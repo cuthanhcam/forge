@@ -26,3 +26,6 @@ preview defects. Extract shared preview controls only after both previews agree
 on behavior. Split the large Markdown page into tab, export and scrolling
 modules in a dedicated refactor with behavior coverage first. Global dark-mode
 selector overrides should gradually give way to semantic component tokens.
+
+See [typography](typography.md) for shared font roles, font licensing and text
+hierarchy. Use the tokens before adding a new local font declaration.
