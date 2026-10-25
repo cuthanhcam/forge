@@ -59,6 +59,27 @@ are invalidated by edits, reset, indentation changes and unmount, so async loads
 cannot overwrite newer text. Raw blocks, templates, foreign tags, attributes and
 invalid-input recovery have service and browser coverage.
 
+## Signature and workbench interaction follow-up
+
+- `feat/home-signature` restores the original signature above the searchable
+  directory, with a reduced-motion-aware Explore tools action.
+- `feat/resizable-preview-panes` adds shared pointer/touch/keyboard dividers to
+  Markdown and HTML, with container-width-based stacking and stable scroll owners.
+  Markdown source uses preview prose typography; ordinary save status is hidden.
+- `feat/markdown-tab-actions` extracts the tab rail and provides right-click,
+  touch-hold and Shift+F10 actions. Collapse sits in the rail footer on desktop.
+- `fix/sidebar-motion` keeps links/controls mounted through width/layout animation,
+  supports reduced motion, improves focus indicators, prevents informational
+  tooltips from blocking controls and manages mobile drawer focus/return.
+
+Acceptance includes divider pointer/keyboard control, source preservation across
+320/390/768/1024/1280/1440px layouts, collapsed-tab actions and focus, touch-hold,
+sidebar node stability/intermediate widths and mobile keyboard focus containment.
+A further scroll-intent fix keeps font/caret changes from overriding a newer
+user scroll. Lazy dependency prebundling stabilizes parallel dev/browser sessions.
+These are Chromium browser checks; physical mobile and assistive-technology
+verification remain useful follow-ups rather than a blanket accessibility claim.
+
 ## Initial audit findings
 
 The sandbox, viewport, HTML overlay, CI, contributor docs and metadata items in

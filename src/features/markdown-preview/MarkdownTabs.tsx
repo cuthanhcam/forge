@@ -30,7 +30,7 @@ interface MarkdownTabsProps {
 const menuClass =
   "z-50 min-w-40 max-w-[calc(100vw-1rem)] rounded-md border border-slate-200 bg-white p-1 shadow-lg shadow-slate-950/10";
 const focusClass =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-400";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600";
 
 export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
   return (
@@ -110,6 +110,8 @@ function DocumentTab({
     event.preventDefault();
     if (openingDialog.current) {
       openingDialog.current = false;
+      // Let the menu focus scope unmount before opening a modal focus scope.
+      window.requestAnimationFrame(() => props.onRename(tab));
       return;
     }
     const useActive = focusActive.current;
@@ -143,7 +145,6 @@ function DocumentTab({
           className="markdown-menu-item"
           onSelect={() => {
             openingDialog.current = true;
-            props.onRename(tab);
           }}
         >
           <Pencil aria-hidden="true" className="h-4 w-4" />

@@ -9,8 +9,11 @@ Forge groups tools by workflow, not by implementation detail.
 Write Markdown and preview the rendered result side by side. Useful for docs,
 release notes, READMEs, and quick content drafts.
 
-Choose Editor, Split or Preview from the layout menu. Split stacks panes on
-narrow screens. Sync follows the pane you scroll; turn it off to read each pane
+Choose Editor, Split or Preview from the layout menu. Drag the divider to give
+more room to the editor or preview. Split stacks panes in narrow workspaces,
+where the divider adjusts their heights. Focus the divider and use arrow keys
+(or Shift+arrow for larger steps), Home/End for its limits, and Enter or a double
+click to restore equal panes. Escape cancels a pointer drag. Sync follows the pane you scroll; turn it off to read each pane
 independently. Scroll progress follows viewport changes, images and diagrams.
 Sync uses relative document position, so it does not map every source line to
 an exact rendered block. The native editor keeps text, caret and scrolling in
@@ -18,8 +21,16 @@ one layer. A separate gutter shows logical line numbers: a wrapped continuation
 keeps the same number, and the next number starts at the next source newline.
 The gutter follows vertical scrolling while staying fixed during horizontal
 scrolling; it recalculates wrapped line heights when the editor resizes.
+Markdown source and preview prose share the same reading font.
 
-Drafts save locally after a short pause; check the status below the toolbar.
+The tab collapse/expand control sits at the bottom of the desktop tab rail.
+Right-click a document, long-press it on touch devices, or focus it and press
+Shift+F10 to rename, duplicate or delete it even when the rail is collapsed.
+The expanded rail also has a three-dot menu. Rename focuses the name field;
+closing actions restores document focus, and deleting an active document selects
+its nearest surviving neighbor.
+
+Drafts save locally after a short pause without a persistent success message.
 If browser storage is full or blocked, the text stays editable for the current
 session and a warning asks you to export Markdown before leaving. Navigation
 flushes pending writes when storage is available. Export important drafts;
@@ -40,6 +51,10 @@ iframe without access to Forge's DOM or browser storage. Forms, popups, modal
 dialogs and downloads initiated inside the preview are restricted. Use the
 Forge toolbar to download the source. Auto updates after a short delay; turn it
 off to apply edits only with Run preview.
+
+HTML Preview uses the same draggable, keyboard-adjustable divider, including
+stacked panes on narrow workspaces. Author-supplied HTML controls its rendered
+font; the source editor retains monospace for code.
 
 The HTML editor uses native text rendering for reliable caret and scroll
 alignment, with the same line-number gutter as Markdown. Line numbers remain

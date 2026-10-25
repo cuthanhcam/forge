@@ -15,6 +15,7 @@ import {
   Settings,
   ShieldCheck,
   type LucideIcon,
+  X,
 } from "lucide-react";
 import { toolCategoryDefinitions } from "@/core/registry/tool.categories";
 import { getToolsByCategory } from "@/core/registry/tool.registry";
@@ -36,16 +37,31 @@ export function Sidebar({
   onOpenShortcuts,
 }: SidebarProps): JSX.Element {
   const [helpOpen, setHelpOpen] = useState(false);
+  const [desktop, setDesktop] = useState(
+    () =>
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(min-width: 1024px)").matches,
+  );
+  useEffect(() => {
+    if (typeof window.matchMedia !== "function") return;
+    const query = window.matchMedia("(min-width: 1024px)");
+    const update = (): void => {
+      setDesktop(query.matches);
+      if (query.matches) onMobileOpenChange(false);
+    };
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, [onMobileOpenChange]);
   const helpRef = useRef<HTMLDivElement>(null);
+  const asideRef = useRef<HTMLElement>(null);
   const location = useLocation();
   const themeMode = useThemeStore((state) => state.mode);
   const sidebarCollapsed = useWorkspaceStore((state) => state.sidebarCollapsed);
   const toggleSidebar = useWorkspaceStore((state) => state.toggleSidebar);
   const ToggleIcon = sidebarCollapsed ? PanelLeftOpen : PanelLeftClose;
   const effectiveCollapsed = sidebarCollapsed && !mobileOpen;
-  const [systemTheme, setSystemTheme] = useState<Exclude<ThemeMode, "system">>(
-    "light",
-  );
+  const [systemTheme, setSystemTheme] = useState<Exclude<ThemeMode, "system">>("light");
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
@@ -73,20 +89,70 @@ export function Sidebar({
   }, [location.pathname, onMobileOpenChange]);
 
   useEffect(() => {
-    if (!mobileOpen) {
-      return;
-    }
-
+    if (!mobileOpen || desktop) return;
+    const opener =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const focusable = (): HTMLElement[] =>
+      Array.from(
+        asideRef.current?.querySelectorAll<HTMLElement>(
+          'a[href],button:not([disabled]),[tabindex="0"]',
+        ) ?? [],
+      ).filter(
+        (element) =>
+          element.getClientRects().length > 0 &&
+          !element.closest("[inert]") &&
+          getComputedStyle(element).visibility !== "hidden",
+      );
+    let frame = 0;
+    const focusWhenVisible = (): void => {
+      if (asideRef.current?.contains(document.activeElement)) return;
+      const activeDialog = document.activeElement?.closest('[role="dialog"]');
+      if (activeDialog && activeDialog !== asideRef.current) return;
+      const first = focusable()[0];
+      first?.focus({ preventScroll: true });
+      if (!asideRef.current?.contains(document.activeElement))
+        frame = window.requestAnimationFrame(focusWhenVisible);
+    };
+    frame = window.requestAnimationFrame(focusWhenVisible);
     function handleKeyDown(event: KeyboardEvent): void {
+      const activeDialog = document.activeElement?.closest('[role="dialog"]');
+      if (
+        activeDialog &&
+        activeDialog !== asideRef.current &&
+        !asideRef.current?.contains(activeDialog)
+      )
+        return;
       if (event.key === "Escape") {
+        event.preventDefault();
         onMobileOpenChange(false);
       }
+      if (event.key !== "Tab") return;
+      const items = focusable();
+      const first = items[0];
+      const last = items.at(-1);
+      if (
+        event.shiftKey &&
+        (document.activeElement === first ||
+          !asideRef.current?.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        last?.focus();
+      } else if (
+        !event.shiftKey &&
+        (document.activeElement === last ||
+          !asideRef.current?.contains(document.activeElement))
+      ) {
+        event.preventDefault();
+        first?.focus();
+      }
     }
-
     document.addEventListener("keydown", handleKeyDown);
-
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [mobileOpen, onMobileOpenChange]);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      document.removeEventListener("keydown", handleKeyDown);
+      if (opener?.isConnected) opener.focus();
+    };
+  }, [mobileOpen, desktop, onMobileOpenChange]);
 
   useEffect(() => {
     if (!helpOpen) {
@@ -112,23 +178,33 @@ export function Sidebar({
     <>
       {mobileOpen ? (
         <button
-          aria-label="Close navigation"
+          aria-label="Dismiss navigation"
           className="fixed inset-0 z-30 bg-slate-950/35 backdrop-blur-[2px] lg:hidden"
           onClick={() => onMobileOpenChange(false)}
           type="button"
         />
       ) : null}
       <aside
+        aria-label={mobileOpen && !desktop ? "Navigation" : "Primary sidebar"}
+        aria-modal={mobileOpen && !desktop ? true : undefined}
+        role={mobileOpen && !desktop ? "dialog" : undefined}
+        aria-hidden={!mobileOpen && !desktop ? true : undefined}
+        inert={!mobileOpen && !desktop}
+        id="forge-sidebar"
+        ref={asideRef}
+        data-sidebar=""
+        data-collapsed={effectiveCollapsed}
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex h-dvh shrink-0 flex-col bg-white transition-[transform,width] duration-200 lg:static lg:z-auto lg:h-screen",
+          "fixed inset-y-0 left-0 z-40 flex h-dvh shrink-0 flex-col bg-white transition-[transform,width,visibility] duration-200 ease-out motion-reduce:transition-none lg:static lg:z-auto lg:h-dvh",
           effectiveCollapsed ? "w-14" : "w-64 lg:w-56 xl:w-64",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0",
+          mobileOpen
+            ? "translate-x-0"
+            : "invisible -translate-x-full lg:visible lg:translate-x-0",
         )}
       >
         <div
           className={cn(
-            "flex h-14 items-center border-b border-slate-200",
-            effectiveCollapsed ? "justify-center px-2" : "gap-2.5 px-3",
+            "flex h-14 shrink-0 items-center gap-2.5 border-b border-slate-200 px-3",
           )}
         >
           <Link
@@ -143,9 +219,11 @@ export function Sidebar({
             />
           </Link>
           <Link
+            aria-hidden={effectiveCollapsed}
+            tabIndex={effectiveCollapsed ? -1 : undefined}
             className={cn(
-              "min-w-0 transition hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400",
-              effectiveCollapsed && "sr-only",
+              "min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 motion-reduce:transition-none",
+              effectiveCollapsed && "opacity-0",
             )}
             to="/"
           >
@@ -154,16 +232,22 @@ export function Sidebar({
               Developer Workstation
             </p>
           </Link>
+          <button
+            aria-label="Close navigation"
+            className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 lg:hidden"
+            onClick={() => onMobileOpenChange(false)}
+            type="button"
+          >
+            <X aria-hidden="true" className="h-4 w-4" />
+          </button>
         </div>
 
         <nav
           aria-label="Tool navigation"
-          className={cn(
-            "scrollbar-forge flex-1 overflow-y-auto py-4",
-            effectiveCollapsed ? "px-2" : "px-2.5",
-          )}
+          id="primary-tool-navigation"
+          className="scrollbar-forge min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-2 py-4"
         >
-          <div className={cn(effectiveCollapsed ? "space-y-2" : "space-y-3")}>
+          <div className="space-y-3">
             {toolCategoryDefinitions.map((category) => {
               const tools = getToolsByCategory(category.id);
 
@@ -188,9 +272,9 @@ export function Sidebar({
           ref={helpRef}
         >
           {helpOpen ? (
-              <div
+            <div
               className={cn(
-                "absolute bottom-14 z-30 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/10 dark:border-pink-400/20 dark:bg-[#100b18] dark:shadow-black/40",
+                "absolute bottom-full mb-2 z-30 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/10 dark:border-pink-400/20 dark:bg-[#100b18] dark:shadow-black/40",
                 effectiveCollapsed ? "left-2 w-64" : "left-2.5 w-64",
               )}
             >
@@ -262,13 +346,8 @@ export function Sidebar({
             </div>
           ) : null}
 
-          <div
-            className={cn(
-              "flex gap-1",
-              effectiveCollapsed ? "flex-col" : "items-center justify-between",
-            )}
-          >
-              <NavLink
+          <div className="sidebar-footer-actions" data-collapsed={effectiveCollapsed}>
+            <NavLink
               aria-label="Settings"
               className={({ isActive }) =>
                 cn("flex h-9 w-9 items-center justify-center transition", {
@@ -309,8 +388,10 @@ export function Sidebar({
             </button>
             <button
               aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              aria-expanded={!sidebarCollapsed}
+              aria-controls="primary-tool-navigation"
               className={cn(
-                "hidden h-9 w-9 shrink-0 items-center justify-center transition lg:flex",
+                "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600 motion-reduce:transition-none lg:flex",
                 effectiveCollapsed
                   ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200"
                   : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200",

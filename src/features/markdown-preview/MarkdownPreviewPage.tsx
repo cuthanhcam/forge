@@ -90,6 +90,7 @@ export function MarkdownPreviewPage(): JSX.Element {
     const parsed = MarkdownPreviewStateSchema.safeParse(storedState);
     return parsed.success ? normalizeMarkdownPreviewState(parsed.data) : initialState;
   }, [storedState, initialState]);
+  const renameInputRef = useRef<HTMLInputElement>(null);
   const activeTabButtonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -113,15 +114,16 @@ export function MarkdownPreviewPage(): JSX.Element {
     viewModes.find((mode) => mode.value === state.viewMode) ?? viewModes[1];
   const ActiveViewIcon = activeViewMode.icon;
 
-  const { onEditorScroll, onPreviewScroll, onEdit } = useMarkdownScroll({
-    editor: editorRef,
-    preview: previewScrollRef,
-    content: previewContentRef,
-    documentId: activeTab.id,
-    enabled: syncScrollEnabled,
-    layout: state.viewMode,
-    html: renderedHtml,
-  });
+  const { onEditorScroll, onPreviewScroll, onEdit, onEditorIntent, onPreviewIntent } =
+    useMarkdownScroll({
+      editor: editorRef,
+      preview: previewScrollRef,
+      content: previewContentRef,
+      documentId: activeTab.id,
+      enabled: syncScrollEnabled,
+      layout: state.viewMode,
+      html: renderedHtml,
+    });
 
   function updateState(nextState: MarkdownPreviewState): void {
     setState(nextState);
@@ -226,9 +228,11 @@ export function MarkdownPreviewPage(): JSX.Element {
       return;
     }
 
+    const deletedIndex = state.tabs.findIndex((tab) => tab.id === tabId);
     const nextTabs = state.tabs.filter((tab) => tab.id !== tabId);
     const nextActiveTab =
-      nextTabs.find((tab) => tab.id === state.activeTabId) ?? nextTabs[0];
+      nextTabs.find((tab) => tab.id === state.activeTabId) ??
+      nextTabs[Math.min(deletedIndex, nextTabs.length - 1)];
 
     updateState({
       ...state,
@@ -373,6 +377,9 @@ ${renderedHtml}
         className="markdown-editor"
         onChange={handleContentChange}
         onScroll={onEditorScroll}
+        onKeyDown={onEditorIntent}
+        onWheel={onEditorIntent}
+        onPointerDown={onEditorIntent}
         placeholder="# Start writing Markdown..."
         textareaRef={editorRef}
         value={activeTab.content}
@@ -422,7 +429,7 @@ ${renderedHtml}
             </p>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex min-w-0 flex-wrap items-center gap-1">
             <Tooltip
               content={state.syncScroll ? "Disable sync" : "Enable sync"}
               side="bottom"
@@ -587,8 +594,14 @@ ${renderedHtml}
             second={
               showPreview ? (
                 <div
-                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-white"
+                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-white outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600"
                   onScroll={onPreviewScroll}
+                  onKeyDown={onPreviewIntent}
+                  onWheel={onPreviewIntent}
+                  onPointerDown={onPreviewIntent}
+                  tabIndex={0}
+                  role="document"
+                  aria-label="Rendered Markdown"
                   ref={previewScrollRef}
                 >
                   <MarkdownPreviewContent
@@ -615,6 +628,11 @@ ${renderedHtml}
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/30" />
           <Dialog.Content
+            onOpenAutoFocus={(event) => {
+              event.preventDefault();
+              renameInputRef.current?.focus();
+              renameInputRef.current?.select();
+            }}
             onCloseAutoFocus={(event) => {
               event.preventDefault();
               activeTabButtonRef.current?.focus();
@@ -641,7 +659,7 @@ ${renderedHtml}
               <label className="block">
                 <span className="sr-only">Tab name</span>
                 <input
-                  autoFocus
+                  ref={renameInputRef}
                   className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-950 outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
                   onChange={(event) => setRenameTitle(event.target.value)}
                   value={renameTitle}
