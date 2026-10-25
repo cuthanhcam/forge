@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
 import { cn } from "@/shared/lib/cn";
+import { ResizablePanes } from "@/shared/components/ResizablePanes";
 import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
@@ -553,19 +554,15 @@ ${renderedHtml}
           />
         </div>
 
-        <p
-          className={cn(
-            "shrink-0 border-b border-slate-100 px-3 py-1 text-xs text-slate-500",
-            persistence === "unavailable" && "text-red-700",
-          )}
-          role={persistence === "unavailable" ? "alert" : "status"}
-        >
-          {persistence === "unavailable"
-            ? "Draft could not be saved in this browser. Keep this tab open and export Markdown before leaving."
-            : persistence === "pending"
-              ? "Saving draft locally?"
-              : "Draft saved in this browser"}
-        </p>
+        {persistence === "unavailable" ? (
+          <p
+            className="shrink-0 border-b border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+            role="alert"
+          >
+            Draft could not be saved in this browser. Keep this tab open and export
+            Markdown before leaving.
+          </p>
+        ) : null}
         <div
           className={cn(
             "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1",
@@ -719,30 +716,24 @@ ${renderedHtml}
             )}
           </aside>
 
-          <div
-            className={cn(
-              "grid h-full min-h-0 min-w-0 flex-1 overflow-hidden",
-              showEditor && showPreview
-                ? "grid-rows-2 lg:grid-cols-2 lg:grid-rows-1"
-                : "grid-cols-1 grid-rows-1",
-            )}
-          >
-            {showEditor ? renderMarkdownEditor() : null}
-
-            {showPreview ? (
-              <div
-                className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain border-t border-slate-100 bg-white lg:border-l lg:border-t-0"
-                onScroll={onPreviewScroll}
-                ref={previewScrollRef}
-              >
-                <MarkdownPreviewContent
-                  key={activeTab.id}
-                  html={renderedHtml}
-                  contentRef={previewContentRef}
-                />
-              </div>
-            ) : null}
-          </div>
+          <ResizablePanes
+            first={showEditor ? renderMarkdownEditor() : null}
+            second={
+              showPreview ? (
+                <div
+                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-white"
+                  onScroll={onPreviewScroll}
+                  ref={previewScrollRef}
+                >
+                  <MarkdownPreviewContent
+                    key={activeTab.id}
+                    html={renderedHtml}
+                    contentRef={previewContentRef}
+                  />
+                </div>
+              ) : null
+            }
+          />
         </div>
       </section>
 
