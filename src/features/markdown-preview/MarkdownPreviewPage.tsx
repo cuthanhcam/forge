@@ -1,7 +1,7 @@
 import "katex/dist/katex.min.css";
 
-import type { ChangeEvent, FormEvent, JSX, UIEvent } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ChangeEvent, FormEvent, JSX } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import html2canvas from "html2canvas";
@@ -50,6 +50,8 @@ import {
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
 
+import { useMarkdownScroll } from "./use-markdown-scroll";
+
 const viewModes: Array<{
   icon: typeof PanelLeft;
   label: string;
@@ -82,7 +84,6 @@ function downloadBlob(blob: Blob, fileName: string): void {
 export function MarkdownPreviewPage(): JSX.Element {
   const [renameTabId, setRenameTabId] = useState<string | null>(null);
   const [renameTitle, setRenameTitle] = useState("");
-  const [editorScrollTop, setEditorScrollTop] = useState(0);
   const [storedState, setState] = usePersistedToolState<MarkdownPreviewState>(
     "markdown-preview",
     createMarkdownPreviewState(),
@@ -95,23 +96,15 @@ export function MarkdownPreviewPage(): JSX.Element {
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
   const previewContentRef = useRef<HTMLDivElement>(null);
-  const syncingScrollRef = useRef(false);
   const activeTab =
     state.tabs.find((tab) => tab.id === state.activeTabId) ?? state.tabs[0];
+  const previewSource = useDeferredValue(activeTab.content);
   const renderedHtml = useMemo(
-    () => renderMarkdownToHtml(activeTab.content),
-    [activeTab.content],
+    () => renderMarkdownToHtml(previewSource),
+    [previewSource],
   );
   const readTime = useMemo(
     () => estimateMarkdownReadTime(activeTab.content),
-    [activeTab.content],
-  );
-  const editorLines = useMemo(
-    () =>
-      activeTab.content.split("\n").map((line, index) => ({
-        content: line,
-        number: index + 1,
-      })),
     [activeTab.content],
   );
   const showEditor = state.viewMode !== "preview";
@@ -121,59 +114,14 @@ export function MarkdownPreviewPage(): JSX.Element {
     viewModes.find((mode) => mode.value === state.viewMode) ?? viewModes[1];
   const ActiveViewIcon = activeViewMode.icon;
 
-  const syncScroll = useCallback((source: HTMLElement, target: HTMLElement): void => {
-    const sourceScrollable = Math.max(0, source.scrollHeight - source.clientHeight);
-    const targetScrollable = Math.max(0, target.scrollHeight - target.clientHeight);
-    const ratio = sourceScrollable <= 0 ? 0 : source.scrollTop / sourceScrollable;
-
-    syncingScrollRef.current = true;
-    target.scrollTop = targetScrollable * ratio;
-    window.requestAnimationFrame(() => {
-      syncingScrollRef.current = false;
-    });
-  }, []);
-
-  const syncPreviewToEditor = useCallback(
-    (editor: HTMLTextAreaElement): void => {
-      const preview = previewScrollRef.current;
-
-      if (!preview) {
-        return;
-      }
-
-      syncScroll(editor, preview);
-    },
-    [syncScroll],
-  );
-
-  const syncEditorToPreview = useCallback(
-    (preview: HTMLDivElement): void => {
-      const editor = editorRef.current;
-
-      if (!editor) {
-        return;
-      }
-
-      syncScroll(preview, editor);
-    },
-    [syncScroll],
-  );
-
-  useEffect(() => {
-    const needsWelcomeMigration =
-      parsedState.success &&
-      parsedState.data.tabs.some(
-        (tab) => tab.title === "Welcome" && tab.content.includes("markdownviewer.org"),
-      );
-
-    if (
-      !parsedState.success ||
-      parsedState.data.viewMode !== state.viewMode ||
-      needsWelcomeMigration
-    ) {
-      setState(state);
-    }
-  }, [parsedState, setState, state]);
+  const { onEditorScroll, onPreviewScroll, onEdit } = useMarkdownScroll({
+    editor: editorRef,
+    preview: previewScrollRef,
+    content: previewContentRef,
+    documentId: activeTab.id,
+    enabled: syncScrollEnabled,
+    html: renderedHtml,
+  });
 
   useEffect(() => {
     if (!previewContentRef.current || !showPreview) {
@@ -198,10 +146,6 @@ export function MarkdownPreviewPage(): JSX.Element {
         nodes: previewContentRef.current?.querySelectorAll(".mermaid"),
         suppressErrors: true,
       });
-
-      if (syncScrollEnabled && editorRef.current) {
-        syncPreviewToEditor(editorRef.current);
-      }
     }
 
     void renderMermaid();
@@ -209,21 +153,7 @@ export function MarkdownPreviewPage(): JSX.Element {
     return () => {
       cancelled = true;
     };
-  }, [renderedHtml, showPreview, syncPreviewToEditor, syncScrollEnabled]);
-
-  useEffect(() => {
-    if (!syncScrollEnabled || !editorRef.current) {
-      return;
-    }
-
-    const animationFrame = window.requestAnimationFrame(() => {
-      if (editorRef.current) {
-        syncPreviewToEditor(editorRef.current);
-      }
-    });
-
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [renderedHtml, syncPreviewToEditor, syncScrollEnabled]);
+  }, [renderedHtml, showPreview]);
 
   function updateState(nextState: MarkdownPreviewState): void {
     setState(nextState);
@@ -243,23 +173,7 @@ export function MarkdownPreviewPage(): JSX.Element {
       updatedAt: Date.now(),
     });
 
-    if (syncScrollEnabled) {
-      window.requestAnimationFrame(() => syncPreviewToEditor(event.target));
-    }
-  }
-
-  function handleEditorScroll(event: UIEvent<HTMLTextAreaElement>): void {
-    setEditorScrollTop(event.currentTarget.scrollTop);
-
-    if (syncScrollEnabled && !syncingScrollRef.current) {
-      syncPreviewToEditor(event.currentTarget);
-    }
-  }
-
-  function handlePreviewScroll(event: UIEvent<HTMLDivElement>): void {
-    if (syncScrollEnabled && !syncingScrollRef.current) {
-      syncEditorToPreview(event.currentTarget);
-    }
+    onEdit();
   }
 
   function addTab(): void {
@@ -491,40 +405,13 @@ ${renderedHtml}
     return (
       <label className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-white">
         <span className="sr-only">Markdown input</span>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div
-            className="markdown-editor min-h-full min-w-full text-[13px] leading-6"
-            style={{
-              transform: `translateY(${-editorScrollTop}px)`,
-            }}
-          >
-            {editorLines.map((line) => (
-              <div
-                className="grid min-h-6 grid-cols-[3.25rem_minmax(0,1fr)]"
-                key={line.number}
-              >
-                <span className="select-none border-r border-slate-100 bg-slate-50 px-3 text-right text-slate-400">
-                  {line.number}
-                </span>
-                <span className="min-w-0 overflow-hidden px-5">
-                  <span className="block min-w-0 select-none whitespace-pre-wrap break-words text-transparent">
-                    {line.content || " "}
-                  </span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
         <textarea
           className={cn(
-            "markdown-editor scrollbar-forge relative w-full resize-none border-0 bg-transparent py-0 pl-[4.5rem] pr-5 text-[13px] leading-6 text-slate-900 caret-slate-950 outline-none placeholder:text-slate-400",
+            "markdown-editor scrollbar-forge relative w-full resize-none border-0 bg-transparent py-0 px-4 text-[13px] leading-6 text-slate-900 caret-slate-950 outline-none placeholder:text-slate-400",
             "h-full min-h-0 flex-1 overflow-auto",
           )}
           onChange={handleContentChange}
-          onScroll={handleEditorScroll}
+          onScroll={onEditorScroll}
           placeholder="# Start writing Markdown..."
           ref={editorRef}
           spellCheck={false}
@@ -871,7 +758,7 @@ ${renderedHtml}
             {showPreview ? (
               <div
                 className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain border-t border-slate-100 bg-white lg:border-l lg:border-t-0"
-                onScroll={handlePreviewScroll}
+                onScroll={onPreviewScroll}
                 ref={previewScrollRef}
               >
                 <div
