@@ -64,10 +64,10 @@ export function SidebarGroup({
         >
           <div
             className={cn(
-              "space-y-1 border-l transition-[margin,padding,border-color] duration-200 motion-reduce:transition-none",
+              "space-y-1 transition-[margin,padding,border-color] duration-200 motion-reduce:transition-none",
               sidebarCollapsed
-                ? "ml-0 border-transparent pl-0"
-                : "ml-2 border-slate-200 pl-2",
+                ? "ml-0 border-l-0 pl-0"
+                : "ml-2 border-l border-slate-200 pl-2",
             )}
           >
             {tools.map((tool) => (
