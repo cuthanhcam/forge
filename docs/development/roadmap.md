@@ -177,3 +177,9 @@ browser results and screenshots to visual PRs. Enable required Quality checks
 and review protection for main/develop in repository settings. CI includes unit/integration/build and Chromium desktop/phone browser checks.
 Dependency update automation, Firefox/WebKit coverage and deployment smoke checks
 remain follow-up work.
+
+## Markdown preview reference
+
+See [reference review and delivery plan](markdown-preview-reference.md) for the
+local Markdown-Viewer audit and scoped follow-up branches, starting with export
+correctness, then document outline, find/replace and diagram controls.

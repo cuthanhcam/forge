@@ -54,20 +54,32 @@ export function HomePage(): JSX.Element {
           aria-labelledby="forge-signature"
           className="flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center py-8 sm:py-12"
         >
+          <div className="mb-8 flex items-center gap-3 sm:mb-10">
+            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-foreground">
+              <img alt="" src="/forge-black.svg" className="h-6 w-6 dark:hidden" />
+              <img alt="" src="/forge-white.svg" className="hidden h-6 w-6 dark:block" />
+            </span>
+            <span className="text-3xl font-semibold tracking-tight">
+              Forge<span className="text-violet-500">.</span>
+            </span>
+          </div>
           <h1
             className="max-w-full text-[clamp(2.1rem,7vw,6.9rem)] font-black leading-[0.92] tracking-normal"
             id="forge-signature"
           >
-            <span className="block">Where rough</span>
+            <span className="block">Where rough </span>
             <span className="block bg-brand-gradient bg-clip-text text-transparent">
-              input becomes
+              input becomes{" "}
             </span>
             <span className="block bg-brand-gradient bg-clip-text text-transparent">
               usable work.
             </span>
           </h1>
+          <p className="mt-7 max-w-md text-sm leading-6 text-muted-foreground sm:text-base">
+            A little clarity for the things you build.
+          </p>
           <button
-            className="mt-10 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+            className="mt-8 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
             onClick={exploreTools}
             type="button"
           >

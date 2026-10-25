@@ -8,7 +8,7 @@ test("home lists tools, filters by task and recovers from an empty search", asyn
   const cards = main.locator('[aria-label="Tool directory"] a');
   await expect(cards).toHaveCount(16);
   await expect(main.getByRole("heading", { level: 1 })).toHaveText(
-    "Where roughinput becomesusable work.",
+    "Where rough input becomes usable work.",
   );
   await expect(
     main.getByRole("heading", { name: "Tools for everyday development" }),
