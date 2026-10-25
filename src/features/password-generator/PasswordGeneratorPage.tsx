@@ -12,6 +12,7 @@ import {
   EyeOff,
 } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
+import { RangeInput } from "@/shared/ui/range";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { PaneHeader, ToolSurface, ToolToolbar } from "@/shared/components/ToolSurface";
@@ -373,13 +374,13 @@ function RangeControl({
         {label}
         <span className="font-mono text-[13px] text-slate-950">{value}</span>
       </span>
-      <input
-        className="mt-3 w-full accent-accent-600"
-        max={max}
+      <RangeInput
+        className="mt-2"
+        label={label}
         min={min}
-        onChange={(event) => onChange(Number(event.target.value))}
-        type="range"
+        max={max}
         value={value}
+        onChange={onChange}
       />
     </label>
   );

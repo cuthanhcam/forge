@@ -1,40 +1,6 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-/** Composite ancestor surfaces, including alpha, before checking visible text. */
-async function contrast(locator: Locator): Promise<number> {
-  return locator.evaluate((node) => {
-    const canvas = document.createElement("canvas");
-    canvas.width = canvas.height = 1;
-    const context = canvas.getContext("2d")!;
-    context.fillStyle = "white";
-    context.fillRect(0, 0, 1, 1);
-    const ancestors: Element[] = [];
-    for (let element: Element | null = node; element; element = element.parentElement)
-      ancestors.unshift(element);
-    for (const element of ancestors) {
-      context.fillStyle = getComputedStyle(element).backgroundColor;
-      context.fillRect(0, 0, 1, 1);
-    }
-    const background = context.getImageData(0, 0, 1, 1).data;
-    context.fillStyle = getComputedStyle(node).color;
-    context.fillRect(0, 0, 1, 1);
-    const foreground = context.getImageData(0, 0, 1, 1).data;
-    const luminance = (pixels: Uint8ClampedArray): number => {
-      const values = Array.from(pixels)
-        .slice(0, 3)
-        .map((value) => {
-          const channel = value / 255;
-          return channel <= 0.04045
-            ? channel / 12.92
-            : ((channel + 0.055) / 1.055) ** 2.4;
-        });
-      return values[0] * 0.2126 + values[1] * 0.7152 + values[2] * 0.0722;
-    };
-    const first = luminance(background);
-    const second = luminance(foreground);
-    return (Math.max(first, second) + 0.05) / (Math.min(first, second) + 0.05);
-  });
-}
+import { contrast } from "./support/contrast";
 
 for (const theme of ["light", "dark"] as const) {
   test(`${theme} workbench keeps blue accents, readable text and coherent hover`, async ({
@@ -80,11 +46,11 @@ for (const theme of ["light", "dark"] as const) {
     if (canHover) {
       await expect(sync).toHaveCSS(
         "background-color",
-        theme === "dark" ? "rgb(27, 53, 84)" : "rgb(219, 234, 254)",
+        theme === "dark" ? "rgb(31, 44, 71)" : "rgb(219, 234, 254)",
       );
       await expect(sync).toHaveCSS(
         "color",
-        theme === "dark" ? "rgb(143, 197, 255)" : "rgb(29, 78, 216)",
+        theme === "dark" ? "rgb(134, 171, 249)" : "rgb(29, 78, 216)",
       );
     }
     expect(await contrast(sync)).toBeGreaterThanOrEqual(4.5);
@@ -120,14 +86,11 @@ for (const theme of ["light", "dark"] as const) {
     await page.goto("/tools/timestamp");
     const field = page.getByRole("textbox", { name: "Timestamp or date", exact: true });
     await field.focus();
-    await expect(field).toHaveCSS(
-      "border-color",
-      theme === "light" ? "rgb(88, 166, 255)" : "rgb(59, 130, 246)",
-    );
+    await expect(field).toHaveCSS("border-color", "rgb(59, 118, 246)");
     const accent = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--accent-600"),
     );
-    expect(accent.trim()).toBe(theme === "light" ? "#79b8ff" : "#2563eb");
+    expect(accent.trim()).toBe(theme === "light" ? "#6e9af7" : "#2563eb");
   });
 }
 

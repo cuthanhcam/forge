@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import { useMemo, useState } from "react";
 import { CheckCircle2, Copy, Download, Fingerprint, RefreshCw } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
+import { RangeInput } from "@/shared/ui/range";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { PaneHeader, ToolSurface, ToolToolbar } from "@/shared/components/ToolSurface";
@@ -130,13 +131,13 @@ export function UuidPage(): JSX.Element {
                   Quantity
                   <span className="font-mono text-[13px] text-slate-950">{count}</span>
                 </span>
-                <input
-                  className="mt-3 w-full accent-accent-600"
-                  max={100}
+                <RangeInput
+                  className="mt-2"
+                  label="UUID quantity"
                   min={1}
-                  onChange={(event) => setCount(Number(event.target.value))}
-                  type="range"
+                  max={100}
                   value={count}
+                  onChange={setCount}
                 />
               </label>
             </section>
