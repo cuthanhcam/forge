@@ -20,7 +20,7 @@
   --accent-200: #bfdbfe;
   --accent-300: #93c5fd;
   --accent-400: #60a5fa;
-  --accent-500: #3b82f6;
+  --accent-500: #3b76f6;
   --accent-600: #2563eb;
   --accent-700: #1d4ed8;
   --accent-800: #1e40af;
@@ -29,6 +29,8 @@
   --accent-solid: #2563eb;
   --accent-solid-hover: #1d4ed8;
   --accent-on-solid: #ffffff;
+  --jwt-payload: #047857;
+  --jwt-signature: #6d28d9;
   --brand-cyan: #12c2e9;
   --brand-purple: #c471ed;
   --brand-coral: #f64f59;
@@ -39,26 +41,28 @@
 /* Neutral workbench surfaces, inspired by the local Markdown-Viewer reference. */
 .dark {
   color-scheme: dark;
-  --accent-50: #17283d;
-  --accent-100: #1b3554;
-  --accent-200: #2d537c;
-  --accent-300: #4374a3;
-  --accent-400: #79b8ff;
-  --accent-500: #58a6ff;
-  --accent-600: #79b8ff;
-  --accent-700: #8fc5ff;
-  --accent-800: #abd4ff;
-  --accent-900: #c8e3ff;
-  --accent-950: #e4f1ff;
-  --accent-solid: #58a6ff;
-  --accent-solid-hover: #79b8ff;
-  --accent-on-solid: #0d1117;
+  --accent-50: #182339;
+  --accent-100: #1f2c47;
+  --accent-200: #324974;
+  --accent-300: #45649f;
+  --accent-400: #6e9af7;
+  --accent-500: #3b76f6;
+  --accent-600: #6e9af7;
+  --accent-700: #86abf9;
+  --accent-800: #adc7fb;
+  --accent-900: #d0dfff;
+  --accent-950: #edf2ff;
+  --accent-solid: #2563eb;
+  --accent-solid-hover: #1d4ed8;
+  --accent-on-solid: #ffffff;
   --background: 215 28% 7%;
   --foreground: 213 17% 82%;
   --card: 215 21% 11%;
   --card-foreground: 213 17% 82%;
   --muted-foreground: 213 12% 66%;
   --border: 214 13% 21%;
+  --jwt-payload: #7ee2b8;
+  --jwt-signature: #c4b5fd;
   --forge-dark-bg: #0d1117;
   --forge-dark-panel: #161b22;
   --forge-dark-panel-2: #21262d;
@@ -894,4 +898,27 @@ body {
   .dark .hover\:border-accent-300:hover {
     border-color: var(--accent-300) !important;
   }
+}
+
+/* JWT segments share explicit foregrounds; dark text must not inherit light-only 900 shades. */
+.jwt-segment--header {
+  --jwt-segment-color: var(--accent-700);
+}
+.jwt-segment--payload {
+  --jwt-segment-color: var(--jwt-payload);
+}
+.jwt-segment--signature {
+  --jwt-segment-color: var(--jwt-signature);
+}
+.jwt-segment {
+  color: var(--jwt-segment-color);
+  border: 1px solid color-mix(in srgb, var(--jwt-segment-color) 35%, hsl(var(--border)));
+  background: color-mix(in srgb, var(--jwt-segment-color) 8%, hsl(var(--card)));
+}
+.jwt-segment-badge {
+  color: var(--jwt-segment-color);
+  background: color-mix(in srgb, var(--jwt-segment-color) 12%, transparent);
+}
+.jwt-signature-text {
+  color: var(--jwt-signature);
 }

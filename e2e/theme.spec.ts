@@ -80,11 +80,11 @@ for (const theme of ["light", "dark"] as const) {
     if (canHover) {
       await expect(sync).toHaveCSS(
         "background-color",
-        theme === "dark" ? "rgb(27, 53, 84)" : "rgb(219, 234, 254)",
+        theme === "dark" ? "rgb(31, 44, 71)" : "rgb(219, 234, 254)",
       );
       await expect(sync).toHaveCSS(
         "color",
-        theme === "dark" ? "rgb(143, 197, 255)" : "rgb(29, 78, 216)",
+        theme === "dark" ? "rgb(134, 171, 249)" : "rgb(29, 78, 216)",
       );
     }
     expect(await contrast(sync)).toBeGreaterThanOrEqual(4.5);
@@ -120,14 +120,11 @@ for (const theme of ["light", "dark"] as const) {
     await page.goto("/tools/timestamp");
     const field = page.getByRole("textbox", { name: "Timestamp or date", exact: true });
     await field.focus();
-    await expect(field).toHaveCSS(
-      "border-color",
-      theme === "light" ? "rgb(88, 166, 255)" : "rgb(59, 130, 246)",
-    );
+    await expect(field).toHaveCSS("border-color", "rgb(59, 118, 246)");
     const accent = await page.evaluate(() =>
       getComputedStyle(document.documentElement).getPropertyValue("--accent-600"),
     );
-    expect(accent.trim()).toBe(theme === "light" ? "#79b8ff" : "#2563eb");
+    expect(accent.trim()).toBe(theme === "light" ? "#6e9af7" : "#2563eb");
   });
 }
 
