@@ -37,6 +37,17 @@ Browser tests compare logical-line offsets against a native textarea, including
 blank/trailing lines, Unicode, tabs, long unbroken text, wrap off, resize and dark
 mode. Syntax highlighting remains separate from this change.
 
+## Typography and home follow-up
+
+`feat/shared-typography` introduces self-hosted Inter for UI/prose/headings and
+one shared code-font token. Body styles, Tailwind, preview editors and gutters
+now resolve the same respective roles. The font license ships with the app.
+`feat/home-tool-directory` replaces the long marketing narrative with grouped
+tool links and a filter using the existing registry/search service. It removes
+the large gradient headline, decorative monospace labels and repeated claims.
+Browser coverage includes filter recovery/navigation, first-party font requests,
+source/gutter font agreement, narrow screens and enlarged text.
+
 ## Initial audit findings
 
 The sandbox, viewport, HTML overlay, CI, contributor docs and metadata items in
@@ -89,8 +100,9 @@ coverage.
    clarify diagram/math fidelity and remove unnecessary remote export resources.
 3. `feat/preview-workbench-controls`: consistent pane headings, HTML layout modes,
    primary actions and accessible empty/error feedback, verified by browser tests.
-4. `feat/workstation-design-tokens`: migrate shared controls/surfaces first, then
-   tool pages; compare screenshots in both themes and at narrow/short viewports.
+4. `feat/workstation-design-tokens`: typography and the home directory are now
+   delivered. Continue with semantic surfaces and shared controls across tool
+   pages; compare screenshots in both themes and narrow/short viewports.
 5. Expand browser acceptance to Firefox/WebKit, physical mobile, images/tables,
    200% zoom and document sizes beyond the current long-text fixtures.
 
@@ -130,6 +142,6 @@ viewport, including 200% zoom and light/dark/system themes. In each preview:
 
 Run `pnpm check:tools` and `pnpm check` before each integration push. Attach
 browser results and screenshots to visual PRs. Enable required Quality checks
-and review protection for main/develop in repository settings. CI currently has
-unit/integration/build coverage; browser automation, dependency update automation
-and deployment smoke checks are remaining work, not completed guarantees.
+and review protection for main/develop in repository settings. CI includes unit/integration/build and Chromium desktop/phone browser checks.
+Dependency update automation, Firefox/WebKit coverage and deployment smoke checks
+remain follow-up work.

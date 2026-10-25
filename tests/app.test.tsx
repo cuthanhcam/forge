@@ -9,7 +9,7 @@ describe("App", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /Where rough input becomes usable work\./,
+        name: "Tools for everyday development",
       }),
     ).toBeInTheDocument();
     expect(
