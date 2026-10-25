@@ -129,9 +129,9 @@ body {
 }
 
 .markdown-editor {
-  font-family: var(--font-ui);
-  font-size: 14px;
-  line-height: 1.7;
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 24px;
   font-variant-ligatures: none;
   tab-size: 2;
 }
