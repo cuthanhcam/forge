@@ -70,13 +70,13 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
           <DocumentTab key={tab.id} {...props} tab={tab} />
         ))}
       </div>
-      <div className="shrink-0 px-2 py-2 md:mt-auto md:border-t md:border-slate-100">
+      <div className="flex shrink-0 justify-end px-1.5 py-2 md:mt-auto">
         <Tooltip content={props.collapsed ? "Expand tabs" : "Collapse tabs"} side="right">
           <button
             aria-label={props.collapsed ? "Expand tabs" : "Collapse tabs"}
             aria-expanded={!props.collapsed}
             className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-white",
+              "flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-950 motion-reduce:transition-none",
               focusClass,
             )}
             onClick={props.onToggleCollapsed}
