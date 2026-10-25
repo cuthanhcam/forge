@@ -12,6 +12,20 @@ Open the URL printed by Vite. Run `pnpm check:tools` and `pnpm check`
 before pushing. `pnpm preview` builds and serves the Cloudflare production output.
 No credentials are required for core tool development.
 
+Preview layout/scroll changes also require real-browser tests:
+
+```sh
+pnpm exec playwright install chromium
+pnpm test:e2e
+```
+
+The suite starts Vite on port 4173 and runs isolated desktop and phone Chromium
+contexts. On Linux CI, install browser system dependencies with
+`pnpm exec playwright install --with-deps chromium`. Failure traces/screenshots
+are written to ignored `test-results/` and `playwright-report/` directories and
+uploaded by the Browser previews CI job. Use `pnpm exec playwright show-report`
+to inspect the report.
+
 ## Find your first change
 
 Read [architecture](docs/development/architecture.md), then the
