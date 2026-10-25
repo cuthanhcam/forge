@@ -45,7 +45,6 @@ import {
   createMarkdownPreviewGuideTab,
   createMarkdownPreviewTab,
   estimateMarkdownReadTime,
-  markdownPreviewGuide,
   normalizeMarkdownPreviewState,
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
@@ -164,11 +163,6 @@ export function MarkdownPreviewPage(): JSX.Element {
       updateState({
         ...state,
         activeTabId: existingGuide.id,
-        tabs: state.tabs.map((tab) =>
-          tab.id === existingGuide.id
-            ? { ...tab, content: markdownPreviewGuide, updatedAt: Date.now() }
-            : tab,
-        ),
       });
       return;
     }
