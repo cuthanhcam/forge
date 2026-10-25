@@ -65,7 +65,8 @@ invalid-input recovery have service and browser coverage.
   directory, with a reduced-motion-aware Explore tools action.
 - `feat/resizable-preview-panes` adds shared pointer/touch/keyboard dividers to
   Markdown and HTML, with container-width-based stacking and stable scroll owners.
-  Markdown source uses preview prose typography; ordinary save status is hidden.
+  Markdown source now matches HTML editor monospace typography; ordinary save
+  status is hidden.
 - `feat/markdown-tab-actions` extracts the tab rail and provides right-click,
   touch-hold and Shift+F10 actions. Collapse sits in the rail footer on desktop.
 - `fix/sidebar-motion` keeps links/controls mounted through width/layout animation,
@@ -183,3 +184,8 @@ remain follow-up work.
 See [reference review and delivery plan](markdown-preview-reference.md) for the
 local Markdown-Viewer audit and scoped follow-up branches, starting with export
 correctness, then document outline, find/replace and diagram controls.
+
+## Other tool UX
+
+See [the tool UI/UX audit](tool-ux-audit.md) for the review of all 14 remaining
+tools, immediate accessible-name fixes and prioritized small follow-up branches.

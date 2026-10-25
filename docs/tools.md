@@ -21,7 +21,8 @@ one layer. A separate gutter shows logical line numbers: a wrapped continuation
 keeps the same number, and the next number starts at the next source newline.
 The gutter follows vertical scrolling while staying fixed during horizontal
 scrolling; it recalculates wrapped line heights when the editor resizes.
-Markdown source and preview prose share the same reading font.
+Markdown and HTML source editors share the same monospace font; rendered
+Markdown prose uses the UI reading font.
 
 The tab collapse/expand control sits at the bottom of the desktop tab rail.
 Right-click a document, long-press it on touch devices, or focus it and press

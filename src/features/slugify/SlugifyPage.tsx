@@ -62,10 +62,21 @@ export function SlugifyPage(): JSX.Element {
               <Copy aria-hidden="true" className="h-4 w-4" />
               Copy
             </Button>
-            <Button disabled={!slug} onClick={download} size="icon" variant="ghost">
+            <Button
+              aria-label="Download output"
+              disabled={!slug}
+              onClick={download}
+              size="icon"
+              variant="ghost"
+            >
               <Download aria-hidden="true" className="h-4 w-4" />
             </Button>
-            <Button onClick={() => setInput("")} size="icon" variant="ghost">
+            <Button
+              aria-label="Clear input"
+              onClick={() => setInput("")}
+              size="icon"
+              variant="ghost"
+            >
               <RotateCcw aria-hidden="true" className="h-4 w-4" />
             </Button>
           </>

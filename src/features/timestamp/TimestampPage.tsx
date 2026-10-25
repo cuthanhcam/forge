@@ -55,7 +55,12 @@ export function TimestampPage(): JSX.Element {
               <Clock3 aria-hidden="true" className="h-4 w-4" />
               Now
             </Button>
-            <Button onClick={() => setInput("")} size="icon" variant="ghost">
+            <Button
+              aria-label="Reset to live time"
+              onClick={() => setInput("")}
+              size="icon"
+              variant="ghost"
+            >
               <RefreshCw aria-hidden="true" className="h-4 w-4" />
             </Button>
           </>
@@ -80,6 +85,7 @@ export function TimestampPage(): JSX.Element {
                   <input
                     className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3 font-mono text-[13px] text-slate-950 outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
                     onChange={(event) => setInput(event.target.value)}
+                    aria-label="Local datetime input"
                     type="datetime-local"
                     value={conversion.dateInput}
                   />

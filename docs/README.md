@@ -21,6 +21,7 @@ collection of unrelated websites.
 - [Contributing](../CONTRIBUTING.md)
 - [Architecture](development/architecture.md)
 - [Roadmap and UI/UX audit](development/roadmap.md)
+- [Other tool UI/UX audit](development/tool-ux-audit.md)
 - [Markdown preview reference review](development/markdown-preview-reference.md)
 
 ## Documentation Goals

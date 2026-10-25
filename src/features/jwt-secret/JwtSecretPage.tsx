@@ -138,6 +138,8 @@ export function JwtSecretPage(): JSX.Element {
               </div>
               <input
                 className="w-full accent-sky-600"
+                aria-label="Secret length in bits"
+                aria-valuetext={`${size} bits`}
                 max={512}
                 min={32}
                 onChange={(event) => setSize(Number(event.target.value))}
