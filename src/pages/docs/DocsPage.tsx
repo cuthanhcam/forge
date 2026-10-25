@@ -40,7 +40,7 @@ export function DocsPage(): JSX.Element {
                       cn(
                         "flex items-start gap-2 rounded-md px-2 py-2 text-[13px] font-semibold transition",
                         isActive || (!docId && doc.id === "overview")
-                          ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                          ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                           : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
                       )
                     }

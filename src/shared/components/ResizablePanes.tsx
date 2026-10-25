@@ -131,7 +131,7 @@ export function ResizablePanes({
             aria-valuemax={maximum}
             aria-valuenow={Math.round(ratio)}
             aria-valuetext={`${firstLabel} ${Math.round(ratio)}%, ${secondLabel} ${100 - Math.round(ratio)}%`}
-            className="relative z-20 flex touch-none items-center justify-center bg-slate-50 text-slate-500 outline-none hover:bg-sky-50 focus-visible:bg-sky-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600"
+            className="relative z-20 flex touch-none items-center justify-center bg-slate-50 text-slate-500 outline-none hover:bg-accent-50 focus-visible:bg-accent-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
             key="divider"
             ref={dividerRef}
             role="separator"

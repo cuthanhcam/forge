@@ -121,7 +121,7 @@ export function JsonToolsPage(): JSX.Element {
               className={cn(
                 "flex h-9 items-center gap-2 rounded-md px-2.5 text-[12px] font-semibold transition",
                 !resultLineWrap
-                  ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                  ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
               )}
               onClick={() => setResultLineWrap((current) => !current)}
@@ -172,7 +172,7 @@ export function JsonToolsPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 {input.length.toLocaleString()} chars
               </span>
             }
@@ -304,7 +304,7 @@ function IndentControl({ disabled, onChange, value }: IndentControlProps): JSX.E
             >
               <span>{option.label}</span>
               {value === option.value ? (
-                <Check aria-hidden="true" className="h-4 w-4 text-sky-600" />
+                <Check aria-hidden="true" className="h-4 w-4 text-accent-600" />
               ) : null}
             </DropdownMenu.Item>
           ))}
@@ -528,7 +528,7 @@ function JsonCodeEditor({
         <span className="sr-only">{label}</span>
         <textarea
           className={cn(
-            "scrollbar-forge relative h-full min-h-0 w-full resize-none border-0 bg-transparent py-0 pl-[5rem] pr-4 font-mono text-[13px] leading-6 text-transparent caret-slate-950 outline-none placeholder:text-slate-400 selection:bg-sky-200/70 selection:text-transparent",
+            "scrollbar-forge relative h-full min-h-0 w-full resize-none border-0 bg-transparent py-0 pl-[5rem] pr-4 font-mono text-[13px] leading-6 text-transparent caret-slate-950 outline-none placeholder:text-slate-400 selection:bg-accent-200/70 selection:text-transparent",
             lineWrap ? "overflow-auto" : "overflow-auto whitespace-pre",
           )}
           onChange={handleChange}
@@ -628,7 +628,7 @@ function highlightJsonLine(line: string, lineIndex: number): JSX.Element[] {
     .map((part, index) => {
       const className =
         /^"(?:\\.|[^"\\])*"$/.test(part) && line.includes(`${part}:`)
-          ? "text-sky-700"
+          ? "text-accent-700"
           : /^"/.test(part)
             ? "text-emerald-700"
             : /^(true|false|null)$/.test(part)
@@ -736,7 +736,7 @@ function TreeName({ name }: { name?: string }): JSX.Element | null {
     return null;
   }
 
-  return <span className="font-semibold text-sky-700">{name}:</span>;
+  return <span className="font-semibold text-accent-700">{name}:</span>;
 }
 
 function JsonScalar({ value }: { value: unknown }): JSX.Element {

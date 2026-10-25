@@ -19,9 +19,9 @@ export function SidebarToolItem({
       aria-label={tool.name}
       className={({ isActive }) =>
         cn(
-          "group relative flex h-8 items-center overflow-hidden rounded-md px-2 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600 motion-reduce:transition-none",
+          "group relative flex h-8 items-center overflow-hidden rounded-md px-2 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none",
           isActive
-            ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200"
+            ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200"
             : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
         )
       }

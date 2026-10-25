@@ -30,7 +30,7 @@ interface MarkdownTabsProps {
 const menuClass =
   "z-50 min-w-40 max-w-[calc(100vw-1rem)] rounded-md border border-slate-200 bg-white p-1 shadow-lg shadow-slate-950/10";
 const focusClass =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600";
 
 export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
   return (
@@ -70,13 +70,13 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
           <DocumentTab key={tab.id} {...props} tab={tab} />
         ))}
       </div>
-      <div className="shrink-0 px-2 py-2 md:mt-auto md:border-t md:border-slate-100">
+      <div className="flex shrink-0 justify-end px-1.5 py-2 md:mt-auto">
         <Tooltip content={props.collapsed ? "Expand tabs" : "Collapse tabs"} side="right">
           <button
             aria-label={props.collapsed ? "Expand tabs" : "Collapse tabs"}
             aria-expanded={!props.collapsed}
             className={cn(
-              "flex h-8 w-8 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-white",
+              "flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-950 motion-reduce:transition-none",
               focusClass,
             )}
             onClick={props.onToggleCollapsed}
@@ -179,7 +179,7 @@ function DocumentTab({
               ? "h-8 w-8 justify-center"
               : "h-10 min-w-40 gap-1 px-1 md:min-w-0",
             active
-              ? "bg-white text-sky-700 shadow-sm ring-1 ring-inset ring-sky-100"
+              ? "bg-white text-accent-700 shadow-sm ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-white",
           )}
           onKeyDown={openKeyboardMenu}

@@ -12,7 +12,7 @@ export function NotFoundPage(): JSX.Element {
       <EmptyState
         action={
           <Link
-            className="inline-flex h-10 items-center justify-center rounded-md bg-gradient-brand px-4 text-sm font-medium text-white shadow-sm shadow-sky-500/20 transition hover:opacity-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="inline-flex h-10 items-center justify-center rounded-md bg-accent-solid px-4 text-sm font-medium text-accent-on-solid shadow-sm transition hover:bg-accent-solid-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
             to="/"
           >
             Back to home

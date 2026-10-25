@@ -117,7 +117,7 @@ export function PasswordGeneratorPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 <SlidersHorizontal
                   aria-hidden="true"
                   className="mr-1 inline h-3.5 w-3.5"
@@ -310,14 +310,16 @@ function PresetCard({
       className={cn(
         "rounded-lg border p-3 text-left transition",
         active
-          ? "border-sky-300 bg-sky-50 ring-2 ring-sky-100"
-          : "border-slate-200 bg-white hover:border-sky-200 hover:bg-sky-50/40",
+          ? "border-accent-300 bg-accent-50 ring-2 ring-accent-100"
+          : "border-slate-200 bg-white hover:border-accent-200 hover:bg-accent-50/40",
       )}
       onClick={onClick}
       type="button"
     >
       <span className="block text-[14px] font-bold text-slate-950">{label}</span>
-      <span className="mt-1 block text-[12px] font-semibold text-sky-700">{value}</span>
+      <span className="mt-1 block text-[12px] font-semibold text-accent-700">
+        {value}
+      </span>
     </button>
   );
 }
@@ -338,7 +340,7 @@ function SegmentedControl<T extends string | number>({
           className={cn(
             "h-8 rounded px-2.5 text-[12px] font-semibold transition",
             value === option.value
-              ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+              ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
           )}
           key={String(option.value)}
@@ -372,7 +374,7 @@ function RangeControl({
         <span className="font-mono text-[13px] text-slate-950">{value}</span>
       </span>
       <input
-        className="mt-3 w-full accent-sky-600"
+        className="mt-3 w-full accent-accent-600"
         max={max}
         min={min}
         onChange={(event) => onChange(Number(event.target.value))}
@@ -396,7 +398,7 @@ function CheckOption({
     <label className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700">
       <input
         checked={checked}
-        className="accent-sky-600"
+        className="accent-accent-600"
         onChange={(event) => onChange(event.target.checked)}
         type="checkbox"
       />

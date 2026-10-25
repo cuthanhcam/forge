@@ -134,10 +134,12 @@ export function JwtSecretPage(): JSX.Element {
                 <p className="text-[12px] font-bold uppercase tracking-[0.08em] text-slate-500">
                   Custom length
                 </p>
-                <span className="text-[13px] font-bold text-sky-700">{size} bits</span>
+                <span className="text-[13px] font-bold text-accent-700">{size} bits</span>
               </div>
               <input
-                className="w-full accent-sky-600"
+                className="w-full accent-accent-600"
+                aria-label="Secret length in bits"
+                aria-valuetext={`${size} bits`}
                 max={512}
                 min={32}
                 onChange={(event) => setSize(Number(event.target.value))}
@@ -153,7 +155,10 @@ export function JwtSecretPage(): JSX.Element {
             </section>
             <section className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-[13px] leading-5 text-slate-600">
               <div className="flex gap-2">
-                <ShieldCheck aria-hidden="true" className="mt-0.5 h-4 w-4 text-sky-600" />
+                <ShieldCheck
+                  aria-hidden="true"
+                  className="mt-0.5 h-4 w-4 text-accent-600"
+                />
                 <p>
                   Generated locally with Web Crypto. Store this value in your secret
                   manager or environment config, and rotate it if it is ever exposed.
@@ -203,14 +208,14 @@ function PresetCard({
       className={cn(
         "rounded-lg border p-3 text-left transition",
         active
-          ? "border-sky-300 bg-sky-50 ring-2 ring-sky-100"
-          : "border-slate-200 bg-white hover:border-sky-200 hover:bg-sky-50/40",
+          ? "border-accent-300 bg-accent-50 ring-2 ring-accent-100"
+          : "border-slate-200 bg-white hover:border-accent-200 hover:bg-accent-50/40",
       )}
       onClick={onClick}
       type="button"
     >
       <span className="block text-[14px] font-bold text-slate-950">{label}</span>
-      <span className="mt-1 block font-mono text-[13px] font-semibold text-sky-700">
+      <span className="mt-1 block font-mono text-[13px] font-semibold text-accent-700">
         {value}
       </span>
       <span className="mt-2 block text-[12px] leading-5 text-slate-500">
@@ -236,7 +241,7 @@ function SegmentedControl<T extends string>({
           className={cn(
             "h-8 rounded px-2.5 text-[12px] font-semibold transition",
             value === option.value
-              ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+              ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
           )}
           key={option.value}

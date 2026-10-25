@@ -60,7 +60,7 @@ export function HomePage(): JSX.Element {
               <img alt="" src="/forge-white.svg" className="hidden h-6 w-6 dark:block" />
             </span>
             <span className="text-3xl font-semibold tracking-tight">
-              Forge<span className="text-violet-500">.</span>
+              Forge<span className="text-accent-600">.</span>
             </span>
           </div>
           <h1
@@ -79,7 +79,7 @@ export function HomePage(): JSX.Element {
             A little clarity for the things you build.
           </p>
           <button
-            className="mt-8 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+            className="mt-8 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
             onClick={exploreTools}
             type="button"
           >
@@ -105,7 +105,7 @@ export function HomePage(): JSX.Element {
           </header>
 
           <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div className="flex h-11 w-full items-center gap-2 rounded-lg border border-border bg-card px-3 focus-within:ring-2 focus-within:ring-sky-600 sm:max-w-md">
+            <div className="flex h-11 w-full items-center gap-2 rounded-lg border border-border bg-card px-3 focus-within:ring-2 focus-within:ring-accent-600 sm:max-w-md">
               <Search
                 aria-hidden="true"
                 className="h-4 w-4 shrink-0 text-muted-foreground"
@@ -125,7 +125,7 @@ export function HomePage(): JSX.Element {
               {query ? (
                 <button
                   aria-label="Clear filter"
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
                   onClick={clearFilter}
                   type="button"
                 >
@@ -155,7 +155,7 @@ export function HomePage(): JSX.Element {
                       <Link
                         aria-labelledby={`home-${tool.id}`}
                         aria-describedby={`home-${tool.id}-description`}
-                        className="group min-w-0 rounded-lg border border-border bg-card p-4 transition-colors hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+                        className="group min-w-0 rounded-lg border border-border bg-card p-4 transition-colors hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
                         key={tool.id}
                         to={tool.route}
                       >
@@ -194,7 +194,7 @@ export function HomePage(): JSX.Element {
                   Try a tool name, format or task, such as JSON, Markdown or encode.
                 </p>
                 <button
-                  className="mt-4 rounded text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+                  className="mt-4 rounded text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
                   onClick={clearFilter}
                   type="button"
                 >
@@ -211,19 +211,19 @@ export function HomePage(): JSX.Element {
           </p>
           <nav aria-label="Forge information" className="flex flex-wrap gap-4">
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
               to="/docs"
             >
               Documentation
             </Link>
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
               to="/privacy"
             >
               Privacy
             </Link>
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
               to="/terms"
             >
               Terms

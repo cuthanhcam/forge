@@ -40,7 +40,7 @@ export function CaseConverterPage(): JSX.Element {
     <ToolSurface>
       <ToolToolbar
         left={
-          <div className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-sky-600">
+          <div className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-accent-600">
             <TextCursorInput aria-hidden="true" className="h-4 w-4" />
             {variants.length} case styles
           </div>
@@ -56,10 +56,20 @@ export function CaseConverterPage(): JSX.Element {
               <Copy aria-hidden="true" className="h-4 w-4" />
               Copy all
             </Button>
-            <Button onClick={download} size="icon" variant="ghost">
+            <Button
+              aria-label="Download output"
+              onClick={download}
+              size="icon"
+              variant="ghost"
+            >
               <Download aria-hidden="true" className="h-4 w-4" />
             </Button>
-            <Button onClick={() => setInput("")} size="icon" variant="ghost">
+            <Button
+              aria-label="Clear input"
+              onClick={() => setInput("")}
+              size="icon"
+              variant="ghost"
+            >
               <RotateCcw aria-hidden="true" className="h-4 w-4" />
             </Button>
           </>
@@ -69,7 +79,7 @@ export function CaseConverterPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 {input.length.toLocaleString()} chars
               </span>
             }
@@ -77,7 +87,7 @@ export function CaseConverterPage(): JSX.Element {
             tone="blue"
           />
           <ToolTextarea
-            className="selection:bg-sky-200/80 selection:text-slate-950"
+            className="selection:bg-accent-200/80 selection:text-slate-950"
             label="Case input"
             onChange={setInput}
             placeholder="Text to convert..."
