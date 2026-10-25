@@ -6,7 +6,9 @@ Forge has two font roles, defined once in `src/app/styles.css`:
   prose. Tailwind `font-sans` resolves to this same token. Headings use size and
   weight for hierarchy rather than an additional display family. The home signature
   is an intentional exception to the restrained heading scale: the original
-  large black-weight Inter lettering and brand gradient sit above the directory.
+  large black-weight Inter lettering and brand gradient sit above the directory,
+  paired with the existing Forge logo and wordmark. Keep real spaces between
+  visual line breaks so the accessible heading reads as a sentence.
 - `--font-code`: one system monospace stack for HTML/code editors, structured
   data, keyboard keys and rendered Markdown code blocks. Do not use monospace
   for decorative labels or marketing copy. Markdown source intentionally uses
