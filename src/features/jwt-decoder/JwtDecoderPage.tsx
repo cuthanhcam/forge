@@ -485,22 +485,17 @@ function TokenSegment({
   value: string;
 }): JSX.Element {
   const toneClass = {
-    emerald: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    sky: "border-accent-200 bg-accent-50 text-accent-900",
-    violet: "border-violet-200 bg-violet-50 text-violet-900",
-  }[tone];
-  const badgeClass = {
-    emerald: "bg-emerald-100 text-emerald-700",
-    sky: "bg-accent-100 text-accent-700",
-    violet: "bg-violet-100 text-violet-700",
+    emerald: "jwt-segment--payload",
+    sky: "jwt-segment--header",
+    violet: "jwt-segment--signature",
   }[tone];
 
   return (
-    <div className={cn("min-w-0 rounded-md border px-3 py-2", toneClass)}>
+    <div className={cn("jwt-segment min-w-0 rounded-md px-3 py-2", toneClass)}>
       <div
         className={cn(
           "mb-1 inline-flex rounded px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em]",
-          badgeClass,
+          "jwt-segment-badge",
         )}
       >
         {label}
@@ -605,7 +600,7 @@ function DecodedPanel({
           </div>
           <p
             className={cn(
-              "font-mono text-[13px] leading-6 text-violet-900",
+              "jwt-signature-text font-mono text-[13px] leading-6",
               lineWrap
                 ? "break-all p-3"
                 : "scrollbar-forge overflow-auto whitespace-pre p-3",
