@@ -73,7 +73,12 @@ loads; an older result will not replace a newer edit.
 
 Compare original and changed text with split and unified review modes. It
 supports whitespace controls, unchanged-line hiding, synchronized scrolling,
-syntax selection, copy actions, and export.
+syntax selection, copy actions, and export. Original/Changed input editors have
+wrap-aware logical line numbers. Use the icon at the options rail footer to
+collapse or expand it; this preference is saved with the local diff draft. The
+collapsed mobile rail leaves an Options bar above the comparison. Split-result
+rows retain their alignment when either side wraps or the workspace resizes;
+unchanged lines have no visible row outline.
 
 ## Data
 

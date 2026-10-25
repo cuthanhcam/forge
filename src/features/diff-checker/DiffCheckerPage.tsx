@@ -7,9 +7,13 @@ import {
   Copy,
   Download,
   Edit3,
+  PanelLeftClose,
+  PanelLeftOpen,
   RotateCcw,
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
+import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
+import { useAlignedDiffRows } from "./use-aligned-diff-rows";
 import { cn } from "@/shared/lib/cn";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
@@ -48,9 +52,13 @@ export function DiffCheckerPage(): JSX.Element {
       }),
     [state.hideWhitespace, state.ignoreBlankLines, state.left, state.right],
   );
-  const visibleChanges = state.hideUnchanged
-    ? changes.filter((change) => change.type !== "unchanged")
-    : changes;
+  const visibleChanges = useMemo(
+    () =>
+      state.hideUnchanged
+        ? changes.filter((change) => change.type !== "unchanged")
+        : changes,
+    [changes, state.hideUnchanged],
+  );
   const additions = changes.filter((change) => change.type === "added").length;
   const removals = changes.filter((change) => change.type === "removed").length;
   const leftLineCount = state.left.split(/\r\n|\n|\r/).length;
@@ -99,8 +107,22 @@ export function DiffCheckerPage(): JSX.Element {
 
   return (
     <section className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03] lg:flex-row">
-      <aside className="flex max-h-64 min-w-0 w-full shrink-0 flex-col border-b border-slate-200 bg-slate-50/70 lg:max-h-none lg:w-56 lg:border-b-0 lg:border-r xl:w-64">
-        <div className="scrollbar-forge flex-1 space-y-4 overflow-y-auto p-3">
+      <aside
+        aria-label="Diff options"
+        className={cn(
+          "flex max-h-64 min-h-0 min-w-0 w-full shrink-0 flex-col border-b border-slate-200 bg-slate-50/70 transition-[width] duration-200 motion-reduce:transition-none lg:max-h-none lg:border-b-0 lg:border-r",
+          state.optionsCollapsed ? "lg:w-12" : "lg:w-56 xl:w-64",
+        )}
+      >
+        <div
+          aria-hidden={state.optionsCollapsed}
+          inert={state.optionsCollapsed}
+          className={cn(
+            "scrollbar-forge min-h-0 flex-1 space-y-4 overflow-y-auto p-3",
+            state.optionsCollapsed && "hidden",
+          )}
+          id="diff-options"
+        >
           <OptionGroup>
             <ToggleRow
               checked={state.hideWhitespace}
@@ -149,9 +171,35 @@ export function DiffCheckerPage(): JSX.Element {
             />
           </OptionGroup>
         </div>
+        <div className="flex h-11 shrink-0 items-center justify-end px-1.5 lg:mt-auto">
+          <span className="mr-auto px-1 text-xs font-medium text-slate-500 lg:hidden">
+            Options
+          </span>
+          <Tooltip
+            content={state.optionsCollapsed ? "Expand options" : "Collapse options"}
+            side="right"
+          >
+            <button
+              aria-label={
+                state.optionsCollapsed ? "Expand diff options" : "Collapse diff options"
+              }
+              aria-controls="diff-options"
+              aria-expanded={!state.optionsCollapsed}
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
+              onClick={() => patchState({ optionsCollapsed: !state.optionsCollapsed })}
+              type="button"
+            >
+              {state.optionsCollapsed ? (
+                <PanelLeftOpen aria-hidden="true" className="h-4 w-4" />
+              ) : (
+                <PanelLeftClose aria-hidden="true" className="h-4 w-4" />
+              )}
+            </button>
+          </Tooltip>
+        </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col">
         <header className="scrollbar-forge flex min-h-14 min-w-0 shrink-0 items-center gap-2 overflow-x-auto border-b border-slate-200 bg-white px-3">
           <div className="min-w-0 flex-1" />
 
@@ -246,28 +294,30 @@ function DiffInputPane({
   value,
 }: DiffInputPaneProps): JSX.Element {
   return (
-    <label className="flex min-h-0 flex-col border-t border-slate-200 lg:border-l lg:border-t-0 first:lg:border-l-0">
-      <span
+    <section
+      aria-label={`${label} editor`}
+      className="flex min-h-0 min-w-0 flex-col border-t border-slate-200 lg:border-l lg:border-t-0 first:lg:border-l-0"
+    >
+      <div
         className={cn(
-          "flex min-h-11 items-center border-b px-4 text-[12px] font-semibold uppercase tracking-wide",
+          "flex min-h-11 shrink-0 items-center justify-between gap-2 border-b px-4 text-[12px] font-semibold",
           tone === "removed"
             ? "border-red-100 bg-red-50/80 text-red-700"
-            : "border-emerald-100 bg-emerald-50/80 text-emerald-700",
+            : "border-emerald-100 bg-emerald-50/70 text-emerald-700",
         )}
       >
-        {label}
-      </span>
-      <textarea
-        className={cn(
-          "scrollbar-forge h-full min-h-0 resize-none border-0 p-4 font-mono text-[13px] leading-6 text-slate-900 outline-none",
-          lineWrap ? "whitespace-pre-wrap" : "whitespace-pre",
-        )}
+        <span>{label}</span>
+        <span className="font-normal text-slate-500">
+          {value.split(/\r\n|\r|\n/).length} lines
+        </span>
+      </div>
+      <NumberedTextarea
+        label={label}
+        lineWrap={lineWrap}
         onChange={(event) => onChange(event.target.value)}
-        spellCheck={false}
         value={value}
-        wrap={lineWrap ? "soft" : "off"}
       />
-    </label>
+    </section>
   );
 }
 
@@ -298,22 +348,21 @@ function SplitDiffView({
 }: SplitDiffViewProps): JSX.Element {
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
-  const syncingScrollRef = useRef(false);
+  const expectedScroll = useRef(new WeakMap<HTMLDivElement, number>());
+  useAlignedDiffRows(leftScrollRef, rightScrollRef, changes, lineWrap, syntax);
 
   function syncScroll(source: HTMLDivElement, target: HTMLDivElement): void {
-    if (!syncScrollEnabled || syncingScrollRef.current) {
-      return;
-    }
+    // Ignore the actual rounded/clamped target position, including delayed scroll events.
+    if (expectedScroll.current.get(source) === source.scrollTop) return;
+    expectedScroll.current.delete(source);
+    if (!syncScrollEnabled) return;
 
     const sourceScrollable = Math.max(0, source.scrollHeight - source.clientHeight);
     const targetScrollable = Math.max(0, target.scrollHeight - target.clientHeight);
     const ratio = sourceScrollable <= 0 ? 0 : source.scrollTop / sourceScrollable;
 
-    syncingScrollRef.current = true;
     target.scrollTop = targetScrollable * ratio;
-    window.requestAnimationFrame(() => {
-      syncingScrollRef.current = false;
-    });
+    expectedScroll.current.set(target, target.scrollTop);
   }
 
   return (
@@ -326,12 +375,15 @@ function SplitDiffView({
           tone="removed"
         />
         <div
-          className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2"
+          className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
           onScroll={(event) => {
             if (rightScrollRef.current) {
               syncScroll(event.currentTarget, rightScrollRef.current);
             }
           }}
+          aria-label="Original comparison"
+          role="region"
+          tabIndex={0}
           ref={leftScrollRef}
         >
           {changes.map((change, index) => (
@@ -362,12 +414,15 @@ function SplitDiffView({
           tone="added"
         />
         <div
-          className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2"
+          className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
           onScroll={(event) => {
             if (leftScrollRef.current) {
               syncScroll(event.currentTarget, leftScrollRef.current);
             }
           }}
+          aria-label="Changed comparison"
+          role="region"
+          tabIndex={0}
           ref={rightScrollRef}
         >
           {changes.map((change, index) => (
@@ -414,7 +469,12 @@ function UnifiedDiffView({
         onCopy={onCopy}
         tone="neutral"
       />
-      <div className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2 font-mono text-[13px] leading-6">
+      <div
+        aria-label="Unified comparison"
+        role="region"
+        tabIndex={0}
+        className="scrollbar-forge min-h-0 flex-1 overflow-auto p-2 font-mono text-[13px] leading-6 outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
+      >
         {changes.map((change, index) => (
           <div
             className={cn(
@@ -483,6 +543,7 @@ function SplitLine({
 
   return (
     <div
+      data-diff-row=""
       className={cn(
         "grid min-h-7 min-w-full grid-cols-[4.75rem_minmax(0,1fr)] px-2 font-mono text-[13px] leading-6",
         !lineWrap && "w-max",
@@ -490,7 +551,9 @@ function SplitLine({
           ? getChangeClass(change.type, previousSame, nextSame)
           : "bg-[repeating-linear-gradient(135deg,#ffffff_0,#ffffff_5px,#f8fafc_5px,#f8fafc_10px)] text-slate-300",
       )}
-      id={change && change.type !== "unchanged" ? `diff-change-${index}` : undefined}
+      id={
+        change && change.type !== "unchanged" ? `diff-${side}-change-${index}` : undefined
+      }
     >
       <span className="select-none text-right text-slate-500">{lineNumber ?? ""}</span>
       <span
@@ -532,8 +595,8 @@ function DiffPaneHeader({
       <span
         className={cn(
           "flex h-5 w-5 items-center justify-center rounded-full border text-xs font-bold",
-          tone === "removed" && "border-red-300 text-red-600",
-          tone === "added" && "border-emerald-300 text-emerald-700",
+          tone === "removed" && "border-red-200 text-red-700",
+          tone === "added" && "border-emerald-200 text-emerald-700",
           tone === "neutral" && "border-slate-300 text-slate-500",
         )}
       >
@@ -542,7 +605,7 @@ function DiffPaneHeader({
       <p
         className={cn(
           "font-semibold",
-          tone === "removed" && "text-red-600",
+          tone === "removed" && "text-red-700",
           tone === "added" && "text-emerald-700",
           tone === "neutral" && "text-slate-700",
         )}
@@ -552,7 +615,14 @@ function DiffPaneHeader({
       <div className="ml-auto flex items-center gap-3">
         <span className="text-[12px] font-medium text-slate-400">{count}</span>
         <button
-          className="text-[13px] font-semibold text-slate-600 transition hover:text-slate-950"
+          aria-label={
+            tone === "removed"
+              ? "Copy original text"
+              : tone === "added"
+                ? "Copy changed text"
+                : "Copy unified diff"
+          }
+          className="rounded-sm text-[13px] font-semibold text-slate-600 transition hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
           onClick={onCopy}
           type="button"
         >
@@ -587,7 +657,7 @@ function ToggleRow({ checked, label, onChange }: ToggleRowProps): JSX.Element {
   return (
     <button
       aria-pressed={checked}
-      className="grid w-full grid-cols-[minmax(0,1fr)_2.5rem] items-center gap-3 text-left text-[13px] font-medium text-slate-700"
+      className="grid w-full grid-cols-[minmax(0,1fr)_2.5rem] items-center gap-3 rounded-md text-left text-[13px] font-medium text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
       onClick={onChange}
       type="button"
     >
@@ -630,6 +700,7 @@ function SegmentedControl({
               ? "bg-white text-slate-950 shadow-sm"
               : "text-slate-500 hover:text-slate-950",
           )}
+          aria-pressed={value === option.value}
           key={option.value}
           onClick={() => onChange(option.value)}
           type="button"
@@ -930,7 +1001,7 @@ function getChangeClass(
 ): string {
   const blockShape = cn(
     previousSame ? "rounded-t-none border-t-0" : "rounded-t-md",
-    nextSame ? "rounded-b-none" : "rounded-b-md",
+    nextSame ? "rounded-b-none border-b-0" : "rounded-b-md",
   );
 
   if (type === "added") {
