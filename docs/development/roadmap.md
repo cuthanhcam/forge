@@ -189,3 +189,9 @@ correctness, then document outline, find/replace and diagram controls.
 
 See [the tool UI/UX audit](tool-ux-audit.md) for the review of all 14 remaining
 tools, immediate accessible-name fixes and prioritized small follow-up branches.
+
+## Design language workstream
+
+See [the design language and redesign plan](design-language.md). Visual hierarchy,
+new-user task discovery and component consistency are explicit deliverables
+alongside correctness and performance. JWT Decoder is the first layout pilot.
