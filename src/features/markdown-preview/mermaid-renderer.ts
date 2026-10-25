@@ -25,6 +25,7 @@ export function renderMermaidDiagram(
       startOnLoad: false,
       securityLevel: "strict",
       theme,
+      fontFamily: window.getComputedStyle(document.body).fontFamily,
       htmlLabels: false,
       flowchart: { htmlLabels: false },
       suppressErrorRendering: true,
