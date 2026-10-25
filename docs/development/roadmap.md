@@ -1,13 +1,15 @@
 # Forge completion and UI/UX roadmap
 
-Audit date: 2026-10-25. Findings below are from source review; browser acceptance
-remains required before declaring responsive preview defects resolved.
+Audit date: 2026-10-25. The initial source audit is retained below, followed by
+work completed and remaining acceptance coverage. Browser results currently
+cover Chromium desktop and phone emulation.
 
 ## Markdown reliability milestone (2026-10-25)
 
 Delivered on small, stacked branches: `test/preview-browser-regressions`,
 `fix/markdown-draft-scroll`, `fix/markdown-storage-resilience` and
-`fix/markdown-mermaid-lifecycle`. Review each branch against its preceding branch.
+`fix/markdown-mermaid-lifecycle`, followed by `fix/markdown-guide-preservation`.
+Review each branch against its preceding branch.
 
 - Chromium desktop/phone tests and Browser previews CI with failure artifacts.
 - Removed content-based Welcome migration that could overwrite pasted text.
@@ -25,7 +27,13 @@ layout switching, resize and dark theme. Chromium emulation does not replace
 physical iOS/Android or Firefox/WebKit verification. The remaining sequence below
 is backlog, not a claim that the full UI redesign has shipped.
 
-## Confirmed gaps
+## Initial audit findings
+
+The sandbox, viewport, HTML overlay, CI, contributor docs and metadata items in
+this table were delivered in the foundation changes. Markdown resize/lifecycle
+work is delivered in the milestone above. Remaining gaps are source mapping
+(optional), formatter preservation, exports, design tokens and broader browser
+coverage.
 
 | Priority | Evidence / impact                                                                                  | Delivery                                                                       |
 | -------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
@@ -62,6 +70,23 @@ is backlog, not a claim that the full UI redesign has shipped.
    address export errors and safe title escaping with interaction coverage.
 8. `fix/html-format-preservation`: syntax-aware formatting, whitespace and
    embedded-language regression fixtures; label destructive transforms clearly.
+
+## Next implementation order
+
+1. `fix/html-format-preservation`: prevent minify/beautify from changing scripts,
+   quoted strings and preformatted text. Add fixtures before replacing the parser.
+2. `fix/markdown-export-safety`: escape document titles, expose export errors,
+   clarify diagram/math fidelity and remove unnecessary remote export resources.
+3. `feat/preview-workbench-controls`: consistent pane headings, HTML layout modes,
+   primary actions and accessible empty/error feedback, verified by browser tests.
+4. `feat/workstation-design-tokens`: migrate shared controls/surfaces first, then
+   tool pages; compare screenshots in both themes and at narrow/short viewports.
+5. Expand browser acceptance to Firefox/WebKit, physical mobile, images/tables,
+   200% zoom and document sizes beyond the current long-text fixtures.
+
+Each branch should pass the quality gate and relevant browser checks before
+integration into develop. Keep the release PR open for review; do not merge main
+until the release checks pass and the maintainer reviews the visual tradeoffs.
 
 ## UI/UX direction
 

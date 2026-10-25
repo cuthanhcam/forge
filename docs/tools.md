@@ -21,7 +21,7 @@ If browser storage is full or blocked, the text stays editable for the current
 session and a warning asks you to export Markdown before leaving. Navigation
 flushes pending writes when storage is available. Export important drafts;
 browser storage is not a backup. Opening the guide never migrates or replaces
-text in your Welcome tab.
+text in your Welcome tab; reopening an existing guide tab also preserves edits.
 
 Fenced code blocks with the `mermaid` language render diagrams after a short
 pause in editing. Invalid diagrams show an error and their source; correct the

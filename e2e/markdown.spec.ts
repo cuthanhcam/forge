@@ -95,3 +95,18 @@ test("storage quota failure keeps pasted text editable and explains how to save 
   await editor.pressSequentially("!");
   await expect(editor).toHaveValue("# Keep this draft even when storage fails!");
 });
+
+test("reopening the guide preserves edits made in that tab", async ({ page }) => {
+  await page.getByRole("button", { name: "Open Markdown guide" }).click();
+  const editor = page.getByRole("textbox", { name: "Markdown input" });
+  await editor.fill("# My edits to the guide");
+  await page.getByRole("button", { name: "Open Markdown guide" }).click();
+  await expect(editor).toHaveValue("# My edits to the guide");
+});
+
+test("reload immediately after editing flushes the pending draft", async ({ page }) => {
+  const editor = page.getByRole("textbox", { name: "Markdown input" });
+  await editor.fill("# Latest draft before reload");
+  await page.reload();
+  await expect(editor).toHaveValue("# Latest draft before reload");
+});
