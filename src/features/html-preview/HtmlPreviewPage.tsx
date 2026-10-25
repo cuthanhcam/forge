@@ -1,5 +1,5 @@
 import type { ChangeEvent, JSX } from "react";
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import {
   Check,
@@ -30,6 +30,15 @@ import {
 
 const indentOptions = Array.from({ length: 10 }, (_, index) => index + 1);
 export function HtmlPreviewPage(): JSX.Element {
+  const [formatting, setFormatting] = useState(false);
+  const [formatError, setFormatError] = useState<string | null>(null);
+  const formatRequest = useRef(0);
+  useEffect(
+    () => () => {
+      formatRequest.current += 1;
+    },
+    [],
+  );
   const [storedState, setState] = usePersistedToolState<HtmlPreviewState>(
     "html-preview",
     createHtmlPreviewState(),
@@ -68,6 +77,9 @@ export function HtmlPreviewPage(): JSX.Element {
   }, [setState, state]);
 
   function updateHtml(nextHtml: string): void {
+    formatRequest.current += 1;
+    setFormatting(false);
+    setFormatError(null);
     setState({
       ...state,
       html: nextHtml,
@@ -79,6 +91,8 @@ export function HtmlPreviewPage(): JSX.Element {
   }
 
   function updateIndentSize(indentSize: number): void {
+    formatRequest.current += 1;
+    setFormatting(false);
     setState({
       ...state,
       indentSize,
@@ -108,16 +122,36 @@ export function HtmlPreviewPage(): JSX.Element {
   }
 
   function resetHtml(): void {
+    formatRequest.current += 1;
+    setFormatting(false);
+    setFormatError(null);
     const nextState = createHtmlPreviewState();
     setState(nextState);
   }
 
-  function applyBeautify(): void {
-    updateHtml(beautifyHtml(state.html, state.indentSize));
-  }
-
-  function applyMinify(): void {
-    updateHtml(minifyHtml(state.html));
+  async function applyFormat(mode: "beautify" | "minify"): Promise<void> {
+    const request = ++formatRequest.current;
+    const input = state.html;
+    setFormatting(true);
+    setFormatError(null);
+    try {
+      const result = await (mode === "beautify"
+        ? beautifyHtml(input, state.indentSize)
+        : minifyHtml(input));
+      if (request !== formatRequest.current) return;
+      setState((current) =>
+        current.html === input ? { ...current, html: result } : current,
+      );
+    } catch (error) {
+      if (request === formatRequest.current)
+        setFormatError(
+          error instanceof Error
+            ? error.message
+            : "Could not format HTML. Check the markup and retry.",
+        );
+    } finally {
+      if (request === formatRequest.current) setFormatting(false);
+    }
   }
 
   async function copyHtml(): Promise<void> {
@@ -225,7 +259,10 @@ export function HtmlPreviewPage(): JSX.Element {
             <Button
               aria-label="Beautify HTML"
               className="h-8 px-2.5 text-xs"
-              onClick={applyBeautify}
+              disabled={formatting}
+              onClick={() => {
+                void applyFormat("beautify");
+              }}
               size="sm"
               variant="ghost"
             >
@@ -233,11 +270,17 @@ export function HtmlPreviewPage(): JSX.Element {
               Beautify HTML
             </Button>
           </Tooltip>
-          <Tooltip content="Minify HTML" side="bottom">
+          <Tooltip
+            content="Compact tag spacing; preserve text, scripts and styles"
+            side="bottom"
+          >
             <Button
               aria-label="Minify HTML"
               className="h-8 px-2.5 text-xs"
-              onClick={applyMinify}
+              disabled={formatting}
+              onClick={() => {
+                void applyFormat("minify");
+              }}
               size="sm"
               variant="ghost"
             >
@@ -275,6 +318,19 @@ export function HtmlPreviewPage(): JSX.Element {
         </div>
       </div>
 
+      {formatting ? (
+        <p className="shrink-0 px-3 py-2 text-xs text-muted-foreground" role="status">
+          Formatting HTML...
+        </p>
+      ) : null}
+      {formatError ? (
+        <p
+          className="shrink-0 border-b border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+          role="alert"
+        >
+          {formatError} Your source was left unchanged.
+        </p>
+      ) : null}
       {/* Explicit tracks keep both panes scrollable on short and narrow viewports. */}
       <div className="grid min-h-0 min-w-0 flex-1 grid-rows-2 overflow-hidden lg:grid-cols-2 lg:grid-rows-1">
         <div className="relative min-h-0 min-w-0 overflow-hidden bg-white">

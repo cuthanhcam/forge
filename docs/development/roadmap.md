@@ -48,6 +48,17 @@ the large gradient headline, decorative monospace labels and repeated claims.
 Browser coverage includes filter recovery/navigation, first-party font requests,
 source/gutter font agreement, narrow screens and enlarged text.
 
+## HTML formatting preservation
+
+`fix/html-format-preservation` replaces regex transforms with parser source
+locations for conservative tag compaction and a lazy-loaded Prettier HTML
+formatter. Text spacing and quoted attributes stay intact when compacting;
+script/style/preformatted/textarea contents are restored verbatim after formatting.
+Malformed input leaves the source in place and displays an error. Format requests
+are invalidated by edits, reset, indentation changes and unmount, so async loads
+cannot overwrite newer text. Raw blocks, templates, foreign tags, attributes and
+invalid-input recovery have service and browser coverage.
+
 ## Initial audit findings
 
 The sandbox, viewport, HTML overlay, CI, contributor docs and metadata items in
@@ -94,8 +105,8 @@ coverage.
 
 ## Next implementation order
 
-1. `fix/html-format-preservation`: prevent minify/beautify from changing scripts,
-   quoted strings and preformatted text. Add fixtures before replacing the parser.
+1. `fix/html-format-preservation`: delivered with conservative compaction,
+   parser-backed validation, verbatim raw blocks and async edit protection.
 2. `fix/markdown-export-safety`: escape document titles, expose export errors,
    clarify diagram/math fidelity and remove unnecessary remote export resources.
 3. `feat/preview-workbench-controls`: consistent pane headings, HTML layout modes,
