@@ -9,6 +9,26 @@ Forge groups tools by workflow, not by implementation detail.
 Write Markdown and preview the rendered result side by side. Useful for docs,
 release notes, READMEs, and quick content drafts.
 
+Choose Editor, Split or Preview from the layout menu. Split stacks panes on
+narrow screens. Sync follows the pane you scroll; turn it off to read each pane
+independently. Scroll progress follows viewport changes, images and diagrams.
+Sync uses relative document position, so it does not map every source line to
+an exact rendered block. The native editor keeps text, caret and scrolling in
+one layer; line-number overlays are no longer used.
+
+Drafts save locally after a short pause; check the status below the toolbar.
+If browser storage is full or blocked, the text stays editable for the current
+session and a warning asks you to export Markdown before leaving. Navigation
+flushes pending writes when storage is available. Export important drafts;
+browser storage is not a backup. Opening the guide never migrates or replaces
+text in your Welcome tab.
+
+Fenced code blocks with the `mermaid` language render diagrams after a short
+pause in editing. Invalid diagrams show an error and their source; correct the
+syntax to retry. Diagrams follow the Forge theme and render with strict security
+and SVG text labels. Executable HTML labels and diagram click callbacks are not
+enabled.
+
 ### HTML Preview
 
 Write HTML and inspect the result in a constrained preview surface. Useful for

@@ -80,11 +80,11 @@ test("storage quota failure keeps pasted text editable and explains how to save 
   page,
 }) => {
   await page.evaluate(() => {
-    const original = Storage.prototype.setItem;
+    const original = localStorage.setItem.bind(localStorage);
     Storage.prototype.setItem = function (key: string, value: string): void {
       if (key === "forge.tool.markdown-preview")
         throw new DOMException("Full", "QuotaExceededError");
-      original.call(this, key, value);
+      original(key, value);
     };
   });
   const editor = page.getByRole("textbox", { name: "Markdown input" });

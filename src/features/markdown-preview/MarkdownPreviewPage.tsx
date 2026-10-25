@@ -1,7 +1,7 @@
 import "katex/dist/katex.min.css";
 
 import type { ChangeEvent, FormEvent, JSX } from "react";
-import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
+import { useDeferredValue, useMemo, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import html2canvas from "html2canvas";
@@ -50,6 +50,7 @@ import {
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
 
+import { MarkdownPreviewContent } from "./MarkdownPreviewContent";
 import { useMarkdownScroll } from "./use-markdown-scroll";
 
 const viewModes: Array<{
@@ -121,40 +122,9 @@ export function MarkdownPreviewPage(): JSX.Element {
     content: previewContentRef,
     documentId: activeTab.id,
     enabled: syncScrollEnabled,
+    layout: state.viewMode,
     html: renderedHtml,
   });
-
-  useEffect(() => {
-    if (!previewContentRef.current || !showPreview) {
-      return;
-    }
-
-    let cancelled = false;
-
-    async function renderMermaid(): Promise<void> {
-      const mermaid = await import("mermaid");
-
-      if (cancelled) {
-        return;
-      }
-
-      mermaid.default.initialize({
-        securityLevel: "strict",
-        startOnLoad: false,
-        theme: "default",
-      });
-      await mermaid.default.run({
-        nodes: previewContentRef.current?.querySelectorAll(".mermaid"),
-        suppressErrors: true,
-      });
-    }
-
-    void renderMermaid();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [renderedHtml, showPreview]);
 
   function updateState(nextState: MarkdownPreviewState): void {
     setState(nextState);
@@ -777,10 +747,10 @@ ${renderedHtml}
                 onScroll={onPreviewScroll}
                 ref={previewScrollRef}
               >
-                <div
-                  className="forge-markdown min-h-full w-full px-6 py-5 sm:px-8 lg:px-10"
-                  dangerouslySetInnerHTML={{ __html: renderedHtml }}
-                  ref={previewContentRef}
+                <MarkdownPreviewContent
+                  key={activeTab.id}
+                  html={renderedHtml}
+                  contentRef={previewContentRef}
                 />
               </div>
             ) : null}
