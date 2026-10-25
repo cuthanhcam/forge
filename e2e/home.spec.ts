@@ -96,3 +96,20 @@ test("editors and line-number gutters share their typography role", async ({ pag
     ).toContain("Inter Variable");
   }
 });
+
+test("Explore tools keeps the application header anchored", async ({ page }) => {
+  await page.goto("/");
+  const main = page.getByRole("main");
+  const header = page
+    .locator("header")
+    .filter({ has: page.getByRole("heading", { name: "Home", exact: true }) });
+  for (const reducedMotion of ["no-preference", "reduce"] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await main.evaluate((element) => element.scrollTo({ top: 0, behavior: "instant" }));
+    await main.getByRole("button", { name: "Explore tools" }).click();
+    await expect(main.getByRole("searchbox")).toBeInViewport();
+    await expect.poll(async () => (await header.boundingBox())?.y).toBe(0);
+    await main.evaluate((element) => element.scrollTo({ top: 0, behavior: "instant" }));
+    await expect(header).toBeInViewport({ ratio: 1 });
+  }
+});

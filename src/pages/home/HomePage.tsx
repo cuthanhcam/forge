@@ -10,19 +10,28 @@ const availableTools = toolRegistry.filter((tool) => tool.status === "available"
 export function HomePage(): JSX.Element {
   const [query, setQuery] = useState("");
   const filterRef = useRef<HTMLInputElement>(null);
+  const scrollRef = useRef<HTMLElement>(null);
   const directoryRef = useRef<HTMLElement>(null);
   function exploreTools(): void {
-    directoryRef.current?.scrollIntoView({
+    const scroll = scrollRef.current;
+    const directory = directoryRef.current;
+    if (!scroll || !directory) return;
+    // Scroll only the page: scrollIntoView also moves overflow-hidden shell ancestors.
+    scroll.scrollTo({
+      top:
+        scroll.scrollTop +
+        directory.getBoundingClientRect().top -
+        scroll.getBoundingClientRect().top -
+        32,
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
         : "smooth",
-      block: "start",
     });
     filterRef.current?.focus({ preventScroll: true });
   }
   function clearFilter(): void {
     setQuery("");
-    filterRef.current?.focus();
+    filterRef.current?.focus({ preventScroll: true });
   }
   const matches = useMemo(
     () => searchTools(availableTools, query).map(({ tool }) => tool),
@@ -36,7 +45,10 @@ export function HomePage(): JSX.Element {
     .filter((category) => category.tools.length > 0);
 
   return (
-    <main className="scrollbar-forge min-h-0 min-w-0 flex-1 overflow-auto break-words bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8">
+    <main
+      ref={scrollRef}
+      className="scrollbar-forge min-h-0 min-w-0 flex-1 overflow-auto break-words bg-background px-4 py-8 text-foreground sm:px-6 lg:px-8"
+    >
       <div className="mx-auto max-w-5xl">
         <section
           aria-labelledby="forge-signature"
