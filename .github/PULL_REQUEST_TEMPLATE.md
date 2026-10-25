@@ -12,12 +12,12 @@
 
 ## Checklist
 
-- [ ] I followed `docs/coding-conventions.md`.
+- [ ] I followed [CONTRIBUTING.md](../CONTRIBUTING.md).
 - [ ] I updated docs where behavior or architecture changed.
 - [ ] I added or updated tests for core, service, or utility changes.
 - [ ] I did not access `localStorage` directly from feature modules.
 - [ ] UI changes include screenshots or a short screen recording.
-- [ ] `pnpm check` passes locally.
+- [ ] `pnpm check:tools` and `pnpm check` pass locally.
 
 ## Screenshots
 

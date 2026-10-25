@@ -7,5 +7,5 @@ requests.
 - Features: use the feature request issue form.
 - Tool ideas: use the tool request issue form.
 - Contribution process: read `docs/contributing.md`.
-- Architecture questions: read `docs/architecture.md` first, then open a
+- Architecture questions: read `docs/development/architecture.md` first, then open a
   discussion if GitHub Discussions are enabled.
