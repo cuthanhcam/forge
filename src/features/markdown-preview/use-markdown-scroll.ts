@@ -38,6 +38,34 @@ export function useMarkdownScroll({
   const leader = useRef<Pane>("editor");
   const expected = useRef(new WeakMap<HTMLElement, number>());
   const progress = useRef(0);
+  const pendingIntent = useRef<Pane | null>(null);
+  const intentFrame = useRef(0);
+  const settleFrame = useRef(0);
+  const markIntent = useCallback(
+    (pane: Pane): void => {
+      leader.current = pane;
+      pendingIntent.current = pane;
+      const element = pane === "editor" ? editor.current : preview.current;
+      if (element) expected.current.delete(element);
+      window.cancelAnimationFrame(intentFrame.current);
+      window.cancelAnimationFrame(settleFrame.current);
+      // Keep native caret/wheel scrolling authoritative until its scroll event
+      // arrives. Later browser anchoring during a resize is geometry, not input.
+      intentFrame.current = window.requestAnimationFrame(() => {
+        settleFrame.current = window.requestAnimationFrame(() => {
+          pendingIntent.current = null;
+        });
+      });
+    },
+    [editor, preview],
+  );
+  useEffect(
+    () => () => {
+      window.cancelAnimationFrame(intentFrame.current);
+      window.cancelAnimationFrame(settleFrame.current);
+    },
+    [],
+  );
   const metrics = useRef(
     new WeakMap<
       HTMLElement,
@@ -59,7 +87,9 @@ export function useMarkdownScroll({
         (leader.current === "preview" && previousSize.range !== sourceRange));
     const nativeScrollMoved =
       previousSize && Math.abs(source.scrollTop - previousSize.top) > 1;
-    if (resized && !nativeScrollMoved) {
+    const userScrollInFlight =
+      pendingIntent.current === leader.current && nativeScrollMoved;
+    if (resized && !userScrollInFlight) {
       // Preserve progress only when the browser/user has not already moved the
       // source. A font/width update must not undo an in-flight caret scroll.
       source.scrollTop = progress.current * sourceRange;
@@ -165,16 +195,8 @@ export function useMarkdownScroll({
   return {
     onEditorScroll: (event) => handleScroll("editor", event.currentTarget),
     onPreviewScroll: (event) => handleScroll("preview", event.currentTarget),
-    onEdit: () => {
-      leader.current = "editor";
-    },
-    onEditorIntent: () => {
-      leader.current = "editor";
-      if (editor.current) expected.current.delete(editor.current);
-    },
-    onPreviewIntent: () => {
-      leader.current = "preview";
-      if (preview.current) expected.current.delete(preview.current);
-    },
+    onEdit: () => markIntent("editor"),
+    onEditorIntent: () => markIntent("editor"),
+    onPreviewIntent: () => markIntent("preview"),
   };
 }
