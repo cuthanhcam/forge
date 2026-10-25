@@ -8,8 +8,13 @@ test("home lists tools, filters by task and recovers from an empty search", asyn
   const cards = main.locator('[aria-label="Tool directory"] a');
   await expect(cards).toHaveCount(16);
   await expect(main.getByRole("heading", { level: 1 })).toHaveText(
-    "Tools for everyday development",
+    "Where roughinput becomesusable work.",
   );
+  await expect(
+    main.getByRole("heading", { name: "Tools for everyday development" }),
+  ).toBeAttached();
+  await main.getByRole("button", { name: "Explore tools" }).click();
+  await expect(main.getByRole("searchbox", { name: "Filter tools" })).toBeFocused();
   const filter = main.getByRole("searchbox", { name: "Filter tools" });
   await filter.fill("mermaid");
   await expect(cards).toHaveCount(1);
