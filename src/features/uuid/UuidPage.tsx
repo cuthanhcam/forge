@@ -146,6 +146,7 @@ export function UuidPage(): JSX.Element {
                 Validate UUID
               </p>
               <textarea
+                aria-label="Validate UUID"
                 className="scrollbar-forge min-h-24 w-full resize-none rounded-lg border border-slate-200 bg-white p-3 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
                 onChange={(event) => setValidationInput(event.target.value)}
                 placeholder="Paste a UUID to inspect version and variant..."
