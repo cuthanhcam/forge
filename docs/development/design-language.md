@@ -56,6 +56,9 @@ put my content? What can I do with the result?
 ## Pilot: JWT Decoder
 
 Start here because it exposes the current hierarchy and contrast problems clearly.
+The corrected [light baseline](../assets/forge-jwt-light.png) and
+[dark baseline](../assets/forge-jwt-dark.png) show the targeted contrast fixes;
+the layout changes below remain planned.
 
 1. Keep Encoded token as the main input. Header/Payload previews should be optional
    aids, not three competing cards above a very small input on a phone.
@@ -107,3 +110,6 @@ Run a short task review with 2-3 new users, record confusion and refine the layo
 A branch is ready only after its interaction checks, `pnpm check`, relevant browser
 coverage, screenshot review and CI pass. Review with the maintainer before merging
 main. Keep [the tool audit](tool-ux-audit.md) and this plan updated as tasks land.
+
+See [range control behavior](range-controls.md) for the implemented scales,
+keyboard rules and native-input constraints.
