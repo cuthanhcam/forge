@@ -5,3 +5,6 @@ node_modules
 ref
 temp
 pnpm-lock.yaml
+
+playwright-report
+test-results

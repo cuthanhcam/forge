@@ -15,6 +15,8 @@ export default tseslint.config(
       "ref/**",
       "temp",
       "temp/**",
+      "playwright-report/**",
+      "test-results/**",
     ],
   },
   js.configs.recommended,
@@ -55,7 +57,13 @@ export default tseslint.config(
     },
   },
   {
-    files: ["vite.config.ts", "vitest.config.ts", "scripts/**/*.ts"],
+    files: [
+      "vite.config.ts",
+      "vitest.config.ts",
+      "playwright.config.ts",
+      "scripts/**/*.ts",
+      "e2e/**/*.ts",
+    ],
     languageOptions: {
       globals: {
         ...globals.node,
