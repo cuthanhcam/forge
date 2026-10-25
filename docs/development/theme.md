@@ -17,12 +17,17 @@ from the reference is copied.
 | Primary reading text | Slate 900/950 | #C9D1D9 |
 | Secondary text | Slate 500/600 | #9AA5B1 |
 | Subtle text and code comments | Slate 400 (existing UI) | #8B949E |
-| Selected control text (`accent-700`) | #1D4ED8 | #8FC5FF |
-| Selected surface (`accent-50`) | #EFF6FF | #17283D |
-| Solid primary action | #2563EB, white text | #58A6FF, #0D1117 text |
+| Selected control text (`accent-700`) | #1D4ED8 | #86ABF9 |
+| Selected surface (`accent-50`) | #EFF6FF | #182339 |
+| Solid primary action | #2563EB, white text | #2563EB, white text |
 
 [Light workbench](../assets/forge-workbench-light.png) /
 [Dark workbench](../assets/forge-workbench-dark.png)
+
+The solid blue and hover blue are identical across themes. Dark text shades use
+the same approximately 221-degree hue at higher lightness for readable contrast,
+rather than switching to cyan. JWT preview labels/signatures have dedicated
+foreground tokens so light-only 900 shades cannot disappear in dark mode.
 
 ## Implementation rules
 
