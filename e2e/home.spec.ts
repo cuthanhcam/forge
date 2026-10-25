@@ -76,17 +76,22 @@ test("UI font is self-hosted and home stays readable at narrow widths and large 
   await page.screenshot({ path: test.info().outputPath("home-dark-large-text.png") });
 });
 
-test("editors and line-number gutters share their typography role", async ({ page }) => {
+test("editor gutters use consistent code typography", async ({ page }) => {
+  let gutterFont: string | undefined;
   for (const tool of ["markdown", "html"]) {
     await page.goto(`/tools/${tool}-preview`);
     const editor = page.getByRole("textbox", {
       name: tool === "markdown" ? "Markdown input" : "HTML input",
     });
     const font = await editor.evaluate((element) => getComputedStyle(element).fontFamily);
-    await expect(page.locator("[data-line-number-gutter]")).toHaveCSS(
-      "font-family",
-      font,
+    const gutter = page.locator("[data-line-number-gutter]");
+    const family = await gutter.evaluate(
+      (element) => getComputedStyle(element).fontFamily,
     );
+    expect(family).not.toContain("Inter Variable");
+    await expect(gutter).toHaveCSS("font-size", "13px");
+    if (gutterFont) expect(family).toBe(gutterFont);
+    gutterFont = family;
     if (tool === "html") expect(font).not.toContain("Inter Variable");
     else await expect(page.locator(".forge-markdown")).toHaveCSS("font-family", font);
     expect(

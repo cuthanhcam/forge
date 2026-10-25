@@ -12,8 +12,9 @@ Forge has two font roles, defined once in `src/app/styles.css`:
 - `--font-code`: one system monospace stack for HTML/code editors, structured
   data, keyboard keys and rendered Markdown code blocks. Do not use monospace
   for decorative labels or marketing copy. Markdown source intentionally uses
-  the same Inter 14px/1.7 reading typography as preview prose; its line-number
-  gutter follows the actual editor font and wrapping.
+  the same Inter 14px/1.7 reading typography as preview prose; both line-number
+  gutters use the shared code font at 13px, with row heights following each
+  editor's actual wrapping and line height.
 
 Inter is bundled through `@fontsource-variable/inter`, including normal/italic
 faces and Unicode subsets. Vite serves font assets from the application origin;

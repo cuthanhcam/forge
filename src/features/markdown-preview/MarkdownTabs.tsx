@@ -76,8 +76,7 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
             aria-label={props.collapsed ? "Expand tabs" : "Collapse tabs"}
             aria-expanded={!props.collapsed}
             className={cn(
-              "flex h-8 items-center justify-center gap-2 rounded-md text-xs text-slate-500 hover:bg-white",
-              props.collapsed ? "w-8" : "w-8 md:w-full md:justify-start md:px-2",
+              "flex h-8 w-8 items-center justify-center rounded-md text-xs text-slate-500 hover:bg-white",
               focusClass,
             )}
             onClick={props.onToggleCollapsed}
@@ -88,9 +87,6 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
             ) : (
               <PanelLeftClose aria-hidden="true" className="h-4 w-4" />
             )}
-            {!props.collapsed ? (
-              <span className="hidden md:inline">Collapse tabs</span>
-            ) : null}
           </button>
         </Tooltip>
       </div>
