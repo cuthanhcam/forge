@@ -23,7 +23,7 @@ export function ToolLayout({
         {showHeader ? (
           <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="flex min-w-0 items-center gap-3">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-brand text-white shadow-sm shadow-sky-500/20">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md bg-gradient-brand text-white shadow-sm shadow-accent-500/20">
                 <Icon aria-hidden="true" className="h-4 w-4" />
               </div>
               <div className="min-w-0">

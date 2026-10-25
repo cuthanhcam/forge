@@ -86,7 +86,7 @@ export function SupportPage(): JSX.Element {
                         cn(
                           "flex gap-3 rounded-lg p-3 transition",
                           isActive || (!mode && item.id === "ask")
-                            ? "bg-white text-sky-700 shadow-sm ring-1 ring-sky-100"
+                            ? "bg-white text-accent-700 shadow-sm ring-1 ring-accent-100"
                             : "text-slate-600 hover:bg-white hover:text-slate-950",
                         )
                       }
@@ -108,7 +108,7 @@ export function SupportPage(): JSX.Element {
 
             <section className="p-5 md:p-6">
               <div className="flex items-start gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-600 ring-1 ring-sky-100">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-accent-50 text-accent-600 ring-1 ring-accent-100">
                   <ActiveIcon aria-hidden="true" className="h-5 w-5" />
                 </div>
                 <div>
@@ -160,7 +160,7 @@ export function SupportPage(): JSX.Element {
                       Subject
                     </span>
                     <input
-                      className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] font-medium text-slate-950 outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                      className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] font-medium text-slate-950 outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                       onChange={(event) => setSubject(event.target.value)}
                       value={subject}
                     />
@@ -170,7 +170,7 @@ export function SupportPage(): JSX.Element {
                       Message
                     </span>
                     <textarea
-                      className="scrollbar-forge mt-2 min-h-44 w-full resize-none rounded-md border border-slate-200 bg-white p-3 text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                      className="scrollbar-forge mt-2 min-h-44 w-full resize-none rounded-md border border-slate-200 bg-white p-3 text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                       onChange={(event) => setMessage(event.target.value)}
                       placeholder={defaultMessage(activeMode.id)}
                       value={message}
@@ -179,14 +179,14 @@ export function SupportPage(): JSX.Element {
                 </div>
                 <div className="grid content-start gap-3">
                   <a
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
                     href={mailtoHref}
                   >
                     <Mail aria-hidden="true" className="h-4 w-4" />
                     Open email
                   </a>
                   <a
-                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
+                    className="inline-flex h-10 items-center justify-center gap-2 rounded-md border border-border bg-white px-4 text-sm font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
                     href={contact.issues}
                     rel="noreferrer"
                     target="_blank"
@@ -195,13 +195,13 @@ export function SupportPage(): JSX.Element {
                     Open issue
                   </a>
                   <a
-                    className="rounded-lg border border-slate-200 bg-white p-3 text-[12px] font-semibold leading-5 text-slate-600 transition hover:border-sky-200 hover:bg-sky-50/40"
+                    className="rounded-lg border border-slate-200 bg-white p-3 text-[12px] font-semibold leading-5 text-slate-600 transition hover:border-accent-200 hover:bg-accent-50/40"
                     href={contact.repository}
                     rel="noreferrer"
                     target="_blank"
                   >
                     Repository:{" "}
-                    <span className="font-mono text-sky-700">orcace/forge</span>
+                    <span className="font-mono text-accent-700">orcace/forge</span>
                   </a>
                 </div>
               </div>
@@ -230,16 +230,16 @@ function ContactCard({
 }: ContactCardProps): JSX.Element {
   return (
     <a
-      className="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-sky-200 hover:bg-sky-50/40"
+      className="group rounded-lg border border-slate-200 bg-white p-4 transition hover:border-accent-200 hover:bg-accent-50/40"
       href={href}
       rel="noreferrer"
       target={href.startsWith("mailto:") ? undefined : "_blank"}
     >
-      <div className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-100 text-slate-600 group-hover:bg-sky-50 group-hover:text-sky-600">
+      <div className="flex h-9 w-9 items-center justify-center rounded-md bg-slate-100 text-slate-600 group-hover:bg-accent-50 group-hover:text-accent-600">
         <Icon aria-hidden="true" className="h-4 w-4" />
       </div>
       <h3 className="mt-3 text-[14px] font-semibold text-slate-950">{title}</h3>
-      <p className="mt-1 break-words font-mono text-[12px] leading-5 text-sky-700">
+      <p className="mt-1 break-words font-mono text-[12px] leading-5 text-accent-700">
         {label}
       </p>
       <p className="mt-2 text-[12px] leading-5 text-slate-500">{description}</p>

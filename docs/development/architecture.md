@@ -29,3 +29,6 @@ selector overrides should gradually give way to semantic component tokens.
 
 See [typography](typography.md) for shared font roles, font licensing and text
 hierarchy. Use the tokens before adding a new local font declaration.
+
+See [theme and interaction colors](theme.md) for the neutral dark palette, blue
+accent tokens and hover/focus behavior.

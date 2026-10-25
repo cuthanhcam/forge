@@ -157,7 +157,7 @@ export function JwtDecoderPage(): JSX.Element {
               className={cn(
                 "flex h-9 items-center gap-2 rounded-md px-2.5 text-[12px] font-semibold transition",
                 !lineWrap
-                  ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                  ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
               )}
               onClick={() => setLineWrap((current) => !current)}
@@ -208,7 +208,7 @@ export function JwtDecoderPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <div className="flex items-center gap-2 text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <div className="flex items-center gap-2 text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 <span>{token.length.toLocaleString()} chars</span>
                 <button
                   className="rounded px-1.5 py-0.5 text-slate-500 transition hover:bg-white hover:text-slate-950"
@@ -265,7 +265,7 @@ function ExampleControl({ onGenerate, value }: ExampleControlProps): JSX.Element
           className="flex h-9 items-center gap-2 rounded-md border border-slate-200 bg-white px-2.5 text-[12px] font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50 hover:text-slate-950"
           type="button"
         >
-          <Sparkles aria-hidden="true" className="h-4 w-4 text-sky-600" />
+          <Sparkles aria-hidden="true" className="h-4 w-4 text-accent-600" />
           <span className="hidden sm:inline">Generate example</span>
           <span className="font-bold text-slate-950">{value}</span>
           <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
@@ -285,7 +285,7 @@ function ExampleControl({ onGenerate, value }: ExampleControlProps): JSX.Element
             >
               <span>{algorithm}</span>
               {value === algorithm ? (
-                <Check aria-hidden="true" className="h-4 w-4 text-sky-600" />
+                <Check aria-hidden="true" className="h-4 w-4 text-accent-600" />
               ) : null}
             </DropdownMenu.Item>
           ))}
@@ -391,8 +391,8 @@ function TokenInput({
           className={cn(
             "scrollbar-forge relative h-full min-h-0 w-full resize-none border-0 bg-transparent p-4 font-mono text-[13px] leading-6 outline-none placeholder:text-slate-400",
             value
-              ? "text-transparent caret-slate-950 selection:bg-sky-200/70 selection:text-transparent"
-              : "text-slate-950 selection:bg-sky-200/80 selection:text-slate-950",
+              ? "text-transparent caret-slate-950 selection:bg-accent-200/70 selection:text-transparent"
+              : "text-slate-950 selection:bg-accent-200/80 selection:text-slate-950",
             lineWrap ? "overflow-auto break-all" : "overflow-auto whitespace-pre",
           )}
           onChange={(event) => onChange(event.target.value)}
@@ -417,7 +417,11 @@ function highlightEncodedToken(value: string): JSX.Element[] {
 
   return parts.flatMap((part, index) => {
     const className =
-      index === 0 ? "text-sky-700" : index === 1 ? "text-emerald-700" : "text-violet-700";
+      index === 0
+        ? "text-accent-700"
+        : index === 1
+          ? "text-emerald-700"
+          : "text-violet-700";
     const segment = (
       <span className={className} key={`segment-${index}`}>
         {part}
@@ -482,12 +486,12 @@ function TokenSegment({
 }): JSX.Element {
   const toneClass = {
     emerald: "border-emerald-200 bg-emerald-50 text-emerald-900",
-    sky: "border-sky-200 bg-sky-50 text-sky-900",
+    sky: "border-accent-200 bg-accent-50 text-accent-900",
     violet: "border-violet-200 bg-violet-50 text-violet-900",
   }[tone];
   const badgeClass = {
     emerald: "bg-emerald-100 text-emerald-700",
-    sky: "bg-sky-100 text-sky-700",
+    sky: "bg-accent-100 text-accent-700",
     violet: "bg-violet-100 text-violet-700",
   }[tone];
 
@@ -634,7 +638,7 @@ function JsonBlock({
 }): JSX.Element {
   const toneClasses =
     tone === "sky"
-      ? "border-sky-100 bg-sky-50/50 text-sky-700"
+      ? "border-accent-100 bg-accent-50/50 text-accent-700"
       : "border-emerald-100 bg-emerald-50/50 text-emerald-700";
 
   return (
@@ -704,7 +708,7 @@ function BreakdownTable({ rows }: { rows: JwtBreakdownRow[] }): JSX.Element {
           className="grid border-b border-slate-200/80 last:border-b-0 md:grid-cols-[10rem_minmax(0,1fr)_minmax(13rem,0.95fr)]"
           key={row.name}
         >
-          <div className="border-slate-200/80 px-3 py-2 font-mono text-[13px] font-semibold text-sky-700 md:border-r">
+          <div className="border-slate-200/80 px-3 py-2 font-mono text-[13px] font-semibold text-accent-700 md:border-r">
             {row.name}
           </div>
           <div className="break-words border-slate-200/80 px-3 py-2 font-mono text-[13px] leading-5 text-slate-950 md:border-r">
@@ -728,7 +732,7 @@ function highlightJson(value: string): JSX.Element[] {
     .map((part, index) => {
       const className =
         /^"(?:\\.|[^"\\])*"$/.test(part) && value.includes(`${part}:`)
-          ? "text-sky-700"
+          ? "text-accent-700"
           : /^"/.test(part)
             ? "text-emerald-700"
             : /^(true|false|null)$/.test(part)
@@ -784,7 +788,9 @@ function ClaimCard({ claim }: { claim: JwtClaimInsight }): JSX.Element {
   return (
     <section className="rounded-lg border border-slate-200 bg-white p-3 shadow-sm">
       <div className="flex items-center justify-between gap-2">
-        <span className="font-mono text-[12px] font-bold text-sky-700">{claim.name}</span>
+        <span className="font-mono text-[12px] font-bold text-accent-700">
+          {claim.name}
+        </span>
         {claim.status ? <ClaimBadge status={claim.status} /> : null}
       </div>
       <p className="mt-1 text-[12px] font-semibold text-slate-500">{claim.description}</p>
@@ -849,7 +855,7 @@ function VerifyPanel({
             HMAC shared secret
           </span>
           <textarea
-            className="scrollbar-forge min-h-32 resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-[13px] leading-6 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-sky-300 focus:bg-white focus:ring-4 focus:ring-sky-100"
+            className="scrollbar-forge min-h-32 resize-y rounded-lg border border-slate-200 bg-slate-50 p-3 font-mono text-[13px] leading-6 text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-accent-500 focus:bg-white focus:ring-4 focus:ring-accent-100"
             onChange={(event) => onSecretChange(event.target.value)}
             placeholder="Enter HS256 / HS384 / HS512 secret..."
             spellCheck={false}

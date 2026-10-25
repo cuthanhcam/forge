@@ -28,7 +28,7 @@ export function Header({
           aria-label="Open navigation"
           aria-expanded={navigationOpen}
           aria-controls="forge-sidebar"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 lg:hidden"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600 lg:hidden"
           onClick={onOpenNavigation}
           type="button"
         >
@@ -36,7 +36,7 @@ export function Header({
         </button>
         <div className="flex min-w-0 items-center gap-2">
           {HeaderIcon ? (
-            <HeaderIcon aria-hidden="true" className="h-4 w-4 shrink-0 text-sky-600" />
+            <HeaderIcon aria-hidden="true" className="h-4 w-4 shrink-0 text-accent-600" />
           ) : null}
           <h1 className="truncate text-[15px] font-semibold text-slate-950">
             {headerMeta.title}

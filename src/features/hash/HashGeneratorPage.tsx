@@ -143,7 +143,7 @@ export function HashGeneratorPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <div className="flex gap-2 text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <div className="flex gap-2 text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 <span>{result.stats.chars.toLocaleString()} chars</span>
                 <span>{result.stats.bytes.toLocaleString()} bytes</span>
               </div>
@@ -158,7 +158,7 @@ export function HashGeneratorPage(): JSX.Element {
                   HMAC secret key
                 </span>
                 <input
-                  className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-3 font-mono text-[13px] text-slate-950 outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                  className="mt-2 h-9 w-full rounded-md border border-slate-200 bg-white px-3 font-mono text-[13px] text-slate-950 outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                   onChange={(event) => setKey(event.target.value)}
                   spellCheck={false}
                   value={key}
@@ -234,7 +234,7 @@ function SegmentedControl<T extends string>({
           className={cn(
             "h-7 rounded px-2 text-[12px] font-semibold transition",
             value === option.value
-              ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+              ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
           )}
           key={option.value}
@@ -281,7 +281,7 @@ function TextPane({
     <label className="block min-h-0 flex-1 bg-white">
       <span className="sr-only">{label}</span>
       <textarea
-        className="scrollbar-forge h-full min-h-0 w-full resize-none border-0 bg-white p-4 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 selection:bg-sky-200/80 selection:text-slate-950"
+        className="scrollbar-forge h-full min-h-0 w-full resize-none border-0 bg-white p-4 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 selection:bg-accent-200/80 selection:text-slate-950"
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
         spellCheck={false}

@@ -32,7 +32,7 @@ export function TimestampPage(): JSX.Element {
             <label className="min-w-0 flex-1">
               <span className="sr-only">Timestamp or date</span>
               <input
-                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                 onChange={(event) => setInput(event.target.value)}
                 placeholder="Unix seconds, milliseconds, ISO date, or readable date..."
                 value={input}
@@ -83,7 +83,7 @@ export function TimestampPage(): JSX.Element {
                     Local datetime input
                   </p>
                   <input
-                    className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3 font-mono text-[13px] text-slate-950 outline-none focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                    className="mt-2 h-10 w-full rounded-md border border-slate-200 bg-white px-3 font-mono text-[13px] text-slate-950 outline-none focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                     onChange={(event) => setInput(event.target.value)}
                     aria-label="Local datetime input"
                     type="datetime-local"
@@ -141,8 +141,8 @@ export function TimestampPage(): JSX.Element {
 
 function PrimaryTime({ label, value }: { label: string; value: string }): JSX.Element {
   return (
-    <div className="rounded-lg border border-sky-100 bg-sky-50 p-4">
-      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-sky-600">
+    <div className="rounded-lg border border-accent-100 bg-accent-50 p-4">
+      <p className="text-[11px] font-bold uppercase tracking-[0.08em] text-accent-600">
         {label}
       </p>
       <p className="mt-2 break-all font-mono text-[22px] font-bold leading-8 text-slate-950">

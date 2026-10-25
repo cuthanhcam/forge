@@ -45,7 +45,7 @@ export function SlugifyPage(): JSX.Element {
     <ToolSurface>
       <ToolToolbar
         left={
-          <div className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-sky-600">
+          <div className="flex min-w-0 items-center gap-2 text-[12px] font-semibold text-accent-600">
             <Link2 aria-hidden="true" className="h-4 w-4" />
             URL-safe slug
           </div>
@@ -86,7 +86,7 @@ export function SlugifyPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 {input.length.toLocaleString()} chars
               </span>
             }
@@ -94,7 +94,7 @@ export function SlugifyPage(): JSX.Element {
             tone="blue"
           />
           <ToolTextarea
-            className="selection:bg-sky-200/80 selection:text-slate-950"
+            className="selection:bg-accent-200/80 selection:text-slate-950"
             label="Slug input"
             onChange={setInput}
             placeholder="Text to slugify..."
@@ -143,7 +143,7 @@ export function SlugifyPage(): JSX.Element {
                     className={cn(
                       "h-8 rounded px-2.5 text-[12px] font-semibold transition",
                       options.separator === option.value
-                        ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+                        ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
                         : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
                     )}
                     key={option.value}
@@ -166,7 +166,7 @@ export function SlugifyPage(): JSX.Element {
                   </span>
                 </span>
                 <input
-                  className="mt-3 w-full accent-sky-600"
+                  className="mt-3 w-full accent-accent-600"
                   max={160}
                   min={16}
                   onChange={(event) =>
@@ -214,7 +214,7 @@ function CheckOption({
     <label className="flex items-center gap-2 rounded-md border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700">
       <input
         checked={checked}
-        className="accent-sky-600"
+        className="accent-accent-600"
         onChange={(event) => onChange(event.target.checked)}
         type="checkbox"
       />

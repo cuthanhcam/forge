@@ -131,14 +131,14 @@ export function SettingsPage(): JSX.Element {
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
                 <a
-                  className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
+                  className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
                   href="/docs"
                 >
                   <BookOpen aria-hidden="true" className="h-4 w-4" />
                   Product docs
                 </a>
                 <a
-                  className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
+                  className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
                   href="https://github.com/orcace/forge/issues"
                   rel="noreferrer"
                   target="_blank"

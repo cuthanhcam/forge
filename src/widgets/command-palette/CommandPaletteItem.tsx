@@ -20,7 +20,7 @@ export function CommandPaletteItem({
     <button
       className={cn(
         "flex w-full items-start gap-3 rounded-md px-3 py-3 text-left transition",
-        active ? "bg-sky-50 ring-1 ring-sky-100" : "hover:bg-slate-50",
+        active ? "bg-accent-50 ring-1 ring-accent-100" : "hover:bg-slate-50",
       )}
       onClick={onSelect}
       type="button"

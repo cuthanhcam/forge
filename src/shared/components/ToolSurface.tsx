@@ -93,7 +93,7 @@ export function PaneHeader({
   tone = "slate",
 }: PaneHeaderProps): JSX.Element {
   const tones: Record<NonNullable<PaneHeaderProps["tone"]>, string> = {
-    blue: "border-sky-100 bg-sky-50/70 text-sky-700",
+    blue: "border-accent-100 bg-accent-50/70 text-accent-700",
     emerald: "border-emerald-100 bg-emerald-50/70 text-emerald-700",
     rose: "border-rose-100 bg-rose-50/70 text-rose-700",
     slate: "border-slate-100 bg-slate-50/70 text-slate-600",
