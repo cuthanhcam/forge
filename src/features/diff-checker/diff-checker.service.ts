@@ -14,6 +14,7 @@ interface PersistedDiffCheckerState extends Omit<
   | "lineWrap"
   | "syncScroll"
   | "syntax"
+  | "optionsCollapsed"
 > {
   hideUnchanged?: boolean;
   hideWhitespace?: boolean;
@@ -23,6 +24,7 @@ interface PersistedDiffCheckerState extends Omit<
   lineWrap?: boolean;
   syncScroll?: boolean;
   syntax?: string;
+  optionsCollapsed?: boolean;
 }
 
 export type DiffChangeType = "added" | "removed" | "unchanged";
@@ -212,6 +214,7 @@ export function createDiffCheckerState(): DiffCheckerState {
     hideWhitespace: false,
     ignoreBlankLines: false,
     inputVisible: false,
+    optionsCollapsed: false,
     layout: "split",
     left: sampleLeft,
     lineWrap: false,
@@ -229,6 +232,7 @@ export function normalizeDiffCheckerState(
     hideWhitespace: input.hideWhitespace ?? false,
     ignoreBlankLines: input.ignoreBlankLines ?? false,
     inputVisible: input.inputVisible ?? false,
+    optionsCollapsed: input.optionsCollapsed ?? false,
     layout: input.layout ?? "split",
     left: input.left,
     lineWrap: input.lineWrap ?? false,

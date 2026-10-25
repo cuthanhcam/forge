@@ -563,7 +563,7 @@ body {
   color: var(--forge-dark-subtle) !important;
 }
 
-.dark .border:not(.border-transparent),
+.dark .border:where(:not(.border-transparent)),
 .dark .border-slate-100,
 .dark .border-slate-200,
 .dark .border-border {

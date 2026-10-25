@@ -14,6 +14,7 @@ export const DiffCheckerStateSchema = z.object({
   inputVisible: z.boolean().optional(),
   ignoreBlankLines: z.boolean().optional(),
   layout: DiffCheckerLayoutSchema.optional(),
+  optionsCollapsed: z.boolean().optional(),
   left: z.string(),
   lineWrap: z.boolean().optional(),
   right: z.string(),
@@ -32,12 +33,14 @@ export type DiffCheckerState = Omit<
   | "lineWrap"
   | "syncScroll"
   | "syntax"
+  | "optionsCollapsed"
 > & {
   hideUnchanged: boolean;
   hideWhitespace: boolean;
   ignoreBlankLines: boolean;
   inputVisible: boolean;
   layout: DiffCheckerLayout;
+  optionsCollapsed: boolean;
   lineWrap: boolean;
   syncScroll: boolean;
   syntax: string;

@@ -13,7 +13,7 @@ from the reference is copied.
 | Canvas | White | #0D1117 |
 | Editor, header and menu | White | #161B22 |
 | Raised/hover surface | Slate 50/100 | #21262D |
-| Neutral divider | Slate 100/200 | #30363D |
+| Neutral divider | Slate 100/200 | #282E36 |
 | Primary reading text | Slate 900/950 | #C9D1D9 |
 | Secondary text | Slate 500/600 | #9AA5B1 |
 | Subtle text and code comments | Slate 400 (existing UI) | #8B949E |
@@ -63,3 +63,9 @@ not a claim that every element in Forge has been certified for WCAG conformance.
 Run `pnpm check` and the browser suite before integrating theme changes. Review
 home, Markdown/HTML, data tools, dialogs, menus, errors and disabled states in
 both themes; preserve the privacy and rendering boundaries.
+
+Decorative neutral dark borders use #282E36. Transparent borders must remain
+transparent: the legacy `.dark .border` bridge excludes `.border-transparent`.
+Do not use a global border override that outlines unchanged diff rows. Changed
+blocks keep a subtle outer boundary without internal horizontal separators;
+keyboard focus and selected/accent boundaries remain explicit.
