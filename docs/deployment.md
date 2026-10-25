@@ -52,12 +52,12 @@ Recommended defaults:
 - Node.js version: 22 or newer
 - Package manager: pnpm 10 or newer
 
-Forge includes `public/_redirects`, which Vite copies into `dist/`. Cloudflare
-Pages uses this file to serve `index.html` for client-side routes:
+The current Vite configuration includes the Cloudflare plugin. Wrangler sets
+`assets.not_found_handling` to `single-page-application` in `wrangler.jsonc`.
+There is no committed `public/_redirects` file. For a separate Pages deployment,
+configure a SPA fallback explicitly and verify a direct tool URL after deployment.
 
-```text
-/* /index.html 200
-```
-
-If route refreshes return 404 on another host, add the equivalent SPA fallback
-rule in that platform's configuration.
+Use `pnpm preview` to build and serve the Cloudflare output locally, and
+`pnpm deploy` for an authorized deployment. Inspect the generated output before
+adapting this project to another static host; the Cloudflare integration affects
+the output layout.

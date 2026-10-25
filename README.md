@@ -78,6 +78,8 @@ keyboard-friendly navigation, and a privacy-first model.
 
 ## Documentation
 
+- [Contributing and local setup](CONTRIBUTING.md)
+- [Development roadmap and UI/UX audit](docs/development/roadmap.md)
 - [Documentation home](docs/README.md)
 - [Product overview](docs/product.md)
 - [Tool guide](docs/tools.md)

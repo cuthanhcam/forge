@@ -16,6 +16,12 @@ collection of unrelated websites.
 - [Deployment notes](deployment.md)
 - [Support](support.md)
 
+## Development
+
+- [Contributing](../CONTRIBUTING.md)
+- [Architecture](development/architecture.md)
+- [Roadmap and UI/UX audit](development/roadmap.md)
+
 ## Documentation Goals
 
 These docs are written for people using Forge, evaluating Forge, or deploying
