@@ -10,6 +10,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
+import { RangeInput } from "@/shared/ui/range";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { PaneHeader, ToolSurface, ToolToolbar } from "@/shared/components/ToolSurface";
@@ -136,22 +137,17 @@ export function JwtSecretPage(): JSX.Element {
                 </p>
                 <span className="text-[13px] font-bold text-accent-700">{size} bits</span>
               </div>
-              <input
-                className="w-full accent-accent-600"
-                aria-label="Secret length in bits"
-                aria-valuetext={`${size} bits`}
-                max={512}
+              <RangeInput
+                label="Secret length in bits"
                 min={32}
-                onChange={(event) => setSize(Number(event.target.value))}
+                max={512}
+                midpoint={256}
                 step={8}
-                type="range"
                 value={size}
+                marks={bitMarks}
+                formatValue={(bits) => `${bits} bits`}
+                onChange={setSize}
               />
-              <div className="mt-2 flex justify-between text-[12px] font-medium text-slate-500">
-                {bitMarks.map((mark) => (
-                  <span key={mark}>{mark}</span>
-                ))}
-              </div>
             </section>
             <section className="mt-6 rounded-lg border border-slate-200 bg-slate-50 p-3 text-[13px] leading-5 text-slate-600">
               <div className="flex gap-2">

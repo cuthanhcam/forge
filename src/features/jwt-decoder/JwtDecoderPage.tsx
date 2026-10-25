@@ -434,7 +434,7 @@ function highlightEncodedToken(value: string): JSX.Element[] {
 
     return [
       segment,
-      <span className="text-slate-400" key={`dot-${index}`}>
+      <span className="text-slate-500" key={`dot-${index}`}>
         .
       </span>,
     ];
