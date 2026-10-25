@@ -60,14 +60,14 @@
   --card: 215 21% 11%;
   --card-foreground: 213 17% 82%;
   --muted-foreground: 213 12% 66%;
-  --border: 214 13% 21%;
+  --border: 215 14% 18%;
   --jwt-payload: #7ee2b8;
   --jwt-signature: #c4b5fd;
   --forge-dark-bg: #0d1117;
   --forge-dark-panel: #161b22;
   --forge-dark-panel-2: #21262d;
   --forge-dark-panel-3: #30363d;
-  --forge-dark-border: #30363d;
+  --forge-dark-border: #282e36;
   --forge-dark-border-soft: #21262d;
   --forge-dark-text: #c9d1d9;
   --forge-dark-muted: #9aa5b1;
@@ -563,7 +563,7 @@ body {
   color: var(--forge-dark-subtle) !important;
 }
 
-.dark .border,
+.dark .border:not(.border-transparent),
 .dark .border-slate-100,
 .dark .border-slate-200,
 .dark .border-border {
