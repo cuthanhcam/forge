@@ -489,7 +489,7 @@ ${renderedHtml}
 
   function renderMarkdownEditor(): JSX.Element {
     return (
-      <label className="relative flex h-full min-h-0 flex-col overflow-hidden bg-white">
+      <label className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-white">
         <span className="sr-only">Markdown input</span>
         <div
           aria-hidden="true"
@@ -584,6 +584,7 @@ ${renderedHtml}
             >
               <Button
                 aria-label="Toggle sync"
+                aria-pressed={state.syncScroll}
                 className={cn(
                   "h-8 px-2.5 text-xs",
                   state.syncScroll && "bg-sky-50 text-sky-700 ring-1 ring-sky-100",
@@ -706,7 +707,7 @@ ${renderedHtml}
 
         <div
           className={cn(
-            "grid min-h-0 flex-1 grid-cols-1 overflow-hidden",
+            "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1",
             state.tabsCollapsed
               ? "md:grid-cols-[3rem_minmax(0,1fr)]"
               : "md:grid-cols-[11.5rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)]",
@@ -859,15 +860,17 @@ ${renderedHtml}
 
           <div
             className={cn(
-              "grid h-full min-h-0 flex-1 overflow-hidden",
-              showEditor && showPreview ? "lg:grid-cols-2" : "grid-cols-1",
+              "grid h-full min-h-0 min-w-0 flex-1 overflow-hidden",
+              showEditor && showPreview
+                ? "grid-rows-2 lg:grid-cols-2 lg:grid-rows-1"
+                : "grid-cols-1 grid-rows-1",
             )}
           >
             {showEditor ? renderMarkdownEditor() : null}
 
             {showPreview ? (
               <div
-                className="scrollbar-forge h-full min-h-0 overflow-auto border-t border-slate-100 bg-white lg:border-l lg:border-t-0"
+                className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain border-t border-slate-100 bg-white lg:border-l lg:border-t-0"
                 onScroll={handlePreviewScroll}
                 ref={previewScrollRef}
               >

@@ -33,6 +33,14 @@ Forge may store local workspace preferences in your browser:
 
 This storage is local to the browser profile and device.
 
+## Preview documents
+
+HTML scripts execute in a sandbox without same-origin access to Forge. This
+isolation does not block network requests: HTML and Markdown can contain remote
+images, styles, links or scripts. Opening such a document can contact external
+servers. Inspect resource URLs before previewing confidential content. Exported
+Markdown HTML currently links to external KaTeX styles.
+
 ## External Links
 
 Some support flows open external services such as GitHub, email, or LinkedIn.

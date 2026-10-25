@@ -18,7 +18,7 @@ export function ToolLayout({
   const Icon = tool.icon;
 
   return (
-    <main className="h-[calc(100vh-3.5rem)] min-w-0 flex-1 overflow-hidden px-3 py-3 md:px-4 md:py-4 2xl:px-5">
+    <main className="min-h-0 min-w-0 flex-1 overflow-hidden px-3 py-3 md:px-4 md:py-4 2xl:px-5">
       <div className="flex h-full min-h-0 w-full flex-col">
         {showHeader ? (
           <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

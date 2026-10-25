@@ -12,7 +12,15 @@ release notes, READMEs, and quick content drafts.
 ### HTML Preview
 
 Write HTML and inspect the result in a constrained preview surface. Useful for
-snippets, templates, and quick markup checks.
+snippets, templates, and quick markup checks. Inline scripts run in an isolated
+iframe without access to Forge's DOM or browser storage. Forms, popups, modal
+dialogs and downloads initiated inside the preview are restricted. Use the
+Forge toolbar to download the source. Auto updates after a short delay; turn it
+off to apply edits only with Run preview.
+
+The HTML editor currently uses native text rendering for reliable caret and
+scroll alignment; syntax coloring and line numbers are deferred until a shared
+editor integration has browser regression coverage.
 
 ### Diff Checker
 
