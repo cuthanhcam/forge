@@ -22,14 +22,27 @@
   --brand-indigo: #6a4bff;
 }
 
+/* Neutral workbench surfaces, inspired by the local Markdown-Viewer reference. */
 .dark {
   color-scheme: dark;
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 217.2 32.6% 17.5%;
-  --card-foreground: 210 40% 98%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --border: 217.2 32.6% 25%;
+  --background: 215 28% 7%;
+  --foreground: 213 27% 91%;
+  --card: 215 21% 11%;
+  --card-foreground: 213 27% 91%;
+  --muted-foreground: 213 12% 66%;
+  --border: 214 13% 21%;
+  --forge-dark-bg: #0d1117;
+  --forge-dark-panel: #161b22;
+  --forge-dark-panel-2: #21262d;
+  --forge-dark-panel-3: #30363d;
+  --forge-dark-border: #30363d;
+  --forge-dark-border-soft: #21262d;
+  --forge-dark-text: #e6edf3;
+  --forge-dark-muted: #a6b0bb;
+  --forge-dark-subtle: #8b949e;
+  --forge-dark-green: #7ee2b8;
+  --forge-dark-amber: #f2cc60;
+  --forge-dark-rose: #ff9b9b;
 }
 
 @theme inline {
@@ -419,48 +432,21 @@ body {
   color: rgb(15 23 42);
 }
 
-.dark {
-  --background: 264 32% 6%;
-  --foreground: 255 33% 96%;
-  --card: 262 25% 10%;
-  --card-foreground: 255 33% 96%;
-  --muted-foreground: 260 13% 70%;
-  --border: 263 18% 22%;
-  --forge-dark-bg: #09070f;
-  --forge-dark-panel: #11101a;
-  --forge-dark-panel-2: #171420;
-  --forge-dark-panel-3: #20182b;
-  --forge-dark-border: #31283f;
-  --forge-dark-border-soft: #251e31;
-  --forge-dark-text: #f6f0ff;
-  --forge-dark-muted: #b8adc8;
-  --forge-dark-subtle: #867a98;
-  --forge-dark-pink: #ff4fd8;
-  --forge-dark-purple: #a855f7;
-  --forge-dark-blue: #60a5fa;
-  --forge-dark-green: #5ee0ad;
-  --forge-dark-amber: #f6c76a;
-  --forge-dark-rose: #ff7a97;
-}
-
 .dark body {
-  background:
-    radial-gradient(circle at 16% 0%, rgb(227 65 255 / 0.16), transparent 34rem),
-    radial-gradient(circle at 88% 10%, rgb(106 75 255 / 0.14), transparent 30rem),
-    linear-gradient(180deg, #0b0710 0%, #09070f 42%, #08070d 100%);
+  background: var(--forge-dark-bg);
   color: var(--forge-dark-text);
 }
 
 .dark .bg-slate-50,
 .dark .bg-slate-50\/70 {
-  background-color: #0d0b14 !important;
+  background-color: var(--forge-dark-bg) !important;
 }
 
 .dark .bg-white,
 .dark .bg-white\/70,
 .dark .bg-white\/80,
 .dark .bg-white\/90 {
-  background-color: rgb(17 16 26 / 0.94) !important;
+  background-color: var(--forge-dark-panel) !important;
 }
 
 .dark .bg-slate-100,
@@ -519,28 +505,20 @@ body {
   background-color: rgb(255 79 216 / 0.13) !important;
 }
 
-.dark .bg-gradient-soft {
-  background:
-    linear-gradient(135deg, rgb(255 79 216 / 0.14), rgb(96 165 250 / 0.1)),
-    linear-gradient(0deg, rgb(17 16 26 / 0.92), rgb(17 16 26 / 0.92));
-}
-
+.dark .bg-gradient-soft,
 .dark .bg-\[\#fbfaf8\] {
-  background:
-    radial-gradient(circle at 16% 5%, rgb(255 79 216 / 0.12), transparent 34rem),
-    radial-gradient(circle at 82% 18%, rgb(106 75 255 / 0.12), transparent 28rem),
-    linear-gradient(180deg, #0b0710 0%, #09070f 100%) !important;
+  background: var(--forge-dark-bg) !important;
 }
 
 .dark [class*="bg-[repeating-linear-gradient"] {
   background-image: repeating-linear-gradient(
     135deg,
-    rgb(17 16 26 / 0.82) 0,
-    rgb(17 16 26 / 0.82) 5px,
-    rgb(32 24 43 / 0.76) 5px,
-    rgb(32 24 43 / 0.76) 10px
+    rgb(22 27 34 / 0.82) 0,
+    rgb(22 27 34 / 0.82) 5px,
+    rgb(33 38 45 / 0.76) 5px,
+    rgb(33 38 45 / 0.76) 10px
   ) !important;
-  color: #756983 !important;
+  color: var(--forge-dark-subtle) !important;
 }
 
 .dark .border,
@@ -649,7 +627,7 @@ body {
 .dark .bg-white button:hover,
 .dark button.bg-white:hover,
 .dark a.bg-white:hover {
-  background-color: #241b30 !important;
+  background-color: var(--forge-dark-panel-3) !important;
 }
 
 .dark .fill-white {
@@ -687,7 +665,7 @@ body {
 }
 
 .dark .placeholder\:text-slate-400::placeholder {
-  color: #756983 !important;
+  color: var(--forge-dark-subtle) !important;
 }
 
 .dark .selection\:bg-sky-200\/80::selection,
@@ -736,7 +714,7 @@ body {
 }
 
 .dark .forge-markdown {
-  color: #ded6e9;
+  color: var(--forge-dark-text);
 }
 
 .dark .forge-markdown h1,
@@ -759,7 +737,7 @@ body {
 .dark .forge-markdown th {
   background: var(--forge-dark-panel-2);
   border-color: var(--forge-dark-border);
-  color: #ded6e9;
+  color: var(--forge-dark-text);
 }
 
 .dark .forge-markdown td,
@@ -768,7 +746,7 @@ body {
 }
 
 .dark .forge-markdown pre code {
-  color: #ded6e9;
+  color: var(--forge-dark-text);
 }
 
 .dark .forge-markdown hr,
@@ -826,4 +804,43 @@ body {
 .sidebar-footer-actions > :focus-visible {
   outline: 2px solid rgb(2 132 199);
   outline-offset: -2px;
+}
+
+.dark .forge-markdown .hljs-keyword,
+.dark .forge-markdown .hljs-selector-tag,
+.dark .forge-markdown .hljs-built_in {
+  color: #ff9b9b;
+}
+.dark .forge-markdown .hljs-string,
+.dark .forge-markdown .hljs-title,
+.dark .forge-markdown .hljs-section,
+.dark .forge-markdown .hljs-attribute {
+  color: #a5d6ff;
+}
+.dark .forge-markdown .hljs-number,
+.dark .forge-markdown .hljs-literal,
+.dark .forge-markdown .hljs-symbol,
+.dark .forge-markdown .hljs-bullet {
+  color: #f2cc60;
+}
+.dark .forge-markdown .hljs-property,
+.dark .forge-markdown .hljs-attr,
+.dark .forge-markdown .hljs-variable,
+.dark .forge-markdown .hljs-template-variable {
+  color: #a5d6ff;
+}
+.dark .forge-markdown .hljs-comment,
+.dark .forge-markdown .hljs-quote {
+  color: var(--forge-dark-subtle);
+}
+.dark .forge-markdown .hljs-punctuation {
+  color: var(--forge-dark-text);
+}
+.dark .forge-markdown kbd {
+  background: var(--forge-dark-panel-2);
+  color: var(--forge-dark-text);
+}
+.dark .forge-markdown mark {
+  background: #f2cc60;
+  color: #0d1117;
 }
