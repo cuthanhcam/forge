@@ -930,7 +930,7 @@ function getChangeClass(
 ): string {
   const blockShape = cn(
     previousSame ? "rounded-t-none border-t-0" : "rounded-t-md",
-    nextSame ? "rounded-b-none" : "rounded-b-md",
+    nextSame ? "rounded-b-none border-b-0" : "rounded-b-md",
   );
 
   if (type === "added") {
