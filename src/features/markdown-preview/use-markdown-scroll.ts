@@ -32,12 +32,17 @@ export function useMarkdownScroll({
   onEditorScroll: (event: UIEvent<HTMLTextAreaElement>) => void;
   onPreviewScroll: (event: UIEvent<HTMLDivElement>) => void;
   onEdit: () => void;
+  onEditorIntent: () => void;
+  onPreviewIntent: () => void;
 } {
   const leader = useRef<Pane>("editor");
   const expected = useRef(new WeakMap<HTMLElement, number>());
   const progress = useRef(0);
   const metrics = useRef(
-    new WeakMap<HTMLElement, { width: number; height: number; range: number }>(),
+    new WeakMap<
+      HTMLElement,
+      { width: number; height: number; range: number; top: number }
+    >(),
   );
   const positions = useRef(new Map<string, { editor: number; preview: number }>());
 
@@ -52,8 +57,11 @@ export function useMarkdownScroll({
       (previousSize.width !== source.clientWidth ||
         previousSize.height !== source.clientHeight ||
         (leader.current === "preview" && previousSize.range !== sourceRange));
-    if (resized) {
-      // Preserve reading progress across wrapping/breakpoints and late diagrams.
+    const nativeScrollMoved =
+      previousSize && Math.abs(source.scrollTop - previousSize.top) > 1;
+    if (resized && !nativeScrollMoved) {
+      // Preserve progress only when the browser/user has not already moved the
+      // source. A font/width update must not undo an in-flight caret scroll.
       source.scrollTop = progress.current * sourceRange;
       expected.current.set(source, source.scrollTop);
     }
@@ -62,6 +70,7 @@ export function useMarkdownScroll({
         width: element.clientWidth,
         height: element.clientHeight,
         range: Math.max(0, element.scrollHeight - element.clientHeight),
+        top: element.scrollTop,
       });
     }
     // A short pane must not pull a long pane back to the top.
@@ -72,6 +81,9 @@ export function useMarkdownScroll({
     if (Math.abs(target.scrollTop - nextTop) < 1) return;
     target.scrollTop = nextTop;
     expected.current.set(target, target.scrollTop);
+    const targetMetrics = metrics.current.get(target);
+    if (targetMetrics)
+      metrics.current.set(target, { ...targetMetrics, top: target.scrollTop });
   }, [editor, preview, enabled]);
 
   const handleScroll = useCallback(
@@ -116,6 +128,7 @@ export function useMarkdownScroll({
           width: element.clientWidth,
           height: element.clientHeight,
           range: Math.max(0, element.scrollHeight - element.clientHeight),
+          top: element.scrollTop,
         });
       }
     }
@@ -154,6 +167,14 @@ export function useMarkdownScroll({
     onPreviewScroll: (event) => handleScroll("preview", event.currentTarget),
     onEdit: () => {
       leader.current = "editor";
+    },
+    onEditorIntent: () => {
+      leader.current = "editor";
+      if (editor.current) expected.current.delete(editor.current);
+    },
+    onPreviewIntent: () => {
+      leader.current = "preview";
+      if (preview.current) expected.current.delete(preview.current);
     },
   };
 }

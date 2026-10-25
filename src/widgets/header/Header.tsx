@@ -5,12 +5,14 @@ import { getToolById } from "@/core/registry/tool.registry";
 import { HeaderActions } from "./HeaderActions";
 
 interface HeaderProps {
+  navigationOpen?: boolean;
   onOpenCommandPalette: () => void;
   onOpenNavigation: () => void;
   onOpenShortcuts: () => void;
 }
 
 export function Header({
+  navigationOpen = false,
   onOpenCommandPalette,
   onOpenNavigation,
   onOpenShortcuts,
@@ -24,7 +26,9 @@ export function Header({
       <div className="flex items-center gap-3">
         <button
           aria-label="Open navigation"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 lg:hidden"
+          aria-expanded={navigationOpen}
+          aria-controls="forge-sidebar"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 lg:hidden"
           onClick={onOpenNavigation}
           type="button"
         >

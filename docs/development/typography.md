@@ -4,10 +4,14 @@ Forge has two font roles, defined once in `src/app/styles.css`:
 
 - `--font-ui`: self-hosted Inter Variable for navigation, controls, headings and
   prose. Tailwind `font-sans` resolves to this same token. Headings use size and
-  weight for hierarchy rather than an additional display family.
-- `--font-code`: one system monospace stack for source, line numbers, structured
-  data and keyboard keys. Tailwind `font-mono`, preview editors and Markdown code
-  blocks share it. Do not use monospace for decorative labels or marketing copy.
+  weight for hierarchy rather than an additional display family. The home signature
+  is an intentional exception to the restrained heading scale: the original
+  large black-weight Inter lettering and brand gradient sit above the directory.
+- `--font-code`: one system monospace stack for HTML/code editors, structured
+  data, keyboard keys and rendered Markdown code blocks. Do not use monospace
+  for decorative labels or marketing copy. Markdown source intentionally uses
+  the same Inter 14px/1.7 reading typography as preview prose; its line-number
+  gutter follows the actual editor font and wrapping.
 
 Inter is bundled through `@fontsource-variable/inter`, including normal/italic
 faces and Unicode subsets. Vite serves font assets from the application origin;

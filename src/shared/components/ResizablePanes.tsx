@@ -52,7 +52,11 @@ export function ResizablePanes({
   }, []);
   useEffect(() => () => window.cancelAnimationFrame(frame.current), []);
   useEffect(() => {
+    const id = pointer.current;
     pointer.current = null;
+    window.cancelAnimationFrame(frame.current);
+    if (id !== null && dividerRef.current?.hasPointerCapture(id))
+      dividerRef.current.releasePointerCapture(id);
     setDragging(false);
   }, [horizontal, split]);
 
@@ -127,7 +131,7 @@ export function ResizablePanes({
             aria-valuemax={maximum}
             aria-valuenow={Math.round(ratio)}
             aria-valuetext={`${firstLabel} ${Math.round(ratio)}%, ${secondLabel} ${100 - Math.round(ratio)}%`}
-            className="relative z-20 flex touch-none items-center justify-center bg-slate-50 text-slate-400 outline-none hover:bg-sky-50 focus-visible:bg-sky-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-400"
+            className="relative z-20 flex touch-none items-center justify-center bg-slate-50 text-slate-500 outline-none hover:bg-sky-50 focus-visible:bg-sky-50 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600"
             key="divider"
             ref={dividerRef}
             role="separator"

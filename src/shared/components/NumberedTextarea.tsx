@@ -159,7 +159,7 @@ export function NumberedTextarea({
       data-numbered-editor=""
     >
       <div
-        className="h-full shrink-0 select-none font-mono text-[13px] border-r border-slate-100 bg-slate-50 text-slate-400"
+        className="h-full shrink-0 select-none font-mono text-[13px] border-r border-slate-100 bg-slate-50 text-slate-500"
         style={{ width: `calc(${String(lines.length).length}ch + 1.5rem)` }}
         aria-hidden="true"
       >

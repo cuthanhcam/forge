@@ -9,6 +9,8 @@ developer input without jumping across unrelated tabs.
 
 ![Forge home screen](docs/assets/forge-home.png)
 
+[View the tool directory](docs/assets/forge-directory.png)
+
 ## Why Forge Exists
 
 Developers often handle sensitive, temporary, messy text:

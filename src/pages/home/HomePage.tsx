@@ -55,7 +55,7 @@ export function HomePage(): JSX.Element {
             </span>
           </h1>
           <button
-            className="mt-10 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="mt-10 inline-flex min-h-10 w-fit items-center gap-2 rounded-md text-sm font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
             onClick={exploreTools}
             type="button"
           >
@@ -81,13 +81,16 @@ export function HomePage(): JSX.Element {
           </header>
 
           <div className="mb-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <label className="flex h-11 w-full items-center gap-2 rounded-lg border border-border bg-card px-3 focus-within:ring-2 focus-within:ring-sky-400 sm:max-w-md">
+            <div className="flex h-11 w-full items-center gap-2 rounded-lg border border-border bg-card px-3 focus-within:ring-2 focus-within:ring-sky-600 sm:max-w-md">
               <Search
                 aria-hidden="true"
                 className="h-4 w-4 shrink-0 text-muted-foreground"
               />
-              <span className="sr-only">Filter tools</span>
+              <label className="sr-only" htmlFor="home-tool-filter">
+                Filter tools
+              </label>
               <input
+                id="home-tool-filter"
                 className="min-w-0 flex-1 border-0 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
                 onChange={(event) => setQuery(event.target.value)}
                 placeholder="Find a tool"
@@ -98,14 +101,14 @@ export function HomePage(): JSX.Element {
               {query ? (
                 <button
                   aria-label="Clear filter"
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
                   onClick={clearFilter}
                   type="button"
                 >
                   <X aria-hidden="true" className="h-4 w-4" />
                 </button>
               ) : null}
-            </label>
+            </div>
             <p className="text-xs text-muted-foreground" role="status">
               {matches.length} {matches.length === 1 ? "tool" : "tools"}
               {query.trim() ? " found" : " available"}
@@ -115,12 +118,12 @@ export function HomePage(): JSX.Element {
           <div className="space-y-8" role="region" aria-label="Tool directory">
             {groups.map((category) => (
               <section aria-labelledby={`category-${category.id}`} key={category.id}>
-                <h2
+                <h3
                   className="mb-3 text-base font-semibold"
                   id={`category-${category.id}`}
                 >
                   {category.id}
-                </h2>
+                </h3>
                 <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
                   {category.tools.map((tool) => {
                     const Icon = tool.icon;
@@ -128,7 +131,7 @@ export function HomePage(): JSX.Element {
                       <Link
                         aria-labelledby={`home-${tool.id}`}
                         aria-describedby={`home-${tool.id}-description`}
-                        className="group min-w-0 rounded-lg border border-border bg-card p-4 transition-colors hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                        className="group min-w-0 rounded-lg border border-border bg-card p-4 transition-colors hover:border-slate-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
                         key={tool.id}
                         to={tool.route}
                       >
@@ -137,12 +140,12 @@ export function HomePage(): JSX.Element {
                             aria-hidden="true"
                             className="h-4 w-4 shrink-0 text-muted-foreground"
                           />
-                          <h3
+                          <h4
                             className="min-w-0 flex-1 text-sm font-medium"
                             id={`home-${tool.id}`}
                           >
                             {tool.name}
-                          </h3>
+                          </h4>
                           <ArrowUpRight
                             aria-hidden="true"
                             className="hidden h-4 w-4 shrink-0 text-muted-foreground opacity-0 sm:block transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
@@ -167,7 +170,7 @@ export function HomePage(): JSX.Element {
                   Try a tool name, format or task, such as JSON, Markdown or encode.
                 </p>
                 <button
-                  className="mt-4 rounded text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+                  className="mt-4 rounded text-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
                   onClick={clearFilter}
                   type="button"
                 >
@@ -184,19 +187,19 @@ export function HomePage(): JSX.Element {
           </p>
           <nav aria-label="Forge information" className="flex flex-wrap gap-4">
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
               to="/docs"
             >
               Documentation
             </Link>
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
               to="/privacy"
             >
               Privacy
             </Link>
             <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600"
               to="/terms"
             >
               Terms

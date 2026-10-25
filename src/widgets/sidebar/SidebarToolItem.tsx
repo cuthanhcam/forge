@@ -16,22 +16,26 @@ export function SidebarToolItem({
 
   return (
     <NavLink
+      aria-label={tool.name}
       className={({ isActive }) =>
-        cn("group flex items-center text-[13px] font-medium transition", {
-          "h-8 justify-center text-slate-500 hover:text-slate-950 focus-visible:outline-none":
-            collapsed && !isActive,
-          "h-8 justify-center text-slate-700 hover:text-slate-950 focus-visible:outline-none":
-            collapsed && isActive,
-          "min-h-8 gap-2 rounded-md px-2.5 py-1.5 text-slate-600 hover:bg-slate-100 hover:text-slate-950":
-            !collapsed && !isActive,
-          "min-h-8 gap-2 rounded-md bg-sky-50 px-2.5 py-1.5 text-sky-700 ring-1 ring-inset ring-sky-200":
-            !collapsed && isActive,
-        })
+        cn(
+          "group relative flex h-8 items-center overflow-hidden rounded-md px-2 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600 motion-reduce:transition-none",
+          isActive
+            ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200"
+            : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
+        )
       }
+      title={collapsed ? tool.name : undefined}
       to={tool.route}
     >
       <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
-      <span className={cn("min-w-0 flex-1 truncate", collapsed && "sr-only")}>
+      <span
+        aria-hidden={collapsed}
+        className={cn(
+          "absolute left-8 right-2 truncate transition-opacity duration-150 motion-reduce:transition-none",
+          collapsed ? "opacity-0" : "opacity-100",
+        )}
+      >
         {tool.name}
       </span>
     </NavLink>

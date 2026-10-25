@@ -775,3 +775,55 @@ body {
 .dark .docs-markdown h2 {
   border-color: var(--forge-dark-border);
 }
+
+/* Keep footer controls mounted while sidebar geometry animates. */
+.sidebar-footer-actions {
+  position: relative;
+  height: 36px;
+  transition: height 200ms ease-out;
+}
+.sidebar-footer-actions > * {
+  position: absolute;
+  top: 0;
+  transition:
+    left 200ms ease-out,
+    top 200ms ease-out,
+    color 150ms;
+}
+.sidebar-footer-actions > :nth-child(1) {
+  left: 2px;
+}
+.sidebar-footer-actions > :nth-child(2) {
+  left: calc(50% - 18px);
+}
+.sidebar-footer-actions > :nth-child(3) {
+  left: calc(100% - 38px);
+}
+.sidebar-footer-actions[data-collapsed="true"] {
+  height: 116px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > * {
+  left: 2px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > :nth-child(2) {
+  top: 40px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > :nth-child(3) {
+  top: 80px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-footer-actions,
+  .sidebar-footer-actions > * {
+    transition: none;
+  }
+}
+
+.markdown-menu-item:focus-visible {
+  outline: 2px solid rgb(2 132 199);
+  outline-offset: -2px;
+}
+
+.sidebar-footer-actions > :focus-visible {
+  outline: 2px solid rgb(2 132 199);
+  outline-offset: -2px;
+}

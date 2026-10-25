@@ -61,6 +61,9 @@ test("UI font is self-hosted and home stays readable at narrow widths and large 
     main.evaluate((element) => element.scrollWidth <= element.clientWidth);
   await expect.poll(noOverflow).toBe(true);
   await page.screenshot({ path: test.info().outputPath("home-light.png") });
+  await main.getByRole("button", { name: "Explore tools" }).click();
+  await expect(main.getByRole("searchbox")).toBeInViewport();
+  await page.screenshot({ path: test.info().outputPath("home-directory.png") });
   await page.setViewportSize({ width: 320, height: 568 });
   await expect.poll(noOverflow).toBe(true);
   await page.evaluate(() => {
@@ -73,9 +76,7 @@ test("UI font is self-hosted and home stays readable at narrow widths and large 
   await page.screenshot({ path: test.info().outputPath("home-dark-large-text.png") });
 });
 
-test("source editors and line-number gutters share the code font role", async ({
-  page,
-}) => {
+test("editors and line-number gutters share their typography role", async ({ page }) => {
   for (const tool of ["markdown", "html"]) {
     await page.goto(`/tools/${tool}-preview`);
     const editor = page.getByRole("textbox", {
