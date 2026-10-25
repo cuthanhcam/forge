@@ -35,7 +35,9 @@ describe("persistent tool drafts", () => {
     act(() => result.current[1]("first edit"));
     act(() => result.current[1]((previous) => previous + " and latest"));
     expect(localStorage.getItem("forge.tool.test")).toBeNull();
-    act(() => vi.advanceTimersByTime(250));
+    act(() => {
+      vi.advanceTimersByTime(250);
+    });
     expect(result.current[2]).toBe("saved");
     act(() => result.current[1]("last edit before navigation"));
     unmount();
@@ -50,7 +52,9 @@ describe("persistent tool drafts", () => {
       usePersistedToolState("test", "initial", { debounceMs: 250 }),
     );
     act(() => result.current[1]("pending edit"));
-    act(() => window.dispatchEvent(new Event("pagehide")));
+    act(() => {
+      window.dispatchEvent(new Event("pagehide"));
+    });
     expect(JSON.parse(localStorage.getItem("forge.tool.test") ?? "null")).toBe(
       "pending edit",
     );

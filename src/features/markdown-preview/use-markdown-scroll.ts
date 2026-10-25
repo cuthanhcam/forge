@@ -14,6 +14,7 @@ interface ScrollOptions {
   content: RefObject<HTMLDivElement | null>;
   documentId: string;
   enabled: boolean;
+  layout: string;
   html: string;
 }
 
@@ -25,6 +26,7 @@ export function useMarkdownScroll({
   content,
   documentId,
   enabled,
+  layout,
   html,
 }: ScrollOptions): {
   onEditorScroll: (event: UIEvent<HTMLTextAreaElement>) => void;
@@ -33,6 +35,10 @@ export function useMarkdownScroll({
 } {
   const leader = useRef<Pane>("editor");
   const expected = useRef(new WeakMap<HTMLElement, number>());
+  const progress = useRef(0);
+  const metrics = useRef(
+    new WeakMap<HTMLElement, { width: number; height: number; range: number }>(),
+  );
   const positions = useRef(new Map<string, { editor: number; preview: number }>());
 
   const synchronize = useCallback((): void => {
@@ -40,9 +46,28 @@ export function useMarkdownScroll({
     const source = leader.current === "editor" ? editor.current : preview.current;
     const target = leader.current === "editor" ? preview.current : editor.current;
     const sourceRange = Math.max(0, source.scrollHeight - source.clientHeight);
+    const previousSize = metrics.current.get(source);
+    const resized =
+      previousSize &&
+      (previousSize.width !== source.clientWidth ||
+        previousSize.height !== source.clientHeight ||
+        (leader.current === "preview" && previousSize.range !== sourceRange));
+    if (resized) {
+      // Preserve reading progress across wrapping/breakpoints and late diagrams.
+      source.scrollTop = progress.current * sourceRange;
+      expected.current.set(source, source.scrollTop);
+    }
+    for (const element of [source, target]) {
+      metrics.current.set(element, {
+        width: element.clientWidth,
+        height: element.clientHeight,
+        range: Math.max(0, element.scrollHeight - element.clientHeight),
+      });
+    }
     // A short pane must not pull a long pane back to the top.
     if (sourceRange === 0) return;
     const ratio = Math.min(1, Math.max(0, source.scrollTop / sourceRange));
+    progress.current = ratio;
     const nextTop = ratio * Math.max(0, target.scrollHeight - target.clientHeight);
     if (Math.abs(target.scrollTop - nextTop) < 1) return;
     target.scrollTop = nextTop;
@@ -51,17 +76,33 @@ export function useMarkdownScroll({
 
   const handleScroll = useCallback(
     (pane: Pane, element: HTMLElement): void => {
+      const previousSize = metrics.current.get(element);
+      if (
+        enabled &&
+        previousSize &&
+        (previousSize.width !== element.clientWidth ||
+          previousSize.height !== element.clientHeight ||
+          (pane === "preview" &&
+            previousSize.range !== element.scrollHeight - element.clientHeight))
+      ) {
+        synchronize();
+        return;
+      }
       const pending = expected.current.get(element);
       if (pending !== undefined && Math.abs(element.scrollTop - pending) < 1) return;
       expected.current.delete(element);
       leader.current = pane;
+      const range = element.scrollHeight - element.clientHeight;
+      progress.current =
+        range > 0 ? Math.min(1, Math.max(0, element.scrollTop / range)) : 0;
       synchronize();
     },
-    [synchronize],
+    [synchronize, enabled],
   );
 
   useLayoutEffect(() => {
-    const saved = positions.current.get(documentId);
+    const savedPositions = positions.current;
+    const saved = savedPositions.get(documentId);
     const editorElement = editor.current;
     const previewElement = preview.current;
     for (const [element, top] of [
@@ -71,16 +112,24 @@ export function useMarkdownScroll({
       if (element) {
         element.scrollTop = top;
         expected.current.set(element, element.scrollTop);
+        metrics.current.set(element, {
+          width: element.clientWidth,
+          height: element.clientHeight,
+          range: Math.max(0, element.scrollHeight - element.clientHeight),
+        });
       }
     }
-    leader.current = "editor";
+    leader.current = editorElement ? "editor" : "preview";
+    const source = editorElement ?? previewElement;
+    const range = source ? source.scrollHeight - source.clientHeight : 0;
+    progress.current = source && range > 0 ? source.scrollTop / range : 0;
     return () => {
-      positions.current.set(documentId, {
-        editor: editorElement?.scrollTop ?? 0,
-        preview: previewElement?.scrollTop ?? 0,
+      savedPositions.set(documentId, {
+        editor: editorElement?.scrollTop ?? saved?.editor ?? 0,
+        preview: previewElement?.scrollTop ?? saved?.preview ?? 0,
       });
     };
-  }, [documentId, editor, preview]);
+  }, [documentId, editor, preview, layout]);
 
   useEffect(() => {
     let frame = 0;

@@ -3,6 +3,28 @@
 Audit date: 2026-10-25. Findings below are from source review; browser acceptance
 remains required before declaring responsive preview defects resolved.
 
+## Markdown reliability milestone (2026-10-25)
+
+Delivered on small, stacked branches: `test/preview-browser-regressions`,
+`fix/markdown-draft-scroll`, `fix/markdown-storage-resilience` and
+`fix/markdown-mermaid-lifecycle`. Review each branch against its preceding branch.
+
+- Chromium desktop/phone tests and Browser previews CI with failure artifacts.
+- Removed content-based Welcome migration that could overwrite pasted text.
+- Native Markdown editor, deferred preview parsing and position-based suppression
+  of programmatic scroll events, with resize-aware progress restoration.
+- Debounced Markdown draft writes, navigation flush and visible storage failures
+  while keeping the in-memory draft editable.
+- Preview renderer owns its DOM and cancels stale Mermaid work. Explicit SVG
+  rendering survives layout changes; syntax errors appear at the diagram.
+- Strict Mermaid security, sanitized SVG and theme-aware text labels.
+
+Browser coverage includes long content, end-of-document scrolling in both panes,
+reload, storage quota failure, rapid diagram edits, guide flow/sequence diagrams,
+layout switching, resize and dark theme. Chromium emulation does not replace
+physical iOS/Android or Firefox/WebKit verification. The remaining sequence below
+is backlog, not a claim that the full UI redesign has shipped.
+
 ## Confirmed gaps
 
 | Priority | Evidence / impact                                                                                  | Delivery                                                                       |
