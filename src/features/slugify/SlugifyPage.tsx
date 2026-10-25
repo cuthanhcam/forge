@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import { useMemo, useState } from "react";
 import { Copy, Download, Link2, RotateCcw } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
+import { RangeInput } from "@/shared/ui/range";
 import { Button } from "@/shared/ui/button";
 import {
   PaneHeader,
@@ -114,7 +115,11 @@ export function SlugifyPage(): JSX.Element {
           <div className="scrollbar-forge min-h-0 flex-1 overflow-auto bg-white p-4">
             <section className="rounded-lg border border-slate-200 bg-slate-50 p-4">
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
-                <p className="min-w-0 flex-1 break-all font-mono text-[18px] font-semibold leading-8 text-slate-950">
+                <p
+                  aria-label="Generated slug"
+                  tabIndex={0}
+                  className="scrollbar-forge h-24 min-w-0 shrink-0 overflow-auto sm:flex-1 break-all font-mono text-[18px] font-semibold leading-8 text-slate-950 outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
+                >
                   {slug || "-"}
                 </p>
                 <Button
@@ -165,15 +170,13 @@ export function SlugifyPage(): JSX.Element {
                     {options.maxLength}
                   </span>
                 </span>
-                <input
-                  className="mt-3 w-full accent-accent-600"
-                  max={160}
+                <RangeInput
+                  className="mt-2"
+                  label="Slug maximum length"
                   min={16}
-                  onChange={(event) =>
-                    updateOptions({ maxLength: Number(event.target.value) })
-                  }
-                  type="range"
+                  max={160}
                   value={options.maxLength}
+                  onChange={(maxLength) => updateOptions({ maxLength })}
                 />
               </label>
               <div className="grid gap-2 sm:grid-cols-2">

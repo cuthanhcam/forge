@@ -29,7 +29,7 @@
   --accent-solid: #2563eb;
   --accent-solid-hover: #1d4ed8;
   --accent-on-solid: #ffffff;
-  --jwt-payload: #047857;
+  --jwt-payload: #065f46;
   --jwt-signature: #6d28d9;
   --brand-cyan: #12c2e9;
   --brand-purple: #c471ed;
@@ -921,4 +921,60 @@ body {
 }
 .jwt-signature-text {
   color: var(--jwt-signature);
+}
+
+/* No geometry transitions: the native thumb must follow pointer/touch input immediately. */
+.forge-range {
+  appearance: none;
+  height: 32px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.forge-range:focus-visible {
+  outline: 2px solid var(--accent-600);
+  outline-offset: 2px;
+}
+.forge-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent-solid) var(--range-fill),
+    hsl(var(--border)) var(--range-fill)
+  );
+}
+.forge-range::-moz-range-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    var(--accent-solid) var(--range-fill),
+    hsl(var(--border)) var(--range-fill)
+  );
+}
+.forge-range::-webkit-slider-thumb {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  margin-top: -6px;
+  border: 2px solid hsl(var(--card));
+  border-radius: 50%;
+  background: var(--accent-solid);
+}
+.forge-range::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border: 2px solid hsl(var(--card));
+  border-radius: 50%;
+  background: var(--accent-solid);
+}
+@media (hover: hover) {
+  .forge-range:hover::-webkit-slider-thumb {
+    background: var(--accent-solid-hover);
+  }
+  .forge-range:hover::-moz-range-thumb {
+    background: var(--accent-solid-hover);
+  }
 }
