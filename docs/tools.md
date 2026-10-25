@@ -46,6 +46,13 @@ alignment, with the same line-number gutter as Markdown. Line numbers remain
 aligned when line wrapping or indentation changes. Syntax coloring remains a
 separate editor enhancement.
 
+Beautify formats HTML with the selected indentation and leaves script, style,
+preformatted and textarea contents intact. It does not format embedded JavaScript
+or CSS. Minify conservatively compacts tag/attribute spacing; it preserves text
+spacing, comments and raw blocks, so output may remain multiline. Invalid markup
+shows an error and keeps the source. You can continue typing while the formatter
+loads; an older result will not replace a newer edit.
+
 ### Diff Checker
 
 Compare original and changed text with split and unified review modes. It

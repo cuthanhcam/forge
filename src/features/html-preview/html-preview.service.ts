@@ -468,123 +468,12 @@ function injectPreviewScrollbarStyle(document: string): string {
   return `${previewScrollbarStyle}${document}`;
 }
 
-export function minifyHtml(input: string): string {
-  return input
-    .replace(/>\s+</g, "><")
-    .replace(/\s{2,}/g, " ")
-    .trim();
+export async function minifyHtml(input: string): Promise<string> {
+  const { compactHtmlTags } = await import("./html-format.service");
+  return compactHtmlTags(input);
 }
 
-export function beautifyHtml(input: string, indentSize = 2): string {
-  const indent = " ".repeat(Math.min(10, Math.max(1, indentSize)));
-  const blocks: string[] = [];
-  const htmlWithPlaceholders = input.replace(
-    /(<(style|script)\b[^>]*>)([\s\S]*?)(<\/\2>)/gi,
-    (_, openTag: string, tagName: string, content: string, closeTag: string) => {
-      const formattedContent =
-        tagName.toLowerCase() === "style"
-          ? beautifyCss(content, indent)
-          : beautifyJavaScript(content, indent);
-      const placeholder = `__FORGE_HTML_BLOCK_${blocks.length}__`;
-
-      blocks.push(`${openTag}\n${formattedContent}\n${closeTag}`);
-
-      return placeholder;
-    },
-  );
-  const compact = minifyHtml(htmlWithPlaceholders);
-  const tokens = compact.replace(/></g, ">\n<").split("\n");
-  let depth = 0;
-
-  return tokens
-    .map((token) => {
-      const trimmed = replaceHtmlBlockPlaceholders(token.trim(), blocks);
-      const isClosingTag = /^<\//.test(trimmed);
-      const isSelfClosingTag =
-        /\/>$/.test(trimmed) ||
-        /^<(area|base|br|col|embed|hr|img|input|link|meta|param|source|track|wbr)\b/i.test(
-          trimmed,
-        );
-
-      if (isClosingTag) {
-        depth = Math.max(0, depth - 1);
-      }
-
-      const line = `${indent.repeat(depth)}${trimmed}`;
-
-      if (!isClosingTag && !isSelfClosingTag && /^<[^!][^>]*>$/.test(trimmed)) {
-        depth += 1;
-      }
-
-      return line;
-    })
-    .join("\n");
-}
-
-function replaceHtmlBlockPlaceholders(input: string, blocks: string[]): string {
-  return input.replace(/__FORGE_HTML_BLOCK_(\d+)__/g, (_, index: string) => {
-    return blocks[Number(index)] ?? "";
-  });
-}
-
-function beautifyCss(input: string, indent: string): string {
-  const lines = input
-    .replace(/\s*([{};])\s*/g, "$1\n")
-    .replace(/\s*,\s*/g, ", ")
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
-  let depth = 0;
-
-  return lines
-    .map((line) => {
-      if (line.startsWith("}")) {
-        depth = Math.max(0, depth - 1);
-      }
-
-      const formatted = `${indent.repeat(depth)}${line}`;
-
-      if (line.endsWith("{")) {
-        depth += 1;
-      }
-
-      return formatted;
-    })
-    .join("\n");
-}
-
-function beautifyJavaScript(input: string, indent: string): string {
-  const normalized = input
-    .replace(/\r\n?/g, "\n")
-    .replace(/\s*([{};])\s*/g, "$1\n")
-    .replace(/\s*([?])\s*/g, " $1 ")
-    .replace(/\s*(:)\s*/g, "$1 ")
-    .replace(/\n+/g, "\n");
-  const lines = normalized
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
-  let depth = 0;
-
-  return lines
-    .map((line) => {
-      if (line.startsWith("}") || line.startsWith(")") || line.startsWith("]")) {
-        depth = Math.max(0, depth - 1);
-      }
-
-      const formatted = `${indent.repeat(depth)}${line}`;
-
-      if (
-        line.endsWith("{") ||
-        line.endsWith("=>{") ||
-        line.endsWith("=> {") ||
-        line.endsWith("(") ||
-        line.endsWith("[")
-      ) {
-        depth += 1;
-      }
-
-      return formatted;
-    })
-    .join("\n");
+export async function beautifyHtml(input: string, indentSize = 2): Promise<string> {
+  const { formatHtml } = await import("./html-format.service");
+  return formatHtml(input, indentSize);
 }
