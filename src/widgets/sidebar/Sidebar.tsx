@@ -274,12 +274,12 @@ export function Sidebar({
           {helpOpen ? (
             <div
               className={cn(
-                "absolute bottom-full mb-2 z-30 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/10 dark:border-pink-400/20 dark:bg-[#100b18] dark:shadow-black/40",
+                "absolute bottom-full mb-2 z-30 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-xl shadow-slate-950/10 dark:shadow-black/40",
                 effectiveCollapsed ? "left-2 w-64" : "left-2.5 w-64",
               )}
             >
               <div className="p-2">
-                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500 dark:text-pink-300">
+                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500">
                   Support
                 </p>
                 <HelpMenuItem
@@ -301,8 +301,8 @@ export function Sidebar({
                   to="/support/feedback"
                 />
               </div>
-              <div className="border-t border-slate-100 p-2 dark:border-pink-400/15">
-                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500 dark:text-pink-300">
+              <div className="border-t border-slate-100 p-2">
+                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500">
                   Documentation
                 </p>
                 <HelpMenuItem
@@ -326,8 +326,8 @@ export function Sidebar({
                   }}
                 />
               </div>
-              <div className="border-t border-slate-100 p-2 dark:border-pink-400/15">
-                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500 dark:text-pink-300">
+              <div className="border-t border-slate-100 p-2">
+                <p className="px-2 pb-1 text-[11px] font-semibold text-slate-500">
                   Trust
                 </p>
                 <HelpMenuItem
@@ -351,13 +351,13 @@ export function Sidebar({
               aria-label="Settings"
               className={({ isActive }) =>
                 cn("flex h-9 w-9 items-center justify-center transition", {
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && !isActive,
-                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && isActive,
-                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200 dark:bg-pink-400/12 dark:text-pink-200 dark:ring-pink-300/25":
+                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200":
                     !effectiveCollapsed && isActive,
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
                     !effectiveCollapsed && !isActive,
                 })
               }
@@ -371,13 +371,13 @@ export function Sidebar({
               className={cn(
                 "flex h-9 w-9 shrink-0 items-center justify-center transition",
                 {
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && !helpOpen,
-                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && helpOpen,
-                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200 dark:bg-pink-400/12 dark:text-pink-200 dark:ring-pink-300/25":
+                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200":
                     !effectiveCollapsed && helpOpen,
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200":
+                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
                     !effectiveCollapsed && !helpOpen,
                 },
               )}
@@ -393,8 +393,8 @@ export function Sidebar({
               className={cn(
                 "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600 motion-reduce:transition-none lg:flex",
                 effectiveCollapsed
-                  ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200"
-                  : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 dark:text-pink-200/70 dark:hover:bg-pink-400/10 dark:hover:text-pink-200",
+                  ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none"
+                  : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950",
               )}
               onClick={toggleSidebar}
               type="button"
@@ -424,7 +424,7 @@ function HelpMenuItem({
   to,
 }: HelpMenuItemProps): JSX.Element {
   const className =
-    "flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 [&.active]:bg-sky-50 [&.active]:text-sky-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-sky-200 dark:text-pink-50 dark:hover:bg-pink-400/12 dark:hover:text-pink-200 dark:[&.active]:bg-pink-400/14 dark:[&.active]:text-pink-200 dark:[&.active]:ring-1 dark:[&.active]:ring-inset dark:[&.active]:ring-pink-300/20";
+    "flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 [&.active]:bg-sky-50 [&.active]:text-sky-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-sky-200 dark:[&.active]:ring-1 dark:[&.active]:ring-inset";
 
   if (to) {
     return (
