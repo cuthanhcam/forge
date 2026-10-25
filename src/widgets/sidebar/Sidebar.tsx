@@ -222,7 +222,7 @@ export function Sidebar({
             aria-hidden={effectiveCollapsed}
             tabIndex={effectiveCollapsed ? -1 : undefined}
             className={cn(
-              "min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 motion-reduce:transition-none",
+              "min-w-0 overflow-hidden whitespace-nowrap transition-opacity duration-150 hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600 motion-reduce:transition-none",
               effectiveCollapsed && "opacity-0",
             )}
             to="/"
@@ -234,7 +234,7 @@ export function Sidebar({
           </Link>
           <button
             aria-label="Close navigation"
-            className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-600 lg:hidden"
+            className="ml-auto flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600 lg:hidden"
             onClick={() => onMobileOpenChange(false)}
             type="button"
           >
@@ -355,7 +355,7 @@ export function Sidebar({
                     effectiveCollapsed && !isActive,
                   "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && isActive,
-                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200":
+                  "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
                     !effectiveCollapsed && isActive,
                   "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
                     !effectiveCollapsed && !isActive,
@@ -375,7 +375,7 @@ export function Sidebar({
                     effectiveCollapsed && !helpOpen,
                   "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
                     effectiveCollapsed && helpOpen,
-                  "rounded-md bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-200":
+                  "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
                     !effectiveCollapsed && helpOpen,
                   "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
                     !effectiveCollapsed && !helpOpen,
@@ -391,7 +391,7 @@ export function Sidebar({
               aria-expanded={!sidebarCollapsed}
               aria-controls="primary-tool-navigation"
               className={cn(
-                "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600 motion-reduce:transition-none lg:flex",
+                "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none lg:flex",
                 effectiveCollapsed
                   ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none"
                   : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950",
@@ -424,7 +424,7 @@ function HelpMenuItem({
   to,
 }: HelpMenuItemProps): JSX.Element {
   const className =
-    "flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 [&.active]:bg-sky-50 [&.active]:text-sky-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-sky-200 dark:[&.active]:ring-1 dark:[&.active]:ring-inset";
+    "flex h-8 w-full items-center gap-2 rounded-md px-2 text-left text-[13px] font-semibold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 [&.active]:bg-accent-50 [&.active]:text-accent-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-accent-200 dark:[&.active]:ring-1 dark:[&.active]:ring-inset";
 
   if (to) {
     return (

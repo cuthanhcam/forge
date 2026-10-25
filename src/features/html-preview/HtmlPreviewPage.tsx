@@ -218,7 +218,7 @@ export function HtmlPreviewPage(): JSX.Element {
                       {size} space{size > 1 ? "s" : ""}
                     </span>
                     {state.indentSize === size ? (
-                      <Check aria-hidden="true" className="h-4 w-4 text-sky-600" />
+                      <Check aria-hidden="true" className="h-4 w-4 text-accent-600" />
                     ) : null}
                   </DropdownMenu.Item>
                 ))}
@@ -230,7 +230,7 @@ export function HtmlPreviewPage(): JSX.Element {
             className={cn(
               "flex h-8 items-center gap-2 rounded-md px-2.5 text-[12px] font-semibold transition",
               state.autoUpdate
-                ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
             )}
             aria-pressed={state.autoUpdate}
@@ -245,7 +245,7 @@ export function HtmlPreviewPage(): JSX.Element {
             className={cn(
               "flex h-8 items-center gap-2 rounded-md px-2.5 text-[12px] font-semibold transition",
               !state.lineWrap
-                ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                 : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
             )}
             aria-pressed={!state.lineWrap}

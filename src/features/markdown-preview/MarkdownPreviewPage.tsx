@@ -439,7 +439,8 @@ ${renderedHtml}
                 aria-pressed={state.syncScroll}
                 className={cn(
                   "h-8 px-2.5 text-xs",
-                  state.syncScroll && "bg-sky-50 text-sky-700 ring-1 ring-sky-100",
+                  state.syncScroll &&
+                    "bg-accent-50 text-accent-700 ring-1 ring-accent-100",
                 )}
                 onClick={() => updateState({ ...state, syncScroll: !state.syncScroll })}
                 size="sm"
@@ -594,7 +595,7 @@ ${renderedHtml}
             second={
               showPreview ? (
                 <div
-                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-white outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600"
+                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-background outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
                   onScroll={onPreviewScroll}
                   onKeyDown={onPreviewIntent}
                   onWheel={onPreviewIntent}
@@ -660,7 +661,7 @@ ${renderedHtml}
                 <span className="sr-only">Tab name</span>
                 <input
                   ref={renameInputRef}
-                  className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-950 outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
+                  className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-950 outline-none transition focus:border-accent-500 focus:ring-2 focus:ring-accent-100"
                   onChange={(event) => setRenameTitle(event.target.value)}
                   value={renameTitle}
                 />

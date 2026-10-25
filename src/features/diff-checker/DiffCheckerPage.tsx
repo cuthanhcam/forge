@@ -595,13 +595,13 @@ function ToggleRow({ checked, label, onChange }: ToggleRowProps): JSX.Element {
       <span
         className={cn(
           "flex h-5 w-10 items-center rounded-full p-0.5 transition",
-          checked ? "bg-sky-100 ring-1 ring-sky-200" : "bg-slate-200",
+          checked ? "bg-accent-100 ring-1 ring-accent-200" : "bg-slate-200",
         )}
       >
         <span
           className={cn(
             "h-4 w-4 rounded-full shadow-sm transition",
-            checked ? "translate-x-5 bg-sky-600" : "bg-white",
+            checked ? "translate-x-5 bg-accent-600" : "bg-white",
           )}
         />
       </span>
@@ -680,8 +680,8 @@ function SyntaxFlyout({ onChange, value }: SyntaxFlyoutProps): JSX.Element {
         className={cn(
           "flex h-11 w-full items-center justify-between gap-3 rounded-md border bg-white px-3 text-left transition",
           open
-            ? "border-sky-200 ring-2 ring-sky-100"
-            : "border-slate-200 hover:border-sky-200 hover:bg-sky-50",
+            ? "border-accent-200 ring-2 ring-accent-100"
+            : "border-slate-200 hover:border-accent-200 hover:bg-accent-50",
         )}
         onClick={() => setOpen((current) => !current)}
         type="button"
@@ -707,7 +707,7 @@ function SyntaxFlyout({ onChange, value }: SyntaxFlyoutProps): JSX.Element {
               className={cn(
                 "flex min-h-10 w-full items-center justify-between gap-2 rounded px-2 text-left transition",
                 value === syntax
-                  ? "bg-sky-50 text-sky-700"
+                  ? "bg-accent-50 text-accent-700"
                   : "text-slate-700 hover:bg-slate-50 hover:text-slate-950",
               )}
               key={syntax}
@@ -851,7 +851,7 @@ function highlightHtmlLine(text: string): JSX.Element[] {
     const className = part.startsWith("<!--")
       ? "text-slate-500 italic"
       : part.startsWith("<")
-        ? "font-semibold text-sky-800"
+        ? "font-semibold text-accent-800"
         : "text-inherit";
 
     return (
@@ -891,7 +891,7 @@ function highlightMarkdownLine(text: string): JSX.Element {
   }
 
   if (/^\s*[-*+]\s/.test(text)) {
-    return <span className="text-sky-900">{text}</span>;
+    return <span className="text-accent-900">{text}</span>;
   }
 
   return <>{text}</>;

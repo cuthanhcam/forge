@@ -43,7 +43,7 @@ export function RegexTesterPage(): JSX.Element {
             <label className="min-w-[260px] flex-1">
               <span className="sr-only">Pattern</span>
               <input
-                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                 onChange={(event) => setPattern(event.target.value)}
                 placeholder="Regular expression pattern..."
                 value={pattern}
@@ -52,7 +52,7 @@ export function RegexTesterPage(): JSX.Element {
             <label className="min-w-[180px] flex-1">
               <span className="sr-only">Replacement</span>
               <input
-                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                className="h-9 w-full rounded-md border border-slate-200 px-3 font-mono text-[13px] text-slate-950 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                 onChange={(event) => setReplacement(event.target.value)}
                 placeholder="Replacement..."
                 value={replacement}
@@ -68,7 +68,7 @@ export function RegexTesterPage(): JSX.Element {
                 className={cn(
                   "h-8 rounded-md px-2 font-mono text-xs font-semibold transition",
                   flags.includes(flag)
-                    ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+                    ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
                     : "text-slate-600 hover:bg-slate-100",
                 )}
                 key={flag}
@@ -97,7 +97,7 @@ export function RegexTesterPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 /{pattern || "(empty)"}/{flags}
               </span>
             }
@@ -105,7 +105,7 @@ export function RegexTesterPage(): JSX.Element {
             tone="blue"
           />
           <ToolTextarea
-            className="selection:bg-sky-200/80 selection:text-slate-950"
+            className="selection:bg-accent-200/80 selection:text-slate-950"
             label="Sample text"
             onChange={setSample}
             placeholder="Text to test..."

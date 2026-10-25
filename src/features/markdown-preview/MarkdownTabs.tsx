@@ -30,7 +30,7 @@ interface MarkdownTabsProps {
 const menuClass =
   "z-50 min-w-40 max-w-[calc(100vw-1rem)] rounded-md border border-slate-200 bg-white p-1 shadow-lg shadow-slate-950/10";
 const focusClass =
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600";
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600";
 
 export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
   return (
@@ -179,7 +179,7 @@ function DocumentTab({
               ? "h-8 w-8 justify-center"
               : "h-10 min-w-40 gap-1 px-1 md:min-w-0",
             active
-              ? "bg-white text-sky-700 shadow-sm ring-1 ring-inset ring-sky-100"
+              ? "bg-white text-accent-700 shadow-sm ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-white",
           )}
           onKeyDown={openKeyboardMenu}

@@ -15,6 +15,20 @@
   --card-foreground: 222.2 84% 4.9%;
   --muted-foreground: 215.4 16.3% 46.9%;
   --border: 214.3 31.8% 91.4%;
+  --accent-50: #eff6ff;
+  --accent-100: #dbeafe;
+  --accent-200: #bfdbfe;
+  --accent-300: #93c5fd;
+  --accent-400: #60a5fa;
+  --accent-500: #3b82f6;
+  --accent-600: #2563eb;
+  --accent-700: #1d4ed8;
+  --accent-800: #1e40af;
+  --accent-900: #1e3a8a;
+  --accent-950: #172554;
+  --accent-solid: #2563eb;
+  --accent-solid-hover: #1d4ed8;
+  --accent-on-solid: #ffffff;
   --brand-cyan: #12c2e9;
   --brand-purple: #c471ed;
   --brand-coral: #f64f59;
@@ -25,10 +39,24 @@
 /* Neutral workbench surfaces, inspired by the local Markdown-Viewer reference. */
 .dark {
   color-scheme: dark;
+  --accent-50: #17283d;
+  --accent-100: #1b3554;
+  --accent-200: #2d537c;
+  --accent-300: #4374a3;
+  --accent-400: #79b8ff;
+  --accent-500: #58a6ff;
+  --accent-600: #79b8ff;
+  --accent-700: #8fc5ff;
+  --accent-800: #abd4ff;
+  --accent-900: #c8e3ff;
+  --accent-950: #e4f1ff;
+  --accent-solid: #58a6ff;
+  --accent-solid-hover: #79b8ff;
+  --accent-on-solid: #0d1117;
   --background: 215 28% 7%;
-  --foreground: 213 27% 91%;
+  --foreground: 213 17% 82%;
   --card: 215 21% 11%;
-  --card-foreground: 213 27% 91%;
+  --card-foreground: 213 17% 82%;
   --muted-foreground: 213 12% 66%;
   --border: 214 13% 21%;
   --forge-dark-bg: #0d1117;
@@ -37,8 +65,8 @@
   --forge-dark-panel-3: #30363d;
   --forge-dark-border: #30363d;
   --forge-dark-border-soft: #21262d;
-  --forge-dark-text: #e6edf3;
-  --forge-dark-muted: #a6b0bb;
+  --forge-dark-text: #c9d1d9;
+  --forge-dark-muted: #9aa5b1;
   --forge-dark-subtle: #8b949e;
   --forge-dark-green: #7ee2b8;
   --forge-dark-amber: #f2cc60;
@@ -48,6 +76,20 @@
 @theme inline {
   --font-sans: var(--font-ui);
   --font-mono: var(--font-code);
+  --color-accent-50: var(--accent-50);
+  --color-accent-100: var(--accent-100);
+  --color-accent-200: var(--accent-200);
+  --color-accent-300: var(--accent-300);
+  --color-accent-400: var(--accent-400);
+  --color-accent-500: var(--accent-500);
+  --color-accent-600: var(--accent-600);
+  --color-accent-700: var(--accent-700);
+  --color-accent-800: var(--accent-800);
+  --color-accent-900: var(--accent-900);
+  --color-accent-950: var(--accent-950);
+  --color-accent-solid: var(--accent-solid);
+  --color-accent-solid-hover: var(--accent-solid-hover);
+  --color-accent-on-solid: var(--accent-on-solid);
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -59,8 +101,10 @@
   --color-brand-coral: var(--brand-coral);
 }
 
-* {
-  border-color: hsl(var(--border));
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
 }
 
 html,
@@ -244,7 +288,7 @@ body {
 }
 
 .forge-markdown a {
-  color: rgb(2 132 199);
+  color: var(--accent-700);
   font-weight: 600;
   text-decoration: underline;
   text-underline-offset: 3px;
@@ -406,7 +450,7 @@ body {
 .forge-markdown .hljs-attr,
 .forge-markdown .hljs-variable,
 .forge-markdown .hljs-template-variable {
-  color: rgb(2 132 199);
+  color: rgb(3 105 161);
 }
 
 .forge-markdown .hljs-punctuation {
@@ -457,12 +501,6 @@ body {
 .dark .bg-slate-200,
 .dark .bg-slate-200\/80 {
   background-color: var(--forge-dark-border) !important;
-}
-
-.dark .bg-sky-50,
-.dark .bg-sky-50\/50,
-.dark .bg-sky-50\/70 {
-  background-color: rgb(96 165 250 / 0.12) !important;
 }
 
 .dark .bg-emerald-50,
@@ -528,11 +566,6 @@ body {
   border-color: var(--forge-dark-border) !important;
 }
 
-.dark .border-sky-100,
-.dark .border-sky-200 {
-  border-color: rgb(96 165 250 / 0.32) !important;
-}
-
 .dark .border-emerald-100,
 .dark .border-emerald-200 {
   border-color: rgb(94 224 173 / 0.32) !important;
@@ -572,13 +605,6 @@ body {
   color: var(--forge-dark-subtle) !important;
 }
 
-.dark .text-sky-600,
-.dark .text-sky-700,
-.dark .text-sky-800,
-.dark .text-sky-900 {
-  color: #8ac7ff !important;
-}
-
 .dark .text-emerald-600,
 .dark .text-emerald-700,
 .dark .text-emerald-800,
@@ -616,20 +642,6 @@ body {
   color: #073a2a !important;
 }
 
-.dark .bg-white button,
-.dark button.bg-white,
-.dark a.bg-white {
-  box-shadow:
-    inset 0 0 0 1px rgb(255 255 255 / 0.04),
-    0 1px 0 rgb(255 255 255 / 0.04);
-}
-
-.dark .bg-white button:hover,
-.dark button.bg-white:hover,
-.dark a.bg-white:hover {
-  background-color: var(--forge-dark-panel-3) !important;
-}
-
 .dark .fill-white {
   fill: var(--forge-dark-panel-2) !important;
 }
@@ -642,10 +654,6 @@ body {
   --tw-shadow: var(--tw-shadow-colored) !important;
 }
 
-.dark .ring-sky-100 {
-  --tw-ring-color: rgb(96 165 250 / 0.32) !important;
-}
-
 .dark .ring-emerald-100 {
   --tw-ring-color: rgb(94 224 173 / 0.32) !important;
 }
@@ -655,42 +663,12 @@ body {
   --tw-ring-color: var(--forge-dark-border) !important;
 }
 
-.dark .focus\:border-sky-300:focus {
-  border-color: rgb(255 79 216 / 0.5) !important;
-}
-
-.dark .focus\:ring-sky-100:focus,
-.dark .focus\:ring-4:focus {
-  --tw-ring-color: rgb(255 79 216 / 0.18) !important;
-}
-
 .dark .placeholder\:text-slate-400::placeholder {
   color: var(--forge-dark-subtle) !important;
 }
 
-.dark .selection\:bg-sky-200\/80::selection,
-.dark .selection\:bg-sky-200\/70::selection {
-  background-color: rgb(255 79 216 / 0.32) !important;
-}
-
 .dark .selection\:text-slate-950::selection {
   color: var(--forge-dark-text) !important;
-}
-
-.dark .hover\:bg-slate-50:hover,
-.dark .hover\:bg-slate-100:hover,
-.dark .hover\:bg-sky-50:hover,
-.dark .hover\:bg-white:hover {
-  background-color: var(--forge-dark-panel-3);
-}
-
-.dark .hover\:text-slate-950:hover,
-.dark .hover\:text-foreground:hover {
-  color: var(--forge-dark-text) !important;
-}
-
-.dark .hover\:text-sky-700:hover {
-  color: #ff8ae8 !important;
 }
 
 .dark input,
@@ -727,7 +705,7 @@ body {
 }
 
 .dark .forge-markdown a {
-  color: #8ac7ff;
+  color: var(--accent-700);
 }
 
 .dark .forge-markdown blockquote,
@@ -797,12 +775,12 @@ body {
 }
 
 .markdown-menu-item:focus-visible {
-  outline: 2px solid rgb(2 132 199);
+  outline: 2px solid var(--accent-500);
   outline-offset: -2px;
 }
 
 .sidebar-footer-actions > :focus-visible {
-  outline: 2px solid rgb(2 132 199);
+  outline: 2px solid var(--accent-500);
   outline-offset: -2px;
 }
 
@@ -843,4 +821,77 @@ body {
 .dark .forge-markdown mark {
   background: #f2cc60;
   color: #0d1117;
+}
+
+/* Hover must win over legacy surface overrides without changing semantic status colors. */
+
+/* Touch devices do not retain mouse-hover treatments after a tap. */
+@media (hover: hover) {
+  .dark .hover\:text-slate-950:hover,
+  .dark .hover\:text-foreground:hover {
+    color: var(--forge-dark-text) !important;
+  }
+  .dark .hover\:bg-slate-50:hover,
+  .dark .hover\:bg-slate-100:hover,
+  .dark .hover\:bg-white:hover {
+    background-color: var(--forge-dark-panel-2) !important;
+  }
+  .dark .hover\:bg-accent-50:hover {
+    background-color: var(--accent-50) !important;
+  }
+  button.bg-accent-50:hover,
+  a.bg-accent-50:hover,
+  button.bg-accent-100:hover,
+  .dark button.bg-accent-50:hover,
+  .dark a.bg-accent-50:hover,
+  .dark button.bg-accent-100:hover {
+    background-color: var(--accent-100) !important;
+    color: var(--accent-700) !important;
+  }
+}
+
+/* Keep selected and focused borders blue even on legacy neutral surfaces. */
+.dark .border-accent-50 {
+  border-color: var(--accent-50) !important;
+}
+.dark .border-accent-100 {
+  border-color: var(--accent-100) !important;
+}
+.dark .border-accent-200 {
+  border-color: var(--accent-200) !important;
+}
+.dark .border-accent-300 {
+  border-color: var(--accent-300) !important;
+}
+.dark .border-accent-400 {
+  border-color: var(--accent-400) !important;
+}
+.dark .border-accent-500 {
+  border-color: var(--accent-500) !important;
+}
+.dark .border-accent-600 {
+  border-color: var(--accent-600) !important;
+}
+.dark .border-accent-700 {
+  border-color: var(--accent-700) !important;
+}
+.dark .border-accent-800 {
+  border-color: var(--accent-800) !important;
+}
+.dark .border-accent-900 {
+  border-color: var(--accent-900) !important;
+}
+.dark .border-accent-950 {
+  border-color: var(--accent-950) !important;
+}
+.dark .focus\:border-accent-500:focus {
+  border-color: var(--accent-500) !important;
+}
+@media (hover: hover) {
+  .dark .hover\:border-accent-200:hover {
+    border-color: var(--accent-200) !important;
+  }
+  .dark .hover\:border-accent-300:hover {
+    border-color: var(--accent-300) !important;
+  }
 }

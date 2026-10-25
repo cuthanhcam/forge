@@ -213,7 +213,7 @@ export function LegalPage(): JSX.Element {
           </div>
 
           <div className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-950/[0.03]">
-            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-sky-50 text-sky-700">
+            <div className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-50 text-accent-700">
               <Mail aria-hidden="true" className="h-4 w-4" />
             </div>
             <h2 className="mt-4 text-base font-semibold text-slate-950">Contact</h2>
@@ -221,7 +221,7 @@ export function LegalPage(): JSX.Element {
               For questions about Forge privacy, terms, or responsible reporting.
             </p>
             <a
-              className="mt-4 inline-flex h-9 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-semibold text-foreground shadow-sm transition hover:border-sky-200 hover:bg-sky-50"
+              className="mt-4 inline-flex h-9 items-center justify-center rounded-md border border-border bg-white px-3 text-xs font-semibold text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
               href="mailto:cuthanhcam04@gmail.com"
             >
               Email maintainer

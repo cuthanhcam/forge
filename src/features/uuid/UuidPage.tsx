@@ -131,7 +131,7 @@ export function UuidPage(): JSX.Element {
                   <span className="font-mono text-[13px] text-slate-950">{count}</span>
                 </span>
                 <input
-                  className="mt-3 w-full accent-sky-600"
+                  className="mt-3 w-full accent-accent-600"
                   max={100}
                   min={1}
                   onChange={(event) => setCount(Number(event.target.value))}
@@ -147,7 +147,7 @@ export function UuidPage(): JSX.Element {
               </p>
               <textarea
                 aria-label="Validate UUID"
-                className="scrollbar-forge min-h-24 w-full resize-none rounded-lg border border-slate-200 bg-white p-3 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 focus:border-sky-300 focus:ring-4 focus:ring-sky-100"
+                className="scrollbar-forge min-h-24 w-full resize-none rounded-lg border border-slate-200 bg-white p-3 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 focus:border-accent-500 focus:ring-4 focus:ring-accent-100"
                 onChange={(event) => setValidationInput(event.target.value)}
                 placeholder="Paste a UUID to inspect version and variant..."
                 spellCheck={false}
@@ -250,7 +250,7 @@ function SegmentedControl<T extends string>({
           className={cn(
             "h-8 rounded px-2.5 text-[12px] font-semibold transition",
             value === option.value
-              ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+              ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
           )}
           key={option.value}
@@ -280,14 +280,16 @@ function PresetCard({
       className={cn(
         "rounded-lg border p-3 text-left transition",
         active
-          ? "border-sky-300 bg-sky-50 ring-2 ring-sky-100"
-          : "border-slate-200 bg-white hover:border-sky-200 hover:bg-sky-50/40",
+          ? "border-accent-300 bg-accent-50 ring-2 ring-accent-100"
+          : "border-slate-200 bg-white hover:border-accent-200 hover:bg-accent-50/40",
       )}
       onClick={onClick}
       type="button"
     >
       <span className="block text-[14px] font-bold text-slate-950">{label}</span>
-      <span className="mt-1 block text-[12px] font-semibold text-sky-700">{value}</span>
+      <span className="mt-1 block text-[12px] font-semibold text-accent-700">
+        {value}
+      </span>
     </button>
   );
 }

@@ -167,7 +167,7 @@ export function UrlEncoderPage(): JSX.Element {
         <div className="flex min-h-0 flex-col">
           <PaneHeader
             actions={
-              <span className="text-[12px] font-semibold normal-case tracking-normal text-sky-600">
+              <span className="text-[12px] font-semibold normal-case tracking-normal text-accent-600">
                 {input.length.toLocaleString()} chars
               </span>
             }
@@ -255,7 +255,7 @@ function SegmentedControl<T extends string>({
           className={cn(
             "h-7 rounded px-2 text-[12px] font-semibold transition",
             value === option.value
-              ? "bg-sky-50 text-sky-700 ring-1 ring-inset ring-sky-100"
+              ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
               : "text-slate-500 hover:bg-slate-50 hover:text-slate-950",
           )}
           key={option.value}
@@ -284,7 +284,7 @@ function ToggleButton({
       className={cn(
         "flex h-9 items-center gap-2 rounded-md px-2.5 text-[12px] font-semibold transition",
         active
-          ? "bg-sky-50 text-sky-700 ring-1 ring-sky-100"
+          ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
           : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
       )}
       onClick={onClick}
@@ -374,7 +374,7 @@ function TextPane({
     <label className="block min-h-0 flex-1 bg-white">
       <span className="sr-only">{label}</span>
       <textarea
-        className="scrollbar-forge h-full min-h-0 w-full resize-none border-0 bg-white p-4 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 selection:bg-sky-200/80 selection:text-slate-950"
+        className="scrollbar-forge h-full min-h-0 w-full resize-none border-0 bg-white p-4 font-mono text-[13px] leading-6 text-slate-950 outline-none placeholder:text-slate-400 selection:bg-accent-200/80 selection:text-slate-950"
         onChange={(event) => onChange?.(event.target.value)}
         placeholder={placeholder}
         readOnly={readOnly}
@@ -395,8 +395,8 @@ function BreakdownPanel({
   return (
     <div className="scrollbar-forge min-h-0 flex-1 overflow-auto bg-white p-4">
       <div className="grid gap-4">
-        <section className="overflow-hidden rounded-lg border border-sky-100 bg-sky-50/50">
-          <div className="border-b border-sky-100 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.08em] text-sky-700">
+        <section className="overflow-hidden rounded-lg border border-accent-100 bg-accent-50/50">
+          <div className="border-b border-accent-100 px-3 py-2 text-[12px] font-bold uppercase tracking-[0.08em] text-accent-700">
             URL parts
           </div>
           {parts.length > 0 ? (
@@ -420,7 +420,7 @@ function BreakdownPanel({
                 className="grid border-b border-emerald-100 last:border-b-0 md:grid-cols-[13rem_minmax(0,1fr)]"
                 key={`${param.key}-${index}`}
               >
-                <div className="border-emerald-100 px-3 py-2 font-mono text-[13px] font-semibold text-sky-700 md:border-r">
+                <div className="border-emerald-100 px-3 py-2 font-mono text-[13px] font-semibold text-accent-700 md:border-r">
                   {param.key}
                 </div>
                 <div className="break-words px-3 py-2 font-mono text-[13px] leading-5 text-slate-950">
@@ -441,8 +441,8 @@ function BreakdownPanel({
 
 function BreakdownRow({ label, value }: UrlPart): JSX.Element {
   return (
-    <div className="grid border-b border-sky-100 last:border-b-0 md:grid-cols-[10rem_minmax(0,1fr)]">
-      <div className="border-sky-100 px-3 py-2 text-[13px] font-semibold text-sky-700 md:border-r">
+    <div className="grid border-b border-accent-100 last:border-b-0 md:grid-cols-[10rem_minmax(0,1fr)]">
+      <div className="border-accent-100 px-3 py-2 text-[13px] font-semibold text-accent-700 md:border-r">
         {label}
       </div>
       <div className="break-words px-3 py-2 font-mono text-[13px] leading-5 text-slate-950">
