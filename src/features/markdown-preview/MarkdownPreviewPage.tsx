@@ -1,7 +1,7 @@
 import "katex/dist/katex.min.css";
 
-import type { ChangeEvent, FormEvent, JSX, UIEvent } from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { ChangeEvent, FormEvent, JSX } from "react";
+import { useDeferredValue, useMemo, useRef, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import html2canvas from "html2canvas";
@@ -13,25 +13,21 @@ import {
   Download,
   FileCode2,
   FileDown,
-  FilePlus2,
   FileText,
   ImageDown,
   Link2,
   Link2Off,
-  MoreVertical,
   PanelLeft,
-  PanelLeftClose,
-  PanelLeftOpen,
   PanelRight,
-  Pencil,
   RotateCcw,
   SplitSquareHorizontal,
-  Trash2,
   Upload,
   X,
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
 import { cn } from "@/shared/lib/cn";
+import { ResizablePanes } from "@/shared/components/ResizablePanes";
+import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import {
@@ -45,10 +41,13 @@ import {
   createMarkdownPreviewGuideTab,
   createMarkdownPreviewTab,
   estimateMarkdownReadTime,
-  markdownPreviewGuide,
   normalizeMarkdownPreviewState,
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
+
+import { MarkdownTabs } from "./MarkdownTabs";
+import { MarkdownPreviewContent } from "./MarkdownPreviewContent";
+import { useMarkdownScroll } from "./use-markdown-scroll";
 
 const viewModes: Array<{
   icon: typeof PanelLeft;
@@ -82,36 +81,30 @@ function downloadBlob(blob: Blob, fileName: string): void {
 export function MarkdownPreviewPage(): JSX.Element {
   const [renameTabId, setRenameTabId] = useState<string | null>(null);
   const [renameTitle, setRenameTitle] = useState("");
-  const [editorScrollTop, setEditorScrollTop] = useState(0);
-  const [storedState, setState] = usePersistedToolState<MarkdownPreviewState>(
-    "markdown-preview",
-    createMarkdownPreviewState(),
-  );
-  const parsedState = MarkdownPreviewStateSchema.safeParse(storedState);
-  const state = parsedState.success
-    ? normalizeMarkdownPreviewState(parsedState.data)
-    : createMarkdownPreviewState();
+  const initialState = useMemo(createMarkdownPreviewState, []);
+  const [storedState, setState, persistence] =
+    usePersistedToolState<MarkdownPreviewState>("markdown-preview", initialState, {
+      debounceMs: 250,
+    });
+  const state = useMemo(() => {
+    const parsed = MarkdownPreviewStateSchema.safeParse(storedState);
+    return parsed.success ? normalizeMarkdownPreviewState(parsed.data) : initialState;
+  }, [storedState, initialState]);
+  const renameInputRef = useRef<HTMLInputElement>(null);
+  const activeTabButtonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
   const previewContentRef = useRef<HTMLDivElement>(null);
-  const syncingScrollRef = useRef(false);
   const activeTab =
     state.tabs.find((tab) => tab.id === state.activeTabId) ?? state.tabs[0];
+  const previewSource = useDeferredValue(activeTab.content);
   const renderedHtml = useMemo(
-    () => renderMarkdownToHtml(activeTab.content),
-    [activeTab.content],
+    () => renderMarkdownToHtml(previewSource),
+    [previewSource],
   );
   const readTime = useMemo(
     () => estimateMarkdownReadTime(activeTab.content),
-    [activeTab.content],
-  );
-  const editorLines = useMemo(
-    () =>
-      activeTab.content.split("\n").map((line, index) => ({
-        content: line,
-        number: index + 1,
-      })),
     [activeTab.content],
   );
   const showEditor = state.viewMode !== "preview";
@@ -121,109 +114,16 @@ export function MarkdownPreviewPage(): JSX.Element {
     viewModes.find((mode) => mode.value === state.viewMode) ?? viewModes[1];
   const ActiveViewIcon = activeViewMode.icon;
 
-  const syncScroll = useCallback((source: HTMLElement, target: HTMLElement): void => {
-    const sourceScrollable = Math.max(0, source.scrollHeight - source.clientHeight);
-    const targetScrollable = Math.max(0, target.scrollHeight - target.clientHeight);
-    const ratio = sourceScrollable <= 0 ? 0 : source.scrollTop / sourceScrollable;
-
-    syncingScrollRef.current = true;
-    target.scrollTop = targetScrollable * ratio;
-    window.requestAnimationFrame(() => {
-      syncingScrollRef.current = false;
+  const { onEditorScroll, onPreviewScroll, onEdit, onEditorIntent, onPreviewIntent } =
+    useMarkdownScroll({
+      editor: editorRef,
+      preview: previewScrollRef,
+      content: previewContentRef,
+      documentId: activeTab.id,
+      enabled: syncScrollEnabled,
+      layout: state.viewMode,
+      html: renderedHtml,
     });
-  }, []);
-
-  const syncPreviewToEditor = useCallback(
-    (editor: HTMLTextAreaElement): void => {
-      const preview = previewScrollRef.current;
-
-      if (!preview) {
-        return;
-      }
-
-      syncScroll(editor, preview);
-    },
-    [syncScroll],
-  );
-
-  const syncEditorToPreview = useCallback(
-    (preview: HTMLDivElement): void => {
-      const editor = editorRef.current;
-
-      if (!editor) {
-        return;
-      }
-
-      syncScroll(preview, editor);
-    },
-    [syncScroll],
-  );
-
-  useEffect(() => {
-    const needsWelcomeMigration =
-      parsedState.success &&
-      parsedState.data.tabs.some(
-        (tab) => tab.title === "Welcome" && tab.content.includes("markdownviewer.org"),
-      );
-
-    if (
-      !parsedState.success ||
-      parsedState.data.viewMode !== state.viewMode ||
-      needsWelcomeMigration
-    ) {
-      setState(state);
-    }
-  }, [parsedState, setState, state]);
-
-  useEffect(() => {
-    if (!previewContentRef.current || !showPreview) {
-      return;
-    }
-
-    let cancelled = false;
-
-    async function renderMermaid(): Promise<void> {
-      const mermaid = await import("mermaid");
-
-      if (cancelled) {
-        return;
-      }
-
-      mermaid.default.initialize({
-        securityLevel: "strict",
-        startOnLoad: false,
-        theme: "default",
-      });
-      await mermaid.default.run({
-        nodes: previewContentRef.current?.querySelectorAll(".mermaid"),
-        suppressErrors: true,
-      });
-
-      if (syncScrollEnabled && editorRef.current) {
-        syncPreviewToEditor(editorRef.current);
-      }
-    }
-
-    void renderMermaid();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [renderedHtml, showPreview, syncPreviewToEditor, syncScrollEnabled]);
-
-  useEffect(() => {
-    if (!syncScrollEnabled || !editorRef.current) {
-      return;
-    }
-
-    const animationFrame = window.requestAnimationFrame(() => {
-      if (editorRef.current) {
-        syncPreviewToEditor(editorRef.current);
-      }
-    });
-
-    return () => window.cancelAnimationFrame(animationFrame);
-  }, [renderedHtml, syncPreviewToEditor, syncScrollEnabled]);
 
   function updateState(nextState: MarkdownPreviewState): void {
     setState(nextState);
@@ -243,23 +143,7 @@ export function MarkdownPreviewPage(): JSX.Element {
       updatedAt: Date.now(),
     });
 
-    if (syncScrollEnabled) {
-      window.requestAnimationFrame(() => syncPreviewToEditor(event.target));
-    }
-  }
-
-  function handleEditorScroll(event: UIEvent<HTMLTextAreaElement>): void {
-    setEditorScrollTop(event.currentTarget.scrollTop);
-
-    if (syncScrollEnabled && !syncingScrollRef.current) {
-      syncPreviewToEditor(event.currentTarget);
-    }
-  }
-
-  function handlePreviewScroll(event: UIEvent<HTMLDivElement>): void {
-    if (syncScrollEnabled && !syncingScrollRef.current) {
-      syncEditorToPreview(event.currentTarget);
-    }
+    onEdit();
   }
 
   function addTab(): void {
@@ -279,11 +163,6 @@ export function MarkdownPreviewPage(): JSX.Element {
       updateState({
         ...state,
         activeTabId: existingGuide.id,
-        tabs: state.tabs.map((tab) =>
-          tab.id === existingGuide.id
-            ? { ...tab, content: markdownPreviewGuide, updatedAt: Date.now() }
-            : tab,
-        ),
       });
       return;
     }
@@ -349,9 +228,11 @@ export function MarkdownPreviewPage(): JSX.Element {
       return;
     }
 
+    const deletedIndex = state.tabs.findIndex((tab) => tab.id === tabId);
     const nextTabs = state.tabs.filter((tab) => tab.id !== tabId);
     const nextActiveTab =
-      nextTabs.find((tab) => tab.id === state.activeTabId) ?? nextTabs[0];
+      nextTabs.find((tab) => tab.id === state.activeTabId) ??
+      nextTabs[Math.min(deletedIndex, nextTabs.length - 1)];
 
     updateState({
       ...state,
@@ -386,10 +267,12 @@ export function MarkdownPreviewPage(): JSX.Element {
         updatedAt: Date.now(),
       };
 
-      updateState({
-        ...state,
-        activeTabId: tab.id,
-        tabs: [...state.tabs, tab],
+      setState((previous) => {
+        const parsed = MarkdownPreviewStateSchema.safeParse(previous);
+        const current = parsed.success
+          ? normalizeMarkdownPreviewState(parsed.data)
+          : initialState;
+        return { ...current, activeTabId: tab.id, tabs: [...current.tabs, tab] };
       });
     });
     reader.readAsText(file);
@@ -489,49 +372,18 @@ ${renderedHtml}
 
   function renderMarkdownEditor(): JSX.Element {
     return (
-      <label className="relative flex h-full min-h-0 flex-col overflow-hidden bg-white">
-        <span className="sr-only">Markdown input</span>
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div
-            className="markdown-editor min-h-full min-w-full text-[13px] leading-6"
-            style={{
-              transform: `translateY(${-editorScrollTop}px)`,
-            }}
-          >
-            {editorLines.map((line) => (
-              <div
-                className="grid min-h-6 grid-cols-[3.25rem_minmax(0,1fr)]"
-                key={line.number}
-              >
-                <span className="select-none border-r border-slate-100 bg-slate-50 px-3 text-right text-slate-400">
-                  {line.number}
-                </span>
-                <span className="min-w-0 overflow-hidden px-5">
-                  <span className="block min-w-0 select-none whitespace-pre-wrap break-words text-transparent">
-                    {line.content || " "}
-                  </span>
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-        <textarea
-          className={cn(
-            "markdown-editor scrollbar-forge relative w-full resize-none border-0 bg-transparent py-0 pl-[4.5rem] pr-5 text-[13px] leading-6 text-slate-900 caret-slate-950 outline-none placeholder:text-slate-400",
-            "h-full min-h-0 flex-1 overflow-auto",
-          )}
-          onChange={handleContentChange}
-          onScroll={handleEditorScroll}
-          placeholder="# Start writing Markdown..."
-          ref={editorRef}
-          spellCheck={false}
-          value={activeTab.content}
-          wrap="soft"
-        />
-      </label>
+      <NumberedTextarea
+        label="Markdown input"
+        className="markdown-editor"
+        onChange={handleContentChange}
+        onScroll={onEditorScroll}
+        onKeyDown={onEditorIntent}
+        onWheel={onEditorIntent}
+        onPointerDown={onEditorIntent}
+        placeholder="# Start writing Markdown..."
+        textareaRef={editorRef}
+        value={activeTab.content}
+      />
     );
   }
 
@@ -577,13 +429,14 @@ ${renderedHtml}
             </p>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex min-w-0 flex-wrap items-center gap-1">
             <Tooltip
               content={state.syncScroll ? "Disable sync" : "Enable sync"}
               side="bottom"
             >
               <Button
                 aria-label="Toggle sync"
+                aria-pressed={state.syncScroll}
                 className={cn(
                   "h-8 px-2.5 text-xs",
                   state.syncScroll && "bg-sky-50 text-sky-700 ring-1 ring-sky-100",
@@ -704,181 +557,62 @@ ${renderedHtml}
           />
         </div>
 
+        {persistence === "unavailable" ? (
+          <p
+            className="shrink-0 border-b border-red-200 bg-red-50 px-3 py-2 text-xs text-red-700"
+            role="alert"
+          >
+            Draft could not be saved in this browser. Keep this tab open and export
+            Markdown before leaving.
+          </p>
+        ) : null}
         <div
           className={cn(
-            "grid min-h-0 flex-1 grid-cols-1 overflow-hidden",
+            "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1",
             state.tabsCollapsed
               ? "md:grid-cols-[3rem_minmax(0,1fr)]"
               : "md:grid-cols-[11.5rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)]",
           )}
         >
-          <aside className="flex min-h-0 shrink-0 flex-col border-b border-slate-100 bg-slate-50/70 md:border-b-0 md:border-r">
-            <div
-              className={cn(
-                "flex shrink-0 items-center px-2",
-                state.tabsCollapsed
-                  ? "h-auto flex-col justify-start gap-1 py-2"
-                  : "h-11 justify-between",
-              )}
-            >
-              {state.tabsCollapsed ? null : (
-                <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
-                  Tabs
-                </p>
-              )}
-              <div
-                className={cn(
-                  "flex items-center gap-1",
-                  state.tabsCollapsed && "flex-col gap-1",
-                )}
-              >
-                <Tooltip
-                  content={state.tabsCollapsed ? "Expand tabs" : "Collapse tabs"}
-                  side="right"
-                >
-                  <Button
-                    aria-label={state.tabsCollapsed ? "Expand tabs" : "Collapse tabs"}
-                    className="h-8 w-8"
-                    onClick={() =>
-                      updateState({
-                        ...state,
-                        tabsCollapsed: !state.tabsCollapsed,
-                      })
-                    }
-                    size="icon"
-                    variant="ghost"
-                  >
-                    {state.tabsCollapsed ? (
-                      <PanelLeftOpen aria-hidden="true" className="h-4 w-4" />
-                    ) : (
-                      <PanelLeftClose aria-hidden="true" className="h-4 w-4" />
-                    )}
-                  </Button>
-                </Tooltip>
-                <Tooltip content="New tab" side="right">
-                  <Button
-                    aria-label="New tab"
-                    className="h-8 w-8"
-                    onClick={addTab}
-                    size="icon"
-                    variant="ghost"
-                  >
-                    <FilePlus2 aria-hidden="true" className="h-4 w-4" />
-                  </Button>
-                </Tooltip>
-              </div>
-            </div>
+          <MarkdownTabs
+            tabs={state.tabs}
+            activeId={activeTab.id}
+            collapsed={state.tabsCollapsed}
+            activeButtonRef={activeTabButtonRef}
+            onSelect={(id) => updateState({ ...state, activeTabId: id })}
+            onAdd={addTab}
+            onRename={openRenameDialog}
+            onDuplicate={duplicateTab}
+            onDelete={deleteTab}
+            onToggleCollapsed={() =>
+              updateState({ ...state, tabsCollapsed: !state.tabsCollapsed })
+            }
+          />
 
-            {state.tabsCollapsed ? (
-              <div className="scrollbar-forge flex min-h-0 flex-1 flex-col items-center gap-1 overflow-y-auto overflow-x-hidden px-1 pb-2">
-                {state.tabs.map((tab) => (
-                  <Tooltip content={tab.title} key={tab.id} side="right">
-                    <button
-                      aria-label={tab.title}
-                      className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-md transition",
-                        tab.id === activeTab.id
-                          ? "bg-white text-sky-700 shadow-sm ring-1 ring-sky-100"
-                          : "text-slate-500 hover:bg-white hover:text-slate-950",
-                      )}
-                      onClick={() => updateState({ ...state, activeTabId: tab.id })}
-                      type="button"
-                    >
-                      <FileText aria-hidden="true" className="h-4 w-4" />
-                    </button>
-                  </Tooltip>
-                ))}
-              </div>
-            ) : (
-              <div className="scrollbar-forge flex shrink-0 gap-1 overflow-x-auto px-2 pb-2 md:min-h-0 md:flex-1 md:shrink md:flex-col md:overflow-y-auto md:overflow-x-hidden">
-                {state.tabs.map((tab) => (
-                  <div
-                    className={cn(
-                      "group flex h-10 min-w-44 items-center gap-1 rounded-md px-1 text-[13px] transition md:min-w-0",
-                      tab.id === activeTab.id
-                        ? "bg-white text-sky-700 shadow-sm ring-1 ring-sky-100"
-                        : "text-slate-600 hover:bg-white hover:text-slate-950",
-                    )}
-                    key={tab.id}
-                  >
-                    <button
-                      className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left"
-                      onClick={() => updateState({ ...state, activeTabId: tab.id })}
-                      type="button"
-                    >
-                      <FileText aria-hidden="true" className="h-4 w-4 shrink-0" />
-                      <span className="min-w-0 flex-1 truncate font-semibold">
-                        {tab.title}
-                      </span>
-                    </button>
-                    <DropdownMenu.Root>
-                      <DropdownMenu.Trigger asChild>
-                        <button
-                          aria-label={`${tab.title} actions`}
-                          className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                          type="button"
-                        >
-                          <MoreVertical aria-hidden="true" className="h-4 w-4" />
-                        </button>
-                      </DropdownMenu.Trigger>
-                      <DropdownMenu.Portal>
-                        <DropdownMenu.Content
-                          align="end"
-                          className="z-50 min-w-36 rounded-md border border-slate-200 bg-white p-1 shadow-lg shadow-slate-950/10"
-                          sideOffset={6}
-                        >
-                          <DropdownMenu.Item
-                            className="markdown-menu-item"
-                            onSelect={() => openRenameDialog(tab)}
-                          >
-                            <Pencil aria-hidden="true" className="h-4 w-4" />
-                            Rename
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item
-                            className="markdown-menu-item"
-                            onSelect={() => duplicateTab(tab)}
-                          >
-                            <Copy aria-hidden="true" className="h-4 w-4" />
-                            Duplicate
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item
-                            className="markdown-menu-item text-red-600 focus:text-red-700"
-                            onSelect={() => deleteTab(tab.id)}
-                          >
-                            <Trash2 aria-hidden="true" className="h-4 w-4" />
-                            Delete
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Portal>
-                    </DropdownMenu.Root>
-                  </div>
-                ))}
-              </div>
-            )}
-          </aside>
-
-          <div
-            className={cn(
-              "grid h-full min-h-0 flex-1 overflow-hidden",
-              showEditor && showPreview ? "lg:grid-cols-2" : "grid-cols-1",
-            )}
-          >
-            {showEditor ? renderMarkdownEditor() : null}
-
-            {showPreview ? (
-              <div
-                className="scrollbar-forge h-full min-h-0 overflow-auto border-t border-slate-100 bg-white lg:border-l lg:border-t-0"
-                onScroll={handlePreviewScroll}
-                ref={previewScrollRef}
-              >
+          <ResizablePanes
+            first={showEditor ? renderMarkdownEditor() : null}
+            second={
+              showPreview ? (
                 <div
-                  className="forge-markdown min-h-full w-full px-6 py-5 sm:px-8 lg:px-10"
-                  dangerouslySetInnerHTML={{ __html: renderedHtml }}
-                  ref={previewContentRef}
-                />
-              </div>
-            ) : null}
-          </div>
+                  className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-white outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-sky-600"
+                  onScroll={onPreviewScroll}
+                  onKeyDown={onPreviewIntent}
+                  onWheel={onPreviewIntent}
+                  onPointerDown={onPreviewIntent}
+                  tabIndex={0}
+                  role="document"
+                  aria-label="Rendered Markdown"
+                  ref={previewScrollRef}
+                >
+                  <MarkdownPreviewContent
+                    key={activeTab.id}
+                    html={renderedHtml}
+                    contentRef={previewContentRef}
+                  />
+                </div>
+              ) : null
+            }
+          />
         </div>
       </section>
 
@@ -893,7 +627,18 @@ ${renderedHtml}
       >
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/30" />
-          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border border-slate-200 bg-white p-4 shadow-xl shadow-slate-950/20">
+          <Dialog.Content
+            onOpenAutoFocus={(event) => {
+              event.preventDefault();
+              renameInputRef.current?.focus();
+              renameInputRef.current?.select();
+            }}
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              activeTabButtonRef.current?.focus();
+            }}
+            className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border border-slate-200 bg-white p-4 shadow-xl shadow-slate-950/20"
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <Dialog.Title className="text-sm font-semibold text-slate-950">
@@ -914,7 +659,7 @@ ${renderedHtml}
               <label className="block">
                 <span className="sr-only">Tab name</span>
                 <input
-                  autoFocus
+                  ref={renameInputRef}
                   className="h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-sm font-medium text-slate-950 outline-none transition focus:border-sky-300 focus:ring-2 focus:ring-sky-100"
                   onChange={(event) => setRenameTitle(event.target.value)}
                   value={renameTitle}

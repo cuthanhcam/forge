@@ -4,6 +4,7 @@ import {
   estimateMarkdownReadTime,
   hasMarkdownPreviewInput,
   normalizeMarkdownPreviewInput,
+  normalizeMarkdownPreviewState,
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
 
@@ -22,6 +23,12 @@ describe("markdown-preview service", () => {
     expect(state.tabs).toHaveLength(1);
     expect(state.activeTabId).toBe(state.tabs[0]?.id);
     expect(state.viewMode).toBe("split");
+  });
+
+  it("never migrates Welcome document content based on text fragments", () => {
+    const state = createMarkdownPreviewState();
+    state.tabs[0].content = "My Forge Markdown Workspace notes: markdownviewer.org";
+    expect(normalizeMarkdownPreviewState(state).tabs).toEqual(state.tabs);
   });
 
   it("renders markdown as sanitized html", () => {

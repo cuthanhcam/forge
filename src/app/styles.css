@@ -1,8 +1,14 @@
 @import "tailwindcss";
+@import "@fontsource-variable/inter/wght.css";
+@import "@fontsource-variable/inter/wght-italic.css";
 @custom-variant dark (&:where(.dark, .dark *));
 
 :root {
   color-scheme: light;
+  --font-ui: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-code:
+    ui-monospace, "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono",
+    monospace;
   --background: 0 0% 100%;
   --foreground: 222.2 84% 4.9%;
   --card: 0 0% 100%;
@@ -27,6 +33,8 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-ui);
+  --font-mono: var(--font-code);
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-card: hsl(var(--card));
@@ -54,14 +62,8 @@ body {
   margin: 0;
   min-width: 320px;
   font-size: 13px;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    ui-sans-serif,
-    system-ui,
-    "Segoe UI",
-    sans-serif;
+  font-family: var(--font-ui);
+  font-optical-sizing: auto;
   background: hsl(var(--background));
 }
 
@@ -127,17 +129,15 @@ body {
 }
 
 .markdown-editor {
-  font-family:
-    "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono",
-    Menlo, monospace;
+  font-family: var(--font-ui);
+  font-size: 14px;
+  line-height: 1.7;
   font-variant-ligatures: none;
   tab-size: 2;
 }
 
 .html-editor {
-  font-family:
-    "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono",
-    Menlo, monospace;
+  font-family: var(--font-code);
   font-variant-ligatures: none;
 }
 
@@ -251,9 +251,7 @@ body {
   background: rgb(248 250 252);
   border: 1px solid rgb(226 232 240);
   padding: 0.12rem 0.28rem;
-  font-family:
-    "JetBrains Mono", "Cascadia Code", "SFMono-Regular", Consolas, "Liberation Mono",
-    Menlo, monospace;
+  font-family: var(--font-code);
   font-size: 0.9em;
 }
 
@@ -342,10 +340,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .home-hero-copy {
-    max-width: calc(100vw - 2rem);
-  }
-
   .docs-markdown p,
   .docs-markdown li,
   .docs-markdown blockquote {
@@ -780,4 +774,56 @@ body {
 .dark .forge-markdown hr,
 .dark .docs-markdown h2 {
   border-color: var(--forge-dark-border);
+}
+
+/* Keep footer controls mounted while sidebar geometry animates. */
+.sidebar-footer-actions {
+  position: relative;
+  height: 36px;
+  transition: height 200ms ease-out;
+}
+.sidebar-footer-actions > * {
+  position: absolute;
+  top: 0;
+  transition:
+    left 200ms ease-out,
+    top 200ms ease-out,
+    color 150ms;
+}
+.sidebar-footer-actions > :nth-child(1) {
+  left: 2px;
+}
+.sidebar-footer-actions > :nth-child(2) {
+  left: calc(50% - 18px);
+}
+.sidebar-footer-actions > :nth-child(3) {
+  left: calc(100% - 38px);
+}
+.sidebar-footer-actions[data-collapsed="true"] {
+  height: 116px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > * {
+  left: 2px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > :nth-child(2) {
+  top: 40px;
+}
+.sidebar-footer-actions[data-collapsed="true"] > :nth-child(3) {
+  top: 80px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-footer-actions,
+  .sidebar-footer-actions > * {
+    transition: none;
+  }
+}
+
+.markdown-menu-item:focus-visible {
+  outline: 2px solid rgb(2 132 199);
+  outline-offset: -2px;
+}
+
+.sidebar-footer-actions > :focus-visible {
+  outline: 2px solid rgb(2 132 199);
+  outline-offset: -2px;
 }

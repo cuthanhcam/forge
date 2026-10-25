@@ -39,27 +39,67 @@ describe("html-preview service", () => {
     expect(previewDocument).toContain("data-forge-preview-scrollbar");
   });
 
-  it("minifies html whitespace between tags", () => {
-    expect(minifyHtml("<main>  <h1>Title</h1>  </main>")).toBe(
-      "<main><h1>Title</h1></main>",
-    );
+  it("compacts tag syntax while preserving text spacing", async () => {
+    expect(
+      await minifyHtml(
+        '<main   class="a  b"  >  <span>one</span> <span>two</span>  </main  >',
+      ),
+    ).toBe('<main class="a  b">  <span>one</span> <span>two</span>  </main>');
   });
 
-  it("beautifies compact html", () => {
-    expect(beautifyHtml("<main><h1>Title</h1></main>")).toContain("  <h1>Title</h1>");
-  });
-
-  it("beautifies html with a custom indent size", () => {
-    expect(beautifyHtml("<main><h1>Title</h1></main>", 4)).toContain(
+  it("beautifies html with a custom indent size", async () => {
+    expect(await beautifyHtml("<main>\n<h1>Title</h1>\n</main>", 4)).toContain(
       "    <h1>Title</h1>",
     );
   });
 
-  it("beautifies script contents", () => {
+  const protectedContent = `<script>const value = "a  b > c"; const tpl = \`first
+    second; { ? : }\`;</script><style>.x::after { content: "a  b;{}"; }</style><pre>  first
+    second
+</pre><textarea>  user
+    input </textarea><!-- keep  this comment -->`;
+
+  it("does not rewrite embedded strings, scripts, styles or preformatted text", async () => {
+    expect(await minifyHtml(protectedContent)).toBe(protectedContent);
+    const formatted = await beautifyHtml(protectedContent);
+    for (const tag of ["script", "style", "pre", "textarea"]) {
+      const original = new DOMParser()
+        .parseFromString(protectedContent, "text/html")
+        .querySelector(tag)?.textContent;
+      const output = new DOMParser()
+        .parseFromString(formatted, "text/html")
+        .querySelector(tag)?.textContent;
+      expect(output).toBe(original);
+    }
+    expect(formatted).toContain("<!-- keep  this comment -->");
+  });
+
+  it("preserves quoted angle brackets, raw attribute values and unquoted slashes", async () => {
+    expect(await minifyHtml("<img   src=x/>")).toBe("<img src=x/>");
+    expect(await minifyHtml("<img   src=x />")).toBe("<img src=x />");
     expect(
-      beautifyHtml(
-        "<script>function toggleTheme(){document.body.classList.toggle('dark');}</script>",
+      await minifyHtml("<div   data-value=\"a  >  b\"   title='two  spaces' >x</div>"),
+    ).toBe("<div data-value=\"a  >  b\" title='two  spaces'>x</div>");
+  });
+
+  it("preserves whitespace in an explicitly preformatted container", async () => {
+    const input = '<div style="white-space: pre">  first\n    second\n</div>';
+    expect((await beautifyHtml(input)).trimEnd()).toBe(input);
+  });
+
+  it("handles template content and foreign self-closing tags", async () => {
+    expect(
+      await minifyHtml(
+        '<template><svg  viewBox="0 0 10 10" ><path  d="M 1  2" /></svg></template>',
       ),
-    ).toContain("function toggleTheme(){\n  document.body.classList.toggle('dark');");
+    ).toBe('<template><svg viewBox="0 0 10 10"><path d="M 1  2" /></svg></template>');
+  });
+
+  it("rejects malformed HTML instead of rewriting a repaired parse tree", async () => {
+    await expect(beautifyHtml('<div title="unfinished>')).rejects.toThrow("Invalid HTML");
+    await expect(minifyHtml('<div title="unfinished>')).rejects.toThrow("Invalid HTML");
+    await expect(minifyHtml('<div a="1" a="2"></div>')).rejects.toThrow(
+      "duplicate-attribute",
+    );
   });
 });

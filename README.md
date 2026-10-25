@@ -9,6 +9,8 @@ developer input without jumping across unrelated tabs.
 
 ![Forge home screen](docs/assets/forge-home.png)
 
+[View the tool directory](docs/assets/forge-directory.png)
+
 ## Why Forge Exists
 
 Developers often handle sensitive, temporary, messy text:
@@ -78,6 +80,8 @@ keyboard-friendly navigation, and a privacy-first model.
 
 ## Documentation
 
+- [Contributing and local setup](CONTRIBUTING.md)
+- [Development roadmap and UI/UX audit](docs/development/roadmap.md)
 - [Documentation home](docs/README.md)
 - [Product overview](docs/product.md)
 - [Tool guide](docs/tools.md)

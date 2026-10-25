@@ -20,43 +20,58 @@ export function SidebarGroup({
   const [open, setOpen] = useState(true);
   const Icon = category.icon;
 
-  if (sidebarCollapsed) {
-    return (
-      <section className="space-y-1">
-        <div className="space-y-1">
-          {tools.map((tool) => (
-            <SidebarToolItem collapsed key={tool.id} tool={tool} />
-          ))}
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="space-y-1.5">
-      <button
-        aria-expanded={open}
-        className="flex h-7 w-full items-center gap-2 rounded-md px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-        onClick={() => setOpen((value) => !value)}
-        type="button"
+    <section>
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows,opacity] duration-200 motion-reduce:transition-none",
+          sidebarCollapsed ? "grid-rows-[0fr] opacity-0" : "grid-rows-[1fr] opacity-100",
+        )}
+        aria-hidden={sidebarCollapsed}
+        inert={sidebarCollapsed}
       >
-        <Icon aria-hidden="true" className="h-3.5 w-3.5 text-slate-300" />
-        <span className="min-w-0 flex-1 text-left">{category.id}</span>
-        <ChevronDown
-          aria-hidden="true"
-          className={cn("h-3.5 w-3.5 transition", !open && "-rotate-90")}
-        />
-      </button>
+        <div className="min-h-0 overflow-hidden">
+          <button
+            aria-expanded={open}
+            className="flex h-7 w-full items-center gap-2 rounded-md px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition hover:bg-slate-100 hover:text-slate-600"
+            onClick={() => setOpen((value) => !value)}
+            type="button"
+          >
+            <Icon aria-hidden="true" className="h-3.5 w-3.5 text-slate-300" />
+            <span className="min-w-0 flex-1 text-left">{category.id}</span>
+            <ChevronDown
+              aria-hidden="true"
+              className={cn(
+                "h-3.5 w-3.5 transition motion-reduce:transition-none",
+                !open && "-rotate-90",
+              )}
+            />
+          </button>
+        </div>
+      </div>
       <div
         className={cn(
           "grid transition-[grid-template-rows,opacity] duration-200 ease-out",
-          open ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0",
+          open || sidebarCollapsed
+            ? "grid-rows-[1fr] opacity-100"
+            : "grid-rows-[0fr] opacity-0",
+          "motion-reduce:transition-none",
         )}
       >
-        <div className="overflow-hidden px-1 py-0.5">
-          <div className="ml-2 space-y-1 border-l border-slate-200 pl-2">
+        <div
+          className="min-h-0 overflow-hidden px-1 py-0.5"
+          inert={!open && !sidebarCollapsed}
+        >
+          <div
+            className={cn(
+              "space-y-1 transition-[margin,padding,border-color] duration-200 motion-reduce:transition-none",
+              sidebarCollapsed
+                ? "ml-0 border-l-0 pl-0"
+                : "ml-2 border-l border-slate-200 pl-2",
+            )}
+          >
             {tools.map((tool) => (
-              <SidebarToolItem key={tool.id} tool={tool} />
+              <SidebarToolItem collapsed={sidebarCollapsed} key={tool.id} tool={tool} />
             ))}
           </div>
         </div>

@@ -167,9 +167,7 @@ export function LegalPage(): JSX.Element {
               )}
             </div>
             <div>
-              <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
-                Forge legal
-              </p>
+              <p className="text-xs font-medium text-slate-400">Forge legal</p>
               <p className="mt-1 text-sm font-medium text-slate-600">
                 Last updated: July 5, 2026
               </p>
@@ -194,14 +192,18 @@ export function LegalPage(): JSX.Element {
 
         <aside className="lg:sticky lg:top-5 lg:self-start">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-950/[0.03]">
-            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-slate-400">
-              Related
-            </p>
+            <p className="text-xs font-medium text-slate-400">Related</p>
             <nav className="mt-4 grid gap-2 text-sm font-semibold">
-              <Link className="text-slate-600 transition hover:text-slate-950" to="/privacy">
+              <Link
+                className="text-slate-600 transition hover:text-slate-950"
+                to="/privacy"
+              >
                 Privacy Policy
               </Link>
-              <Link className="text-slate-600 transition hover:text-slate-950" to="/terms">
+              <Link
+                className="text-slate-600 transition hover:text-slate-950"
+                to="/terms"
+              >
                 Terms of Use
               </Link>
               <Link className="text-slate-600 transition hover:text-slate-950" to="/docs">

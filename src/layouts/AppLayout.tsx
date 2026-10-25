@@ -17,8 +17,8 @@ export function AppLayout(): JSX.Element {
   useShortcuts({ onCommandPalette: openCommandPalette });
 
   return (
-    <div className="h-screen overflow-hidden bg-slate-50 text-foreground">
-      <div className="flex h-screen min-h-0">
+    <div className="h-dvh overflow-hidden bg-slate-50 text-foreground">
+      <div className="flex h-dvh min-h-0">
         <Sidebar
           mobileOpen={mobileSidebarOpen}
           onMobileOpenChange={setMobileSidebarOpen}
@@ -26,6 +26,7 @@ export function AppLayout(): JSX.Element {
         />
         <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
           <Header
+            navigationOpen={mobileSidebarOpen}
             onOpenNavigation={() => setMobileSidebarOpen(true)}
             onOpenCommandPalette={openCommandPalette}
             onOpenShortcuts={openShortcuts}

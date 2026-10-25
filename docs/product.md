@@ -13,6 +13,18 @@ It brings common utilities into one interface:
 - secret and password generation
 - timestamp, UUID, case, slug, and regex helpers
 
+## Start with a tool
+
+The home page opens with the Forge signature. Scroll down or choose Explore
+tools to reach the directory, which lists available tools by category. Filter by name, format or task
+(for example JSON, Mermaid or encode), then open a tool directly. The header's
+command palette remains available with `Ctrl K` from any page.
+
+UI text and headings use one self-hosted Inter family. Source editors, structured
+data and keyboard keys use a shared monospace role; math and user-authored HTML
+retain their specialized rendering. See the [typography guide](development/typography.md)
+for the implementation rules.
+
 ## Product Principles
 
 ### Local-first
