@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
 import { cn } from "@/shared/lib/cn";
+import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import {
@@ -370,22 +371,15 @@ ${renderedHtml}
 
   function renderMarkdownEditor(): JSX.Element {
     return (
-      <label className="relative flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-white">
-        <span className="sr-only">Markdown input</span>
-        <textarea
-          className={cn(
-            "markdown-editor scrollbar-forge relative w-full resize-none border-0 bg-transparent py-0 px-4 text-[13px] leading-6 text-slate-900 caret-slate-950 outline-none placeholder:text-slate-400",
-            "h-full min-h-0 flex-1 overflow-auto",
-          )}
-          onChange={handleContentChange}
-          onScroll={onEditorScroll}
-          placeholder="# Start writing Markdown..."
-          ref={editorRef}
-          spellCheck={false}
-          value={activeTab.content}
-          wrap="soft"
-        />
-      </label>
+      <NumberedTextarea
+        label="Markdown input"
+        className="markdown-editor"
+        onChange={handleContentChange}
+        onScroll={onEditorScroll}
+        placeholder="# Start writing Markdown..."
+        textareaRef={editorRef}
+        value={activeTab.content}
+      />
     );
   }
 

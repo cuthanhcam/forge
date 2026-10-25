@@ -27,6 +27,16 @@ layout switching, resize and dark theme. Chromium emulation does not replace
 physical iOS/Android or Firefox/WebKit verification. The remaining sequence below
 is backlog, not a claim that the full UI redesign has shipped.
 
+## Line-number follow-up
+
+`fix/preview-editor-line-numbers` restores a shared gutter for Markdown and HTML
+without bringing back the old overlaid text renderer. It measures native content
+width excluding scrollbars and matches the editor typography, wrapping and tabs.
+The gutter scrolls directly from textarea events without page state updates.
+Browser tests compare logical-line offsets against a native textarea, including
+blank/trailing lines, Unicode, tabs, long unbroken text, wrap off, resize and dark
+mode. Syntax highlighting remains separate from this change.
+
 ## Initial audit findings
 
 The sandbox, viewport, HTML overlay, CI, contributor docs and metadata items in

@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
 import { cn } from "@/shared/lib/cn";
+import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { HtmlPreviewStateSchema, type HtmlPreviewState } from "./html-preview.schema";
@@ -277,21 +278,15 @@ export function HtmlPreviewPage(): JSX.Element {
       {/* Explicit tracks keep both panes scrollable on short and narrow viewports. */}
       <div className="grid min-h-0 min-w-0 flex-1 grid-rows-2 overflow-hidden lg:grid-cols-2 lg:grid-rows-1">
         <div className="relative min-h-0 min-w-0 overflow-hidden bg-white">
-          <label className="relative block h-full min-h-0 bg-transparent">
-            <span className="sr-only">HTML input</span>
-            <textarea
-              className={cn(
-                "html-editor scrollbar-forge relative h-full min-h-0 w-full resize-none border-0 bg-transparent py-0 px-4 text-[13px] leading-6 text-slate-900 caret-slate-950 outline-none placeholder:text-slate-400",
-                state.lineWrap ? "overflow-auto" : "overflow-auto whitespace-pre",
-              )}
-              onChange={handleHtmlChange}
-              placeholder="Paste or write HTML..."
-              spellCheck={false}
-              style={{ tabSize: state.indentSize }}
-              value={state.html}
-              wrap={state.lineWrap ? "soft" : "off"}
-            />
-          </label>
+          <NumberedTextarea
+            label="HTML input"
+            className="html-editor"
+            lineWrap={state.lineWrap}
+            onChange={handleHtmlChange}
+            placeholder="Paste or write HTML..."
+            style={{ tabSize: state.indentSize }}
+            value={state.html}
+          />
         </div>
 
         <div className="min-h-0 min-w-0 overflow-hidden border-t border-slate-200 bg-white lg:border-l lg:border-t-0">

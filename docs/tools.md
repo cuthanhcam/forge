@@ -14,7 +14,10 @@ narrow screens. Sync follows the pane you scroll; turn it off to read each pane
 independently. Scroll progress follows viewport changes, images and diagrams.
 Sync uses relative document position, so it does not map every source line to
 an exact rendered block. The native editor keeps text, caret and scrolling in
-one layer; line-number overlays are no longer used.
+one layer. A separate gutter shows logical line numbers: a wrapped continuation
+keeps the same number, and the next number starts at the next source newline.
+The gutter follows vertical scrolling while staying fixed during horizontal
+scrolling; it recalculates wrapped line heights when the editor resizes.
 
 Drafts save locally after a short pause; check the status below the toolbar.
 If browser storage is full or blocked, the text stays editable for the current
@@ -38,9 +41,10 @@ dialogs and downloads initiated inside the preview are restricted. Use the
 Forge toolbar to download the source. Auto updates after a short delay; turn it
 off to apply edits only with Run preview.
 
-The HTML editor currently uses native text rendering for reliable caret and
-scroll alignment; syntax coloring and line numbers are deferred until a shared
-editor integration has browser regression coverage.
+The HTML editor uses native text rendering for reliable caret and scroll
+alignment, with the same line-number gutter as Markdown. Line numbers remain
+aligned when line wrapping or indentation changes. Syntax coloring remains a
+separate editor enhancement.
 
 ### Diff Checker
 
