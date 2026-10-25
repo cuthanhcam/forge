@@ -84,14 +84,15 @@ function downloadBlob(blob: Blob, fileName: string): void {
 export function MarkdownPreviewPage(): JSX.Element {
   const [renameTabId, setRenameTabId] = useState<string | null>(null);
   const [renameTitle, setRenameTitle] = useState("");
-  const [storedState, setState] = usePersistedToolState<MarkdownPreviewState>(
-    "markdown-preview",
-    createMarkdownPreviewState(),
-  );
-  const parsedState = MarkdownPreviewStateSchema.safeParse(storedState);
-  const state = parsedState.success
-    ? normalizeMarkdownPreviewState(parsedState.data)
-    : createMarkdownPreviewState();
+  const initialState = useMemo(createMarkdownPreviewState, []);
+  const [storedState, setState, persistence] =
+    usePersistedToolState<MarkdownPreviewState>("markdown-preview", initialState, {
+      debounceMs: 250,
+    });
+  const state = useMemo(() => {
+    const parsed = MarkdownPreviewStateSchema.safeParse(storedState);
+    return parsed.success ? normalizeMarkdownPreviewState(parsed.data) : initialState;
+  }, [storedState, initialState]);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
@@ -300,10 +301,12 @@ export function MarkdownPreviewPage(): JSX.Element {
         updatedAt: Date.now(),
       };
 
-      updateState({
-        ...state,
-        activeTabId: tab.id,
-        tabs: [...state.tabs, tab],
+      setState((previous) => {
+        const parsed = MarkdownPreviewStateSchema.safeParse(previous);
+        const current = parsed.success
+          ? normalizeMarkdownPreviewState(parsed.data)
+          : initialState;
+        return { ...current, activeTabId: tab.id, tabs: [...current.tabs, tab] };
       });
     });
     reader.readAsText(file);
@@ -592,6 +595,19 @@ ${renderedHtml}
           />
         </div>
 
+        <p
+          className={cn(
+            "shrink-0 border-b border-slate-100 px-3 py-1 text-xs text-slate-500",
+            persistence === "unavailable" && "text-red-700",
+          )}
+          role={persistence === "unavailable" ? "alert" : "status"}
+        >
+          {persistence === "unavailable"
+            ? "Draft could not be saved in this browser. Keep this tab open and export Markdown before leaving."
+            : persistence === "pending"
+              ? "Saving draft locally?"
+              : "Draft saved in this browser"}
+        </p>
         <div
           className={cn(
             "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1",

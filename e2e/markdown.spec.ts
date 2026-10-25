@@ -20,6 +20,7 @@ test("pasting a document into Welcome never replaces it with the guide", async (
   const editor = page.getByRole("textbox", { name: "Markdown input" });
   await editor.fill(content);
   await expect(editor).toHaveValue(content);
+  await expect(page.getByRole("status")).toHaveText("Draft saved in this browser");
   await page.reload();
   await expect(editor).toHaveValue(content);
 });
@@ -70,6 +71,27 @@ test("long pasted content reaches the end of both panes without scroll feedback"
     .poll(() => editor.evaluate((element) => element.scrollTop))
     .toBeLessThan(3);
   await expect(editor).toHaveValue(longDocument);
+  await expect(page.getByRole("status")).toHaveText("Draft saved in this browser");
   await page.reload();
   await expect(editor).toHaveValue(longDocument);
+});
+
+test("storage quota failure keeps pasted text editable and explains how to save it", async ({
+  page,
+}) => {
+  await page.evaluate(() => {
+    const original = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (key: string, value: string): void {
+      if (key === "forge.tool.markdown-preview")
+        throw new DOMException("Full", "QuotaExceededError");
+      original.call(this, key, value);
+    };
+  });
+  const editor = page.getByRole("textbox", { name: "Markdown input" });
+  await editor.fill("# Keep this draft even when storage fails");
+  await expect(page.getByRole("alert")).toContainText("export Markdown before leaving");
+  await expect(editor).toHaveValue("# Keep this draft even when storage fails");
+  await editor.press("End");
+  await editor.pressSequentially("!");
+  await expect(editor).toHaveValue("# Keep this draft even when storage fails!");
 });
