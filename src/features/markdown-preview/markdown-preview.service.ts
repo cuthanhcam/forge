@@ -279,13 +279,8 @@ export function normalizeMarkdownPreviewState(
     activeTabId: input.activeTabId,
     syncScroll: input.syncScroll,
     tabsCollapsed: input.tabsCollapsed ?? false,
-    tabs: input.tabs.map((tab) =>
-      tab.title === "Welcome" &&
-      (tab.content.includes("markdownviewer.org") ||
-        tab.content.includes("Forge Markdown Workspace"))
-        ? { ...tab, content: markdownPreviewGuide }
-        : tab,
-    ),
+    // Normalize layout preferences only; document text always belongs to the user.
+    tabs: input.tabs,
     viewMode: input.viewMode ?? (input.previewVisible === false ? "editor" : "split"),
   };
 }
