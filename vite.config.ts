@@ -7,6 +7,17 @@ import { cloudflare } from "@cloudflare/vite-plugin";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), cloudflare()],
+  // These imports are intentionally lazy in product code. Prebundle their
+  // dependencies up front so parallel dev/browser sessions keep stable URLs.
+  optimizeDeps: {
+    include: [
+      "mermaid",
+      "parse5",
+      "prettier/standalone",
+      "prettier/plugins/html",
+      "@radix-ui/react-context-menu",
+    ],
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
