@@ -92,8 +92,14 @@ test("editor gutters use consistent code typography", async ({ page }) => {
     await expect(gutter).toHaveCSS("font-size", "13px");
     if (gutterFont) expect(family).toBe(gutterFont);
     gutterFont = family;
-    if (tool === "html") expect(font).not.toContain("Inter Variable");
-    else await expect(page.locator(".forge-markdown")).toHaveCSS("font-family", font);
+    expect(font).toBe(family);
+    await expect(editor).toHaveCSS("font-size", "13px");
+    await expect(editor).toHaveCSS("line-height", "24px");
+    if (tool === "markdown")
+      await expect(page.locator(".forge-markdown")).toHaveCSS(
+        "font-family",
+        /Inter Variable/,
+      );
     expect(
       await page
         .locator("body")

@@ -11,8 +11,9 @@ Forge has two font roles, defined once in `src/app/styles.css`:
   visual line breaks so the accessible heading reads as a sentence.
 - `--font-code`: one system monospace stack for HTML/code editors, structured
   data, keyboard keys and rendered Markdown code blocks. Do not use monospace
-  for decorative labels or marketing copy. Markdown source intentionally uses
-  the same Inter 14px/1.7 reading typography as preview prose; both line-number
+  for decorative labels or marketing copy. Markdown and HTML source editors use
+  the same monospace 13px/24px typography; rendered Markdown prose retains
+  Inter 14px/1.7. Both line-number
   gutters use the shared code font at 13px, with row heights following each
   editor's actual wrapping and line height.
 
