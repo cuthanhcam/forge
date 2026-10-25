@@ -13,20 +13,14 @@ import {
   Download,
   FileCode2,
   FileDown,
-  FilePlus2,
   FileText,
   ImageDown,
   Link2,
   Link2Off,
-  MoreVertical,
   PanelLeft,
-  PanelLeftClose,
-  PanelLeftOpen,
   PanelRight,
-  Pencil,
   RotateCcw,
   SplitSquareHorizontal,
-  Trash2,
   Upload,
   X,
 } from "lucide-react";
@@ -51,6 +45,7 @@ import {
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
 
+import { MarkdownTabs } from "./MarkdownTabs";
 import { MarkdownPreviewContent } from "./MarkdownPreviewContent";
 import { useMarkdownScroll } from "./use-markdown-scroll";
 
@@ -95,6 +90,7 @@ export function MarkdownPreviewPage(): JSX.Element {
     const parsed = MarkdownPreviewStateSchema.safeParse(storedState);
     return parsed.success ? normalizeMarkdownPreviewState(parsed.data) : initialState;
   }, [storedState, initialState]);
+  const activeTabButtonRef = useRef<HTMLButtonElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const previewScrollRef = useRef<HTMLDivElement>(null);
@@ -571,150 +567,20 @@ ${renderedHtml}
               : "md:grid-cols-[11.5rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)]",
           )}
         >
-          <aside className="flex min-h-0 shrink-0 flex-col border-b border-slate-100 bg-slate-50/70 md:border-b-0 md:border-r">
-            <div
-              className={cn(
-                "flex shrink-0 items-center px-2",
-                state.tabsCollapsed
-                  ? "h-auto flex-col justify-start gap-1 py-2"
-                  : "h-11 justify-between",
-              )}
-            >
-              {state.tabsCollapsed ? null : (
-                <p className="text-[12px] font-semibold uppercase tracking-wide text-slate-500">
-                  Tabs
-                </p>
-              )}
-              <div
-                className={cn(
-                  "flex items-center gap-1",
-                  state.tabsCollapsed && "flex-col gap-1",
-                )}
-              >
-                <Tooltip
-                  content={state.tabsCollapsed ? "Expand tabs" : "Collapse tabs"}
-                  side="right"
-                >
-                  <Button
-                    aria-label={state.tabsCollapsed ? "Expand tabs" : "Collapse tabs"}
-                    className="h-8 w-8"
-                    onClick={() =>
-                      updateState({
-                        ...state,
-                        tabsCollapsed: !state.tabsCollapsed,
-                      })
-                    }
-                    size="icon"
-                    variant="ghost"
-                  >
-                    {state.tabsCollapsed ? (
-                      <PanelLeftOpen aria-hidden="true" className="h-4 w-4" />
-                    ) : (
-                      <PanelLeftClose aria-hidden="true" className="h-4 w-4" />
-                    )}
-                  </Button>
-                </Tooltip>
-                <Tooltip content="New tab" side="right">
-                  <Button
-                    aria-label="New tab"
-                    className="h-8 w-8"
-                    onClick={addTab}
-                    size="icon"
-                    variant="ghost"
-                  >
-                    <FilePlus2 aria-hidden="true" className="h-4 w-4" />
-                  </Button>
-                </Tooltip>
-              </div>
-            </div>
-
-            {state.tabsCollapsed ? (
-              <div className="scrollbar-forge flex min-h-0 flex-1 flex-col items-center gap-1 overflow-y-auto overflow-x-hidden px-1 pb-2">
-                {state.tabs.map((tab) => (
-                  <Tooltip content={tab.title} key={tab.id} side="right">
-                    <button
-                      aria-label={tab.title}
-                      className={cn(
-                        "flex h-8 w-8 items-center justify-center rounded-md transition",
-                        tab.id === activeTab.id
-                          ? "bg-white text-sky-700 shadow-sm ring-1 ring-sky-100"
-                          : "text-slate-500 hover:bg-white hover:text-slate-950",
-                      )}
-                      onClick={() => updateState({ ...state, activeTabId: tab.id })}
-                      type="button"
-                    >
-                      <FileText aria-hidden="true" className="h-4 w-4" />
-                    </button>
-                  </Tooltip>
-                ))}
-              </div>
-            ) : (
-              <div className="scrollbar-forge flex shrink-0 gap-1 overflow-x-auto px-2 pb-2 md:min-h-0 md:flex-1 md:shrink md:flex-col md:overflow-y-auto md:overflow-x-hidden">
-                {state.tabs.map((tab) => (
-                  <div
-                    className={cn(
-                      "group flex h-10 min-w-44 items-center gap-1 rounded-md px-1 text-[13px] transition md:min-w-0",
-                      tab.id === activeTab.id
-                        ? "bg-white text-sky-700 shadow-sm ring-1 ring-sky-100"
-                        : "text-slate-600 hover:bg-white hover:text-slate-950",
-                    )}
-                    key={tab.id}
-                  >
-                    <button
-                      className="flex min-w-0 flex-1 items-center gap-2 px-1 text-left"
-                      onClick={() => updateState({ ...state, activeTabId: tab.id })}
-                      type="button"
-                    >
-                      <FileText aria-hidden="true" className="h-4 w-4 shrink-0" />
-                      <span className="min-w-0 flex-1 truncate font-semibold">
-                        {tab.title}
-                      </span>
-                    </button>
-                    <DropdownMenu.Root>
-                      <DropdownMenu.Trigger asChild>
-                        <button
-                          aria-label={`${tab.title} actions`}
-                          className="inline-flex h-7 w-7 shrink-0 items-center justify-center rounded text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
-                          type="button"
-                        >
-                          <MoreVertical aria-hidden="true" className="h-4 w-4" />
-                        </button>
-                      </DropdownMenu.Trigger>
-                      <DropdownMenu.Portal>
-                        <DropdownMenu.Content
-                          align="end"
-                          className="z-50 min-w-36 rounded-md border border-slate-200 bg-white p-1 shadow-lg shadow-slate-950/10"
-                          sideOffset={6}
-                        >
-                          <DropdownMenu.Item
-                            className="markdown-menu-item"
-                            onSelect={() => openRenameDialog(tab)}
-                          >
-                            <Pencil aria-hidden="true" className="h-4 w-4" />
-                            Rename
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item
-                            className="markdown-menu-item"
-                            onSelect={() => duplicateTab(tab)}
-                          >
-                            <Copy aria-hidden="true" className="h-4 w-4" />
-                            Duplicate
-                          </DropdownMenu.Item>
-                          <DropdownMenu.Item
-                            className="markdown-menu-item text-red-600 focus:text-red-700"
-                            onSelect={() => deleteTab(tab.id)}
-                          >
-                            <Trash2 aria-hidden="true" className="h-4 w-4" />
-                            Delete
-                          </DropdownMenu.Item>
-                        </DropdownMenu.Content>
-                      </DropdownMenu.Portal>
-                    </DropdownMenu.Root>
-                  </div>
-                ))}
-              </div>
-            )}
-          </aside>
+          <MarkdownTabs
+            tabs={state.tabs}
+            activeId={activeTab.id}
+            collapsed={state.tabsCollapsed}
+            activeButtonRef={activeTabButtonRef}
+            onSelect={(id) => updateState({ ...state, activeTabId: id })}
+            onAdd={addTab}
+            onRename={openRenameDialog}
+            onDuplicate={duplicateTab}
+            onDelete={deleteTab}
+            onToggleCollapsed={() =>
+              updateState({ ...state, tabsCollapsed: !state.tabsCollapsed })
+            }
+          />
 
           <ResizablePanes
             first={showEditor ? renderMarkdownEditor() : null}
@@ -748,7 +614,13 @@ ${renderedHtml}
       >
         <Dialog.Portal>
           <Dialog.Overlay className="fixed inset-0 z-50 bg-slate-950/30" />
-          <Dialog.Content className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border border-slate-200 bg-white p-4 shadow-xl shadow-slate-950/20">
+          <Dialog.Content
+            onCloseAutoFocus={(event) => {
+              event.preventDefault();
+              activeTabButtonRef.current?.focus();
+            }}
+            className="fixed left-1/2 top-1/2 z-50 w-[calc(100vw-2rem)] max-w-sm -translate-x-1/2 -translate-y-1/2 rounded-lg border border-slate-200 bg-white p-4 shadow-xl shadow-slate-950/20"
+          >
             <div className="flex items-start justify-between gap-4">
               <div>
                 <Dialog.Title className="text-sm font-semibold text-slate-950">
