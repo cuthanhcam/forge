@@ -1,0 +1,78 @@
+# Forge completion and UI/UX roadmap
+
+Audit date: 2026-10-25. Findings below are from source review; browser acceptance
+remains required before declaring responsive preview defects resolved.
+
+## Confirmed gaps
+
+| Priority | Evidence / impact                                                                                  | Delivery                                                                       |
+| -------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| P0       | HTML iframe combines scripts and same-origin: preview can access the host origin                   | Remove same-origin permission; test sandbox policy                             |
+| P1       | Preview grids have implicit mobile rows and children with full height                              | Explicit equal, shrinkable rows and zero minimum width                         |
+| P1       | App shell uses 100vh, which can exceed mobile visible viewport                                     | Dynamic viewport sizing and flex-based tool height                             |
+| P1       | HTML syntax overlay duplicates textarea layout without matching scrollbar width                    | Replace with readable native editor first; evaluate existing Monaco separately |
+| P1       | Markdown sync uses relative scroll position, not source mapping; diagrams resize asynchronously    | Regression fixtures, resize handling, then source anchors if justified         |
+| P1       | CI push trigger excludes develop; tool registry gate omitted                                       | Add both to CI                                                                 |
+| P2       | Contributor entry point and architecture guide absent; deployment docs reference missing redirects | Add guides and correct hosting instructions                                    |
+| P2       | Package homepage points to another owner                                                           | Align metadata                                                                 |
+| P2       | Large Markdown page mixes tabs, rendering, export and scrolling                                    | Incremental extraction after interaction tests                                 |
+| P2       | Regex-based HTML formatter/minifier can change script/string/preformatted content                  | Replace with syntax-aware implementation; preserve whitespace fixtures         |
+| P2       | Markdown HTML export interpolates title and links remote KaTeX CSS                                 | Escape title; document or bundle export dependencies                           |
+| P2       | Drafts and external resources need clearer privacy expectations                                    | Explain persistence, clearing and remote URL requests in product UI/docs       |
+
+## Small branch sequence
+
+1. `chore/contributor-roadmap-ci`: contributor guide, architecture, audit, metadata,
+   deployment accuracy and CI coverage. Gate: registry check and quality build.
+2. `fix/preview-layout-isolation`: viewport and split-pane sizing, readable HTML
+   editor, sandbox isolation and pressed states. Gate: tests and production build.
+3. `test/preview-browser-regressions`: add Playwright with desktop/mobile projects,
+   browser installation and CI artifacts. Cover editor/preview independent scroll,
+   resize, long lines, tables, images, Mermaid, zoom and theme switching.
+4. `fix/markdown-scroll-lifecycle`: cancellable sync lifecycle, ResizeObserver,
+   tab-specific scroll restoration and Mermaid async race handling. Do not claim
+   pixel-exact sync from ratios; define anchor behavior before implementing it.
+5. `feat/workstation-design-tokens`: semantic surfaces, borders, muted text,
+   focus and spacing tokens; migrate shared surfaces before individual tools.
+6. `feat/preview-workbench-controls`: common pane headings, consistent run/auto
+   controls, compact overflow menu and editor/preview/split modes for both tools.
+7. `refactor/markdown-workbench`: extract tabs, exports and renderer lifecycle;
+   address export errors and safe title escaping with interaction coverage.
+8. `fix/html-format-preservation`: syntax-aware formatting, whitespace and
+   embedded-language regression fixtures; label destructive transforms clearly.
+
+## UI/UX direction
+
+Build a restrained developer workbench: neutral backgrounds, one accent for
+active navigation and primary actions, thin dividers and consistent typography.
+Reserve gradients for the brand mark; reduce decorative gradients, tinted badges,
+uppercase labels and repeated card shadows in everyday work areas. Prefer clear
+pane titles, visible document state and a stable action hierarchy over decoration.
+
+Use one spacing scale (4/8/12/16/24), consistent 32/36px controls and a readable
+monospace editor. Tokenize light/dark colors rather than patching utility selectors.
+Keep document rendering independent of shell theme where HTML owns its styling.
+Show primary actions (Run, Copy, Export) consistently; move rare actions to a
+labelled menu. Explain Auto and sync state with pressed semantics and tooltips.
+For phones, offer a single-pane mode as well as a usable stacked split.
+
+## Acceptance matrix and release checklist
+
+Check 320x568, 390x844, 768x1024, 1024x768, 1440x900 and a short 1280x600
+viewport, including 200% zoom and light/dark/system themes. In each preview:
+
+- No page-level horizontal overflow; long code/tables scroll inside their pane.
+- Both split panes remain reachable and independently scroll to the end.
+- Caret, selection and text remain aligned after wrap, scroll and resize.
+- Keyboard users can reach controls, see focus and dismiss menus/dialogs.
+- Switching tabs/layouts retains content; Auto off only updates on Run.
+- Markdown sync does not oscillate; images/diagrams do not strand the scroll.
+- HTML scripts cannot read parent DOM/storage or remove the iframe sandbox.
+- Empty, invalid and large documents have understandable states; export errors
+  are visible and no input is transmitted by Forge itself.
+
+Run `pnpm check:tools` and `pnpm check` before each integration push. Attach
+browser results and screenshots to visual PRs. Enable required Quality checks
+and review protection for main/develop in repository settings. CI currently has
+unit/integration/build coverage; browser automation, dependency update automation
+and deployment smoke checks are remaining work, not completed guarantees.
