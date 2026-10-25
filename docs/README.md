@@ -21,6 +21,7 @@ collection of unrelated websites.
 - [Contributing](../CONTRIBUTING.md)
 - [Architecture](development/architecture.md)
 - [Theme and interaction colors](development/theme.md)
+- [Diff workbench](development/diff-workbench.md)
 - [Design language and redesign plan](development/design-language.md)
 - [Roadmap and UI/UX audit](development/roadmap.md)
 - [Other tool UI/UX audit](development/tool-ux-audit.md)
