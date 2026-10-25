@@ -15,7 +15,7 @@ there are no Google Fonts or other runtime font-CDN requests. `font-display: swa
 keeps controls readable while the font loads. The complete redistribution
 license is served at `/licenses/inter-OFL.txt` (SIL OFL 1.1).
 
-Prefer 14px body text, 12px secondary labels, 16px section headings, and 28?32px
+Prefer 14px body text, 12px secondary labels, 16px section headings, and 28-32px
 page headings. Dense tool surfaces may retain 13px body/editor text. Use regular
 400, medium 500 and semibold 600 for ordinary UI hierarchy. Avoid adding tiny
 uppercase tracking, extra font families or heavy display weights to new UI.

@@ -338,10 +338,6 @@ body {
 }
 
 @media (max-width: 640px) {
-  .home-hero-copy {
-    max-width: calc(100vw - 2rem);
-  }
-
   .docs-markdown p,
   .docs-markdown li,
   .docs-markdown blockquote {
