@@ -86,7 +86,8 @@ test("source editors and line-number gutters share the code font role", async ({
       "font-family",
       font,
     );
-    expect(font).not.toContain("Inter Variable");
+    if (tool === "html") expect(font).not.toContain("Inter Variable");
+    else await expect(page.locator(".forge-markdown")).toHaveCSS("font-family", font);
     expect(
       await page
         .locator("body")

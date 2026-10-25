@@ -103,6 +103,9 @@ export function NumberedTextarea({
       // Match the native scroll range, including bottom padding and horizontal bars.
       track.style.minHeight = `${input.scrollHeight}px`;
       gutter.style.height = `${input.clientHeight}px`;
+      gutter.style.fontFamily = computed.fontFamily;
+      if (gutter.parentElement)
+        gutter.parentElement.style.fontFamily = computed.fontFamily;
       gutter.style.fontSize = computed.fontSize;
       gutter.style.lineHeight = computed.lineHeight;
       gutter.scrollTop = input.scrollTop;

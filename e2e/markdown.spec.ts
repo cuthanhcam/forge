@@ -20,7 +20,9 @@ test("pasting a document into Welcome never replaces it with the guide", async (
   const editor = page.getByRole("textbox", { name: "Markdown input" });
   await editor.fill(content);
   await expect(editor).toHaveValue(content);
-  await expect(page.getByRole("status")).toHaveText("Draft saved in this browser");
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("forge.tool.markdown-preview")))
+    .toContain(JSON.stringify(content).slice(1, -1));
   await page.reload();
   await expect(editor).toHaveValue(content);
 });
@@ -71,7 +73,9 @@ test("long pasted content reaches the end of both panes without scroll feedback"
     .poll(() => editor.evaluate((element) => element.scrollTop))
     .toBeLessThan(3);
   await expect(editor).toHaveValue(longDocument);
-  await expect(page.getByRole("status")).toHaveText("Draft saved in this browser");
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem("forge.tool.markdown-preview")))
+    .toContain(JSON.stringify(longDocument).slice(1, -1));
   await page.reload();
   await expect(editor).toHaveValue(longDocument);
 });

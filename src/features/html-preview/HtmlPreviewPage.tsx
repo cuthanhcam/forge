@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { usePersistedToolState } from "@/core/storage/use-persisted-tool-state";
 import { cn } from "@/shared/lib/cn";
+import { ResizablePanes } from "@/shared/components/ResizablePanes";
 import { NumberedTextarea } from "@/shared/components/NumberedTextarea";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
@@ -331,9 +332,8 @@ export function HtmlPreviewPage(): JSX.Element {
           {formatError} Your source was left unchanged.
         </p>
       ) : null}
-      {/* Explicit tracks keep both panes scrollable on short and narrow viewports. */}
-      <div className="grid min-h-0 min-w-0 flex-1 grid-rows-2 overflow-hidden lg:grid-cols-2 lg:grid-rows-1">
-        <div className="relative min-h-0 min-w-0 overflow-hidden bg-white">
+      <ResizablePanes
+        first={
           <NumberedTextarea
             label="HTML input"
             className="html-editor"
@@ -343,17 +343,16 @@ export function HtmlPreviewPage(): JSX.Element {
             style={{ tabSize: state.indentSize }}
             value={state.html}
           />
-        </div>
-
-        <div className="min-h-0 min-w-0 overflow-hidden border-t border-slate-200 bg-white lg:border-l lg:border-t-0">
+        }
+        second={
           <iframe
             className="h-full w-full border-0 bg-white"
             sandbox="allow-scripts"
             srcDoc={previewDocument}
             title="HTML preview output"
           />
-        </div>
-      </div>
+        }
+      />
     </section>
   );
 }
