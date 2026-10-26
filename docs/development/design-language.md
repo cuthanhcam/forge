@@ -24,18 +24,18 @@ colored pane headers, uppercase micro-labels everywhere and cards inside cards.
 
 ## Common standards to establish
 
-| Area | Proposed rule |
-| --- | --- |
-| Color | One blue identity: #2563EB solid actions and #1D4ED8 hover in both themes. Text/soft selection shades retain the same hue and adjust brightness for contrast. Neutral surfaces; green/amber/red communicate status. JWT segment colors label document parts, not application actions. |
-| Typography | Inter for UI/prose; shared monospace for source/results. 14px/20px reading labels, 13px/24px code, 12px/16px metadata, 18-24px semibold page headings. Sentence case. Avoid tiny all-caps control groups. |
-| Spacing | 4/8/12/16/24/32px scale. Related controls stay together; separate task groups with space before adding borders or panels. |
-| Shape | 8px control radius, 12px pane/menu radius, thin neutral borders. Pills only for truly segmented modes/status, not every control. Reserve shadows for floating layers. |
-| Buttons | 36px normal controls, 32px dense controls, at least 44px touch targets where practical. One primary task action per tool. Icon-only actions need a tooltip, accessible name and visible focus. Rare actions move to a labelled menu. |
-| Icons | Lucide, 16px and a consistent stroke weight (target 1.75). 20px only where hierarchy requires it. No mixed emoji/icon styles in controls. |
-| State | Define default, hover, pressed, focus, disabled, loading, success and error for every primitive in both themes. Selection survives hover. Touch does not inherit sticky mouse hover. |
-| Panes | Neutral pane chrome, obvious title, local Copy/Expand actions, readable content. Shared split/mode controls; resizing must retain source, selection and scroll position. |
-| Feedback | Inline validation near input; brief copy feedback with a polite status; actionable failure. Never display or transmit secret contents in telemetry or status messages. |
-| Sliders | Native interaction, visible value and correctly positioned ticks. Linear by default; JWT secret explicitly anchors 32/256/512 so 256 is centered. Logical keyboard increments and announced units must match displayed values. No thumb geometry animation or output reflow under a drag. Add numeric entry where exact configuration is important. |
+| Area       | Proposed rule                                                                                                                                                                                                                                                                                                                                       |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Color      | One blue identity: #2563EB solid actions and #1D4ED8 hover in both themes. Text/soft selection shades retain the same hue and adjust brightness for contrast. Neutral surfaces; green/amber/red communicate status. JWT segment colors label document parts, not application actions.                                                               |
+| Typography | Inter for UI/prose; shared monospace for source/results. 14px/20px reading labels, 13px/24px code, 12px/16px metadata, 18-24px semibold page headings. Sentence case. Avoid tiny all-caps control groups.                                                                                                                                           |
+| Spacing    | 4/8/12/16/24/32px scale. Related controls stay together; separate task groups with space before adding borders or panels.                                                                                                                                                                                                                           |
+| Shape      | 8px control radius, 12px pane/menu radius, thin neutral borders. Pills only for truly segmented modes/status, not every control. Reserve shadows for floating layers.                                                                                                                                                                               |
+| Buttons    | 36px normal controls, 32px dense controls, at least 44px touch targets where practical. One primary task action per tool. Icon-only actions need a tooltip, accessible name and visible focus. Rare actions move to a labelled menu.                                                                                                                |
+| Icons      | Lucide, 16px and a consistent stroke weight (target 1.75). 20px only where hierarchy requires it. No mixed emoji/icon styles in controls.                                                                                                                                                                                                           |
+| State      | Define default, hover, pressed, focus, disabled, loading, success and error for every primitive in both themes. Selection survives hover. Touch does not inherit sticky mouse hover.                                                                                                                                                                |
+| Panes      | Neutral pane chrome, obvious title, local Copy/Expand actions, readable content. Shared split/mode controls; resizing must retain source, selection and scroll position.                                                                                                                                                                            |
+| Feedback   | Inline validation near input; brief copy feedback with a polite status; actionable failure. Never display or transmit secret contents in telemetry or status messages.                                                                                                                                                                              |
+| Sliders    | Native interaction, visible value and correctly positioned ticks. Linear by default; JWT secret explicitly anchors 32/256/512 so 256 is centered. Logical keyboard increments and announced units must match displayed values. No thumb geometry animation or output reflow under a drag. Add numeric entry where exact configuration is important. |
 
 ## Task organization
 
@@ -78,19 +78,19 @@ the layout changes below remain planned.
 ## Small implementation branches
 
 - [ ] `feat/design-foundations`: document final tokens and a component/state gallery;
-  agree button, segmented-control, field, pane, badge, menu and empty/error patterns.
+      agree button, segmented-control, field, pane, badge, menu and empty/error patterns.
 - [ ] `feat/jwt-workbench-layout`: implement the pilot above with before/after
-  desktop/phone screenshots and a visible task hierarchy. Preserve all current modes.
+      desktop/phone screenshots and a visible task hierarchy. Preserve all current modes.
 - [ ] `feat/preview-toolbar-hierarchy`: align Markdown/HTML modes, primary actions,
-  local output actions and Options. Retain line numbers, Mermaid and resizing.
+      local output actions and Options. Retain line numbers, Mermaid and resizing.
 - [ ] `feat/generator-control-layout`: consolidate secret/password/UUID configuration;
-  retain readable generated output, presets, precise values and consistent sliders.
+      retain readable generated output, presets, precise values and consistent sliders.
 - [ ] `feat/data-workbench-layouts`: migrate JSON, JSON/YAML, Diff, Base64, URL and Hash
-  to the common panes/actions, with enough editor space at narrow/short sizes.
+      to the common panes/actions, with enough editor space at narrow/short sizes.
 - [ ] `feat/text-utility-layouts`: simplify Case Converter, Slugify, Regex and Timestamp
-  results/metrics, labels and settings; keep copy/download nearby.
+      results/metrics, labels and settings; keep copy/download nearby.
 - [ ] `feat/workbench-onboarding`: concise first-use guidance and explicit examples;
-  test discoverability with new users before adding feature tours.
+      test discoverability with new users before adding feature tours.
 
 Deliver one branch at a time. Establish primitives before migrating every screen.
 Do not combine parser, cryptographic or storage rewrites with visual changes.
@@ -113,3 +113,18 @@ main. Keep [the tool audit](tool-ux-audit.md) and this plan updated as tasks lan
 
 See [range control behavior](range-controls.md) for the implemented scales,
 keyboard rules and native-input constraints.
+
+## Informational footer proposal
+
+Use one shared footer on Home, Docs, Support, Settings, Privacy, Terms and the
+not-found page. It lives at the end of each page's own scroll owner, never fixed
+above tool editors. Docs keeps it in the reader column so the document outline
+and navigation remain independently reachable.
+
+The project-first treatment uses a quiet top divider, copyright/maintainer name,
+short OSS description, five accessible contact icons and local information links.
+GitHub, LinkedIn and email appear first; Facebook and Instagram follow. Keep
+icons monochrome, with theme-aware hover/focus and tooltips. External links use
+noopener/noreferrer and no embedded social feeds. Narrow layouts wrap naturally.
+This is the initial reviewable proposal; avoid a large marketing footer in the
+workbench and do not add it to registered tool routes.

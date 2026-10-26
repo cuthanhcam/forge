@@ -1,6 +1,7 @@
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import { Tooltip } from "@/shared/ui/tooltip";
 import { useMemo, useRef, useState, type JSX } from "react";
-import { ArrowDown, ArrowUpRight, Search, ShieldCheck, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Search, X } from "lucide-react";
 import { Link } from "react-router";
 import { toolCategoryDefinitions } from "@/core/registry/tool.categories";
 import { toolRegistry } from "@/core/registry/tool.registry";
@@ -207,32 +208,7 @@ export function HomePage(): JSX.Element {
             ) : null}
           </div>
         </section>
-        <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">
-          <p className="flex items-center gap-2">
-            <ShieldCheck aria-hidden="true" className="h-4 w-4 shrink-0" />
-            Core tools run in your browser.
-          </p>
-          <nav aria-label="Forge information" className="flex flex-wrap gap-4">
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/docs"
-            >
-              Documentation
-            </Link>
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/privacy"
-            >
-              Privacy
-            </Link>
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/terms"
-            >
-              Terms
-            </Link>
-          </nav>
-        </footer>
+        <SiteFooter />
       </div>
     </main>
   );

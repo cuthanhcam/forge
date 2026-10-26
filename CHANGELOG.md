@@ -17,6 +17,8 @@ development work and are not a claim that a tagged release has shipped.
 ### Improved
 
 - Compact diagram controls, themed outline tooltips and smooth tab-rail collapse.
+- Shared informational-page footer with accessible maintainer contact links.
+- In-app Privacy/Terms rendered from maintained Markdown policies.
 - Consistent helper-page brand treatment and redacted support-report guidance.
 - Subtle drafting-grid background on the Home signature.
 - Local support/help routing and shared icon tooltips across navigation/header.

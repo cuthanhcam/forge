@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import { useRef } from "react";
 import type { JSX } from "react";
 import { BookOpen, ChevronRight, Keyboard, Route } from "lucide-react";
@@ -126,6 +127,7 @@ export function DocsPage(): JSX.Element {
               <DocsMarkdown markdown={page.markdown} />
             </div>
           </div>
+          <SiteFooter />
         </section>
 
         <aside className="scrollbar-forge hidden min-h-0 overflow-y-auto border-l border-slate-200 pl-4 pt-5 xl:block">

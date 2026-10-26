@@ -24,7 +24,10 @@ export function LegalPage(): JSX.Element {
       title={title}
     >
       <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_16rem]">
-        <article className="rounded-lg border border-slate-200 bg-white px-6 py-7 shadow-sm shadow-slate-950/[0.03] md:px-9 md:py-9">
+        <section
+          aria-label={title}
+          className="rounded-lg border border-slate-200 bg-white px-6 py-7 shadow-sm shadow-slate-950/[0.03] md:px-9 md:py-9"
+        >
           <div className="flex items-center gap-3 border-b border-slate-200 pb-5">
             <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-600">
               {isTerms ? (
@@ -44,7 +47,7 @@ export function LegalPage(): JSX.Element {
           <div className="mt-7">
             <DocsMarkdown markdown={markdown} />
           </div>
-        </article>
+        </section>
 
         <aside className="lg:sticky lg:top-5 lg:self-start">
           <div className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm shadow-slate-950/[0.03]">
