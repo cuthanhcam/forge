@@ -6,13 +6,13 @@
   "private": false,
   "license": "MIT",
   "author": "cuthanhcam",
-  "homepage": "https://github.com/orcace/forge#readme",
+  "homepage": "https://github.com/cuthanhcam/forge#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/orcace/forge.git"
+    "url": "git+https://github.com/cuthanhcam/forge.git"
   },
   "bugs": {
-    "url": "https://github.com/orcace/forge/issues"
+    "url": "https://github.com/cuthanhcam/forge/issues"
   },
   "keywords": [
     "developer-tools",

@@ -31,7 +31,15 @@ Forge may store local workspace preferences in your browser:
 - recent tools
 - persisted tool drafts where enabled
 
-This storage is local to the browser profile and device.
+This storage is local to the browser profile and origin. Markdown, HTML, Diff,
+JSON, JSON/YAML and Regex can save drafts. JWT tokens, verification secrets and
+generated passwords/secrets are not persisted by Forge. Page memory, clipboard,
+downloads, extensions and screenshots have separate lifecycles.
+
+Stored drafts are not encrypted. To remove them and preferences, clear this
+site's data in browser settings; export wanted drafts first. Clearing visible
+input may not remove previously saved data. Close or reload existing tabs after
+clearing site data to release their in-memory content.
 
 ## Preview documents
 

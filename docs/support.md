@@ -1,34 +1,37 @@
 # Support
 
-Forge is maintained as an open developer tool.
+Forge is maintained at [cuthanhcam/forge](https://github.com/cuthanhcam/forge).
 
-## Ask A Question
+## Ask a question
 
-Use the in-app support page from your Forge workspace, or send a direct email
-to `cuthanhcam04@gmail.com`.
+Use [Ask a question](https://forge.cuthanhcam.workers.dev/support/ask), or email
+cuthanhcam04@gmail.com. The in-app form prepares a mail draft for review in your
+mail app; it does not submit a support ticket or save the message in Forge.
 
-## Report An Issue
+## Report an issue
 
-Use GitHub Issues for bugs, broken UI states, incorrect output, and feature
-requests:
+Start at [Report an issue](https://forge.cuthanhcam.workers.dev/support/issue),
+then open the [GitHub issue tracker](https://github.com/cuthanhcam/forge/issues).
+Include the tool/page, reproduction steps, expected and actual output, browser,
+OS, theme and screen size. Add screenshots only after redaction. Use synthetic
+examples; never paste real tokens, passwords, signing secrets or customer data.
 
-[https://github.com/cuthanhcam/forge/issues](https://github.com/cuthanhcam/forge/issues)
+A security vulnerability belongs in a private email to the maintainer, not a
+public issue. Read [the security policy](https://github.com/cuthanhcam/forge/blob/main/SECURITY.md).
+Do not email live credentials either.
 
-When reporting a bug, include:
+## Share feedback or contribute
 
-- the tool or page
-- input type, with secrets redacted
-- expected result
-- actual result
-- browser and operating system
-- screenshots when useful
+Use [Share feedback](https://forge.cuthanhcam.workers.dev/support/feedback) or a
+focused feature request in the repository. Read
+[Contributing](https://github.com/cuthanhcam/forge/blob/main/CONTRIBUTING.md) for setup
+and the small-branch review process. Contributions follow the
+[Code of Conduct](https://github.com/cuthanhcam/forge/blob/main/CODE_OF_CONDUCT.md).
 
-## Share Feedback
+## Optional project support
 
-Use the in-app feedback page from your Forge workspace, or open a GitHub
-discussion through the project repository when that is more convenient.
-
-## Sensitive Data
-
-Do not share real tokens, passwords, API keys, customer data, or private source
-code in public issues. Redact or replace values with safe examples.
+Help with docs, accessibility reviews, browser testing and reproducible bugs is
+welcome. Optional financial support is available through
+[GitHub Sponsors](https://github.com/sponsors/cuthanhcam) and
+[Ko-fi](https://ko-fi.com/cuthanhcam). Donations use external providers and do not
+create a support SLA or feature guarantee.
