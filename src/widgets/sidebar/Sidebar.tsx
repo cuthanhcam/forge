@@ -345,21 +345,12 @@ export function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps): JSX.E
             <Tooltip content={"Settings"} side="right">
               <NavLink
                 aria-label="Settings"
-                className={({ isActive }) =>
-                  cn(
-                    "flex h-9 w-9 items-center justify-center transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
-                    {
-                      "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                        effectiveCollapsed && !isActive,
-                      "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                        effectiveCollapsed && isActive,
-                      "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
-                        !effectiveCollapsed && isActive,
-                      "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
-                        !effectiveCollapsed && !isActive,
-                    },
-                  )
-                }
+                className={cn(
+                  "flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
+                  effectiveCollapsed
+                    ? "[&.active]:text-slate-700"
+                    : "[&.active]:bg-accent-50 [&.active]:text-accent-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-accent-200",
+                )}
                 to="/settings"
               >
                 <Settings aria-hidden="true" className="h-4 w-4 shrink-0" />

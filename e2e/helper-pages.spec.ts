@@ -106,6 +106,16 @@ test("help menu uses local routes while header shortcuts keep the dialog", async
     .filter({ has: page.locator("span") });
   await expect(issue).toHaveAttribute("href", "/support/issue");
   await expect(issue).not.toHaveAttribute("target", "_blank");
+  await expect(
+    page.getByRole("link", { name: "Markdown Preview", exact: true }),
+  ).toHaveCSS("height", "32px");
+  await expect(
+    page.getByRole("link", { name: "Markdown Preview", exact: true }),
+  ).toHaveCSS("box-shadow", "none");
+  await expect(page.getByRole("link", { name: "Settings", exact: true })).toHaveCSS(
+    "height",
+    "36px",
+  );
   await issue.click();
   await expect(page).toHaveURL(/\/support\/issue$/);
   if (isMobile)
