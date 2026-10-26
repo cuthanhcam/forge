@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { useState } from "react";
+import { useWorkspaceStore } from "@/core/workspace/workspace.store";
 import { ChevronDown } from "lucide-react";
 import type { ToolCategoryDefinition } from "@/core/registry/tool.categories";
 import type { ToolDefinition } from "@/core/registry/tool.definition";
@@ -17,7 +17,10 @@ export function SidebarGroup({
   sidebarCollapsed = false,
   tools,
 }: SidebarGroupProps): JSX.Element {
-  const [open, setOpen] = useState(true);
+  const open = useWorkspaceStore(
+    (state) => !state.collapsedCategoryIds.includes(category.id),
+  );
+  const toggleCategory = useWorkspaceStore((state) => state.toggleCategory);
   const Icon = category.icon;
 
   return (
@@ -34,7 +37,7 @@ export function SidebarGroup({
           <button
             aria-expanded={open}
             className="flex h-7 w-full items-center gap-2 rounded-md px-2 text-[11px] font-semibold uppercase tracking-wide text-slate-500 transition hover:bg-slate-100 hover:text-slate-600"
-            onClick={() => setOpen((value) => !value)}
+            onClick={() => toggleCategory(category.id)}
             type="button"
           >
             <Icon aria-hidden="true" className="h-3.5 w-3.5 text-slate-300" />
