@@ -21,6 +21,7 @@ import type { ToolDefinition } from "./tool.definition";
 export const toolRegistry: ToolDefinition[] = [
   {
     id: "markdown-preview",
+    loadingLayout: "markdown",
     name: "Markdown Preview",
     category: "Editors",
     description: "Edit Markdown and preview rendered output side by side.",
@@ -33,6 +34,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "html-preview",
+    loadingLayout: "preview",
     name: "HTML Preview",
     category: "Editors",
     description: "Write HTML and inspect a sandboxed live preview.",
@@ -45,6 +47,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "diff-checker",
+    loadingLayout: "diff",
     name: "Diff Checker",
     category: "Editors",
     description: "Compare two text inputs with focused diff controls.",
@@ -57,6 +60,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "json-formatter",
+    loadingLayout: "data",
     name: "JSON Formatter",
     category: "Data",
     description: "Format, validate, and inspect JSON payloads.",
@@ -69,6 +73,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "json-yaml",
+    loadingLayout: "data",
     name: "JSON YAML Converter",
     category: "Data",
     description: "Convert between JSON and YAML for config workflows.",
@@ -81,6 +86,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "jwt-decoder",
+    loadingLayout: "jwt",
     name: "JWT Decoder",
     category: "Data",
     description: "Decode JWT headers and payloads without sending tokens away.",
@@ -93,6 +99,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "base64",
+    loadingLayout: "transform",
     name: "Base64",
     category: "Encoding",
     description: "Encode and decode Base64 strings locally.",
@@ -105,6 +112,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "url-encoder",
+    loadingLayout: "transform",
     name: "URL Encoder",
     category: "Encoding",
     description: "Encode and decode URL components safely.",
@@ -117,6 +125,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "jwt-secret",
+    loadingLayout: "generator",
     name: "JWT Secret Generator",
     category: "Crypto",
     description: "Generate secure HS256, HS384, and HS512 JWT secrets locally.",
@@ -129,6 +138,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "hash-generator",
+    loadingLayout: "transform",
     name: "Hash Generator",
     category: "Crypto",
     description: "Generate common hashes from local text input.",
@@ -141,6 +151,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "password-generator",
+    loadingLayout: "generator",
     name: "Password Generator",
     category: "Crypto",
     description: "Generate strong local passwords with configurable rules.",
@@ -153,6 +164,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "uuid",
+    loadingLayout: "generator",
     name: "UUID Generator",
     category: "Utilities",
     description: "Generate single or batch UUID values.",
@@ -165,6 +177,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "timestamp",
+    loadingLayout: "timestamp",
     name: "Timestamp Converter",
     category: "Utilities",
     description: "Convert Unix timestamps and readable dates.",
@@ -177,6 +190,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "case-converter",
+    loadingLayout: "transform",
     name: "Case Converter",
     category: "Utilities",
     description: "Convert text between common naming conventions.",
@@ -189,6 +203,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "slugify",
+    loadingLayout: "transform",
     name: "Slugify",
     category: "Utilities",
     description: "Create clean URL slugs from human-readable text.",
@@ -201,6 +216,7 @@ export const toolRegistry: ToolDefinition[] = [
   },
   {
     id: "regex-tester",
+    loadingLayout: "regex",
     name: "Regex Tester",
     category: "Utilities",
     description: "Test regular expressions against sample input.",

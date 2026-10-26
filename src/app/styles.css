@@ -1010,3 +1010,11 @@ body {
     display: none;
   }
 }
+
+/* Match ResizablePanes' container threshold, including a collapsed/expanded tab rail. */
+@container (min-width: 640px) {
+  .forge-loading-preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+  }
+}

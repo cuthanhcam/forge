@@ -1,13 +1,28 @@
-import { existsSync } from "node:fs";
-import path from "node:path";
+import process from "node:process";
+import { toolRegistry } from "../src/core/registry/tool.registry";
+import { toolCategories } from "../src/core/registry/tool.categories";
+import { toolLoadingLayouts } from "../src/core/registry/tool.definition";
 
-const registryPath = path.resolve("src/core/registry/tool.registry.ts");
-
-if (!existsSync(registryPath)) {
-  console.warn(
-    "Tool registry was not found yet. Skipping tool registry validation for the foundation scaffold.",
-  );
-  process.exit(0);
+const errors: string[] = [];
+const ids = new Set<string>();
+const routes = new Set<string>();
+for (const tool of toolRegistry) {
+  if (!/^[a-z][a-z0-9-]*$/.test(tool.id) || ids.has(tool.id))
+    errors.push(`Invalid or duplicate tool ID: ${tool.id}`);
+  if (routes.has(tool.route) || tool.route !== `/tools/${tool.id}`)
+    errors.push(`Invalid or duplicate route: ${tool.route}`);
+  if (!tool.name.trim()) errors.push(`Missing name: ${tool.id}`);
+  if (!toolCategories.includes(tool.category))
+    errors.push(`Unknown category: ${tool.id}`);
+  if (!toolLoadingLayouts.includes(tool.loadingLayout))
+    errors.push(`Unknown loading layout: ${tool.id}`);
+  ids.add(tool.id);
+  routes.add(tool.route);
 }
-
-console.log("Tool registry validation passed.");
+if (errors.length) {
+  console.error(errors.join("\n"));
+  process.exitCode = 1;
+} else
+  console.log(
+    `Validated ${toolRegistry.length} tools: IDs, routes, names, categories and loading layouts.`,
+  );

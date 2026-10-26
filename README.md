@@ -52,7 +52,7 @@ Open the URL printed by Vite. See [Start here](START-HERE.md) for the first
 workflow, common setup problems and browser tests.
 
 ```sh
-pnpm check:tools             # registry and feature consistency
+pnpm check:tools             # registry IDs, routes and loading layouts
 pnpm check                   # types, lint, unit tests, production build
 pnpm exec playwright install chromium
 pnpm test:e2e                # desktop and phone browser interactions
