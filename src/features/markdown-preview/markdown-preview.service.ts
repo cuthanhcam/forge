@@ -12,9 +12,10 @@ import type { MarkdownPreviewState, MarkdownPreviewTab } from "./markdown-previe
 
 interface PersistedMarkdownPreviewState extends Omit<
   MarkdownPreviewState,
-  "tabsCollapsed" | "viewMode"
+  "tabsCollapsed" | "viewMode" | "outlineOpen"
 > {
   tabsCollapsed?: boolean;
+  outlineOpen?: boolean;
   previewVisible?: boolean;
   viewMode?: MarkdownPreviewState["viewMode"];
 }
@@ -279,6 +280,7 @@ export function normalizeMarkdownPreviewState(
     activeTabId: input.activeTabId,
     syncScroll: input.syncScroll,
     tabsCollapsed: input.tabsCollapsed ?? false,
+    outlineOpen: input.outlineOpen ?? false,
     // Normalize layout preferences only; document text always belongs to the user.
     tabs: input.tabs,
     viewMode: input.viewMode ?? (input.previewVisible === false ? "editor" : "split"),
@@ -311,6 +313,7 @@ export function createMarkdownPreviewState(): MarkdownPreviewState {
     syncScroll: true,
     tabs: [tab],
     tabsCollapsed: false,
+    outlineOpen: false,
     viewMode: "split",
   };
 }

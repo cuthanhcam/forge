@@ -29,6 +29,13 @@ scrolling; it recalculates wrapped line heights when the editor resizes.
 Markdown and HTML source editors share the same monospace font; rendered
 Markdown prose uses the UI reading font.
 
+Open Outline from the toolbar to browse document headings below the tabs.
+Indentation follows heading levels, and the current section is highlighted.
+Click a heading to jump within the preview; Editor-only layout opens Split.
+Outline can collapse independently and remembers its state after reload.
+Code blocks are excluded. Use Arrow keys, Home and End to move between entries.
+
+The tab rail animates smoothly and respects reduced-motion settings.
 The tab collapse/expand control sits at the bottom of the desktop tab rail.
 Right-click a document, long-press it on touch devices, or focus it and press
 Shift+F10 to rename, duplicate or delete it even when the rail is collapsed.
@@ -49,12 +56,13 @@ syntax to retry. Diagrams follow the Forge theme and render with strict security
 and SVG text labels. Executable HTML labels and diagram click callbacks are not
 enabled.
 
-Each Mermaid diagram has zoom out/in, a percentage indicator, Fit, Reset to 100%,
-Download SVG and Expand controls. Drag with a mouse to pan; Ctrl/Cmd+wheel zooms
-around the pointer in the inline viewer. Ordinary wheel scrolling still scrolls
-the document. Expand opens a larger viewer where wheel zoom and two-finger pinch
-are available. On touch, inline vertical swipes keep scrolling the document;
-use the expanded viewer for free two-dimensional panning.
+Each Mermaid diagram has a compact Expand icon in its top-right corner. The
+expanded Diagram viewer occupies about 80% of the viewport and places zoom,
+Fit, Reset to 100% and Download SVG controls in the bottom-right corner. Zoom
+buttons change scale by 10 percentage points. Drag to pan; wheel and two-finger
+pinch zoom in the expanded viewer. You can still scroll the document outside it.
+Inline Ctrl/Cmd+wheel zooms around the pointer; ordinary wheel and vertical touch
+swipes keep scrolling the document.
 
 Focus the diagram to use arrows to pan (Shift for larger steps), +/- to zoom,
 0 to fit, and 1 for 100%. Escape closes the expanded viewer and returns focus to

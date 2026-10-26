@@ -12,10 +12,19 @@ import {
   Trash2,
 } from "lucide-react";
 import { cn } from "@/shared/lib/cn";
+import { MarkdownOutline } from "./MarkdownOutline";
+import type { MarkdownHeading } from "./markdown-outline.service";
 import { Tooltip } from "@/shared/ui/tooltip";
 import type { MarkdownPreviewTab } from "./markdown-preview.schema";
 
 interface MarkdownTabsProps {
+  outline: {
+    headings: MarkdownHeading[];
+    open: boolean;
+    activeId: string | null;
+    onToggle: () => void;
+    onNavigate: (id: string) => void;
+  };
   tabs: MarkdownPreviewTab[];
   activeId: string;
   collapsed: boolean;
@@ -38,12 +47,16 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
       aria-label="Markdown tabs"
       className="grid min-h-0 min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center border-b border-slate-100 bg-slate-50/70 md:flex md:flex-col md:items-stretch md:border-b-0 md:border-r"
     >
-      <div className="flex h-11 shrink-0 items-center justify-between gap-1 px-2">
-        {!props.collapsed ? (
-          <span className="hidden text-xs font-medium text-slate-500 md:inline">
-            Tabs
-          </span>
-        ) : null}
+      <div className="col-start-1 row-start-1 flex h-11 shrink-0 items-center justify-between px-2">
+        <span
+          aria-hidden={props.collapsed}
+          className={cn(
+            "hidden overflow-hidden whitespace-nowrap text-xs font-medium text-slate-500 transition-[max-width,opacity] duration-200 motion-reduce:transition-none md:block",
+            props.collapsed ? "max-w-0 opacity-0" : "max-w-20 opacity-100",
+          )}
+        >
+          Tabs
+        </span>
         <Tooltip content="New tab" side="right">
           <button
             aria-label="New tab"
@@ -58,19 +71,31 @@ export function MarkdownTabs(props: MarkdownTabsProps): JSX.Element {
           </button>
         </Tooltip>
       </div>
-      <div
-        aria-label="Markdown documents"
-        className={cn(
-          "scrollbar-forge flex min-h-0 min-w-0 gap-1 overflow-x-auto p-1 md:flex-1 md:flex-col md:overflow-x-hidden md:overflow-y-auto",
-          props.collapsed && "md:items-center",
-        )}
-        role="group"
-      >
-        {props.tabs.map((tab) => (
-          <DocumentTab key={tab.id} {...props} tab={tab} />
-        ))}
+      <div className="scrollbar-forge contents md:flex md:min-h-0 md:flex-1 md:flex-col md:overflow-y-auto">
+        <div
+          aria-label="Markdown documents"
+          role="group"
+          className={cn(
+            "scrollbar-forge col-start-2 row-start-1 flex min-h-0 min-w-0 shrink-0 gap-1 overflow-x-auto p-1 md:flex-col md:overflow-x-hidden",
+            props.collapsed && "md:items-center",
+          )}
+        >
+          {props.tabs.map((tab) => (
+            <DocumentTab key={tab.id} {...props} tab={tab} />
+          ))}
+        </div>
+        <div
+          className={cn(
+            "scrollbar-forge col-span-3 row-start-2 max-h-48 overflow-y-auto md:max-h-none md:overflow-visible",
+            props.collapsed && "hidden",
+          )}
+          inert={props.collapsed}
+          aria-hidden={props.collapsed}
+        >
+          <MarkdownOutline {...props.outline} />
+        </div>
       </div>
-      <div className="flex shrink-0 justify-end px-1.5 py-2 md:mt-auto">
+      <div className="col-start-3 row-start-1 flex shrink-0 justify-end px-1.5 py-2 md:mt-auto">
         <Tooltip content={props.collapsed ? "Expand tabs" : "Collapse tabs"} side="right">
           <button
             aria-label={props.collapsed ? "Expand tabs" : "Collapse tabs"}

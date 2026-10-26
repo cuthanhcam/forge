@@ -199,5 +199,6 @@ alongside correctness and performance. JWT Decoder is the first layout pilot.
 ## Mermaid interaction and remembered navigation
 
 Delivered: local navigator/category preferences, independent diagram viewports,
-expanded viewer, zoom/pan/pinch, fit/reset and full SVG download. See
+expanded viewer, zoom/pan/pinch, fit/reset and full SVG download. A collapsible
+document outline, heading navigation and remembered visibility are also delivered. See
 [implementation and remaining export limits](diagram-viewer.md).
