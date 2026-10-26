@@ -1,6 +1,7 @@
+import { useRef } from "react";
 import type { JSX } from "react";
 import { BookOpen, ChevronRight, Keyboard, Route } from "lucide-react";
-import { Link, NavLink, useParams } from "react-router";
+import { Link, NavLink, useNavigate, useParams } from "react-router";
 import { cn } from "@/shared/lib/cn";
 import { DocsMarkdown } from "./DocsMarkdown";
 import { docPages, getDocPage } from "./docs.content";
@@ -13,19 +14,33 @@ const docIcons: Record<string, typeof BookOpen> = {
 };
 
 export function DocsPage(): JSX.Element {
+  const navigate = useNavigate();
+  const scrollRef = useRef<HTMLElement>(null);
   const { docId } = useParams();
   const page = getDocPage(docId);
   const toc = createToc(page.markdown);
 
   function scrollToHeading(id: string): void {
-    document.getElementById(id)?.scrollIntoView({ block: "start", behavior: "smooth" });
+    const target = scrollRef.current?.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
+    const owner = scrollRef.current;
+    if (target && owner)
+      owner.scrollTo({
+        top:
+          owner.scrollTop +
+          target.getBoundingClientRect().top -
+          owner.getBoundingClientRect().top -
+          16,
+        behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+      });
     window.history.replaceState(null, "", `#${id}`);
   }
 
   return (
     <main className="min-h-0 min-w-0 flex-1 overflow-hidden px-4 pb-5 md:px-6">
       <div className="mx-auto grid h-full min-w-0 max-w-full gap-4 lg:grid-cols-[240px_minmax(0,1fr)] xl:max-w-7xl xl:grid-cols-[240px_minmax(0,1fr)_220px]">
-        <aside className="hidden min-h-0 border-r border-slate-200 pr-4 pt-5 lg:block">
+        <aside className="scrollbar-forge hidden min-h-0 overflow-y-auto border-r border-slate-200 pr-4 pt-5 lg:block">
           <div className="sticky top-5">
             <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
               Documentation
@@ -62,9 +77,33 @@ export function DocsPage(): JSX.Element {
           </div>
         </aside>
 
-        <section className="scrollbar-forge min-h-0 min-w-0 max-w-full overflow-auto py-5">
+        <section
+          ref={scrollRef}
+          className="scrollbar-forge min-h-0 min-w-0 max-w-full overflow-auto py-5"
+        >
+          <label className="mb-4 block text-sm text-muted-foreground lg:hidden">
+            Documentation page
+            <select
+              aria-label="Documentation page"
+              className="mt-2 w-full rounded-md border border-border bg-white p-2 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
+              value={page.id}
+              onChange={(event) => {
+                void navigate(
+                  event.target.value === "overview"
+                    ? "/docs"
+                    : `/docs/${event.target.value}`,
+                );
+              }}
+            >
+              {docPages.map((doc) => (
+                <option key={doc.id} value={doc.id}>
+                  {doc.title}
+                </option>
+              ))}
+            </select>
+          </label>
           <div className="min-w-0 max-w-full rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03]">
-            <div className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+            <div className="border-b border-slate-200 bg-gradient-soft px-5 py-4">
               <div className="flex flex-wrap items-center gap-1 text-[12px] font-semibold">
                 <Link className="text-slate-500 transition hover:text-slate-950" to="/">
                   Forge

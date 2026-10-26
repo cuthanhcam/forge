@@ -1,30 +1,9 @@
+import { themeOptions } from "@/core/theme/theme.options";
 import type { JSX } from "react";
 import { useEffect, useRef, useState } from "react";
-import { Check, ChevronDown, Monitor, Moon, Sun } from "lucide-react";
+import { Check, ChevronDown, Sun } from "lucide-react";
 import { useThemeStore } from "@/core/theme/theme.store";
 import type { ThemeMode } from "@/core/theme/theme.types";
-
-const themeOptions: Array<{
-  icon: typeof Sun;
-  label: string;
-  mode: ThemeMode;
-}> = [
-  {
-    icon: Sun,
-    label: "Light",
-    mode: "light",
-  },
-  {
-    icon: Moon,
-    label: "Dark",
-    mode: "dark",
-  },
-  {
-    icon: Monitor,
-    label: "System",
-    mode: "system",
-  },
-];
 
 function getThemeIcon(mode: ThemeMode): typeof Sun {
   return themeOptions.find((option) => option.mode === mode)?.icon ?? Sun;

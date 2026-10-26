@@ -1,3 +1,5 @@
+import { projectLinks } from "@/core/config/project-links";
+import { HelperPageHeader } from "@/shared/components/HelperPageHeader";
 import type { JSX } from "react";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -33,11 +35,10 @@ const supportModes = [
 ];
 
 const contact = {
-  email: "cuthanhcam04@gmail.com",
-  github: "https://github.com/cuthanhcam",
-  issues: "https://github.com/orcace/forge/issues",
+  email: projectLinks.email,
+  issues: projectLinks.issues,
   linkedin: "https://www.linkedin.com/in/cuthanhcam/",
-  repository: "https://github.com/orcace/forge",
+  repository: projectLinks.repository,
 };
 
 export function SupportPage(): JSX.Element {
@@ -61,18 +62,11 @@ export function SupportPage(): JSX.Element {
     <main className="scrollbar-forge min-h-0 flex-1 overflow-auto px-4 py-6 md:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03]">
-          <div className="border-b border-slate-200 bg-gradient-soft px-6 py-8">
-            <p className="text-xs font-bold uppercase tracking-[0.08em] text-gradient-brand">
-              Support
-            </p>
-            <h1 className="mt-3 max-w-2xl text-3xl font-semibold tracking-normal text-slate-950">
-              Keep the work moving without leaving the product context.
-            </h1>
-            <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-              Use the path that matches what you need: ask a question, report an issue, or
-              share feedback for the next Forge iteration.
-            </p>
-          </div>
+          <HelperPageHeader
+            eyebrow="Support"
+            title="How can we help?"
+            subtitle="Ask a question, report a reproducible issue, or help shape the next Forge improvement."
+          />
 
           <div className="grid min-h-[560px] lg:grid-cols-[280px_minmax(0,1fr)]">
             <aside className="border-b border-slate-200 bg-slate-50 p-3 lg:border-b-0 lg:border-r">
@@ -121,9 +115,23 @@ export function SupportPage(): JSX.Element {
                 </div>
               </div>
 
+              <div className="mt-5 rounded-md border border-border bg-slate-50 p-4 text-sm leading-6 text-muted-foreground">
+                Use synthetic examples and redact tokens, secrets, personal data and
+                screenshots before sharing. For a security vulnerability, email the
+                maintainer privately instead of opening a public issue.{" "}
+                <a
+                  className="text-accent-700 underline underline-offset-4"
+                  href="https://github.com/cuthanhcam/forge/blob/main/SECURITY.md"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Security policy
+                </a>
+                .
+              </div>
               <div className="mt-6 grid gap-3 md:grid-cols-3">
                 <ContactCard
-                  description="Best for questions, private context, or longer notes."
+                  description="Questions or private vulnerability reports. Never send live credentials."
                   href={mailtoHref}
                   icon={Mail}
                   label={contact.email}
@@ -133,7 +141,7 @@ export function SupportPage(): JSX.Element {
                   description="Best for bugs, reproducible cases, and public tracking."
                   href={contact.issues}
                   icon={Github}
-                  label="github.com/orcace/forge/issues"
+                  label="github.com/cuthanhcam/forge/issues"
                   title="GitHub issues"
                 />
                 <ContactCard
@@ -153,7 +161,8 @@ export function SupportPage(): JSX.Element {
                   <p className="mt-1 text-[13px] leading-5 text-slate-500">
                     Write a quick note here, then open it in your mail app. For
                     reproducible bugs, GitHub issues are better because they stay
-                    trackable in the real repository.
+                    trackable in the repository. This form does not submit or save your
+                    message; Open email hands the draft to your mail app for review.
                   </p>
                   <label className="mt-4 block">
                     <span className="text-[12px] font-bold uppercase tracking-[0.08em] text-slate-400">
@@ -201,9 +210,30 @@ export function SupportPage(): JSX.Element {
                     target="_blank"
                   >
                     Repository:{" "}
-                    <span className="font-mono text-accent-700">orcace/forge</span>
+                    <span className="font-mono text-accent-700">cuthanhcam/forge</span>
                   </a>
                 </div>
+              </div>
+              <div className="mt-6 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
+                <span>
+                  Forge is open source. Contributions and optional support help it grow.
+                </span>
+                <a
+                  className="text-accent-700 underline underline-offset-4"
+                  href={projectLinks.sponsors}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub Sponsors
+                </a>
+                <a
+                  className="text-accent-700 underline underline-offset-4"
+                  href={projectLinks.kofi}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Ko-fi
+                </a>
               </div>
             </section>
           </div>

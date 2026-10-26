@@ -38,6 +38,13 @@ const privacySections: LegalSection[] = [
     ],
   },
   {
+    title: "Preview documents and remote resources",
+    body: [
+      "HTML scripts run in an isolated sandbox without access to Forge's DOM or storage. Markdown is sanitized and Mermaid uses strict rendering. These boundaries do not prevent remote images, styles, links or scripts from contacting their hosts. Inspect resource URLs before previewing confidential documents.",
+      "JWT tokens, verification secrets and generated passwords/secrets are not persisted by Forge. Other tools can save drafts locally, which may themselves contain sensitive data. Local storage is not an encrypted vault; page memory, clipboard contents, downloaded files and extensions have separate lifecycles.",
+    ],
+  },
+  {
     title: "Hosted deployments and self-hosted copies",
     body: [
       "The public Forge deployment is hosted as a static web application. If you run Forge from another domain, fork, local build, preview environment, or internal deployment, the privacy behavior may depend on that environment and any analytics, proxies, headers, access logs, extensions, or platform services added around it.",
