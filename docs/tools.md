@@ -2,6 +2,11 @@
 
 Forge groups tools by workflow, not by implementation detail.
 
+The main navigation's collapsed state and expanded/collapsed category groups are
+remembered in this browser. Markdown tab and Diff option rails keep their own
+preferences. A mobile navigation drawer still starts closed after reload. If
+browser storage is blocked or cleared, preferences are session-only or reset.
+
 ## Editors
 
 ### Markdown Preview
@@ -43,6 +48,21 @@ pause in editing. Invalid diagrams show an error and their source; correct the
 syntax to retry. Diagrams follow the Forge theme and render with strict security
 and SVG text labels. Executable HTML labels and diagram click callbacks are not
 enabled.
+
+Each Mermaid diagram has zoom out/in, a percentage indicator, Fit, Reset to 100%,
+Download SVG and Expand controls. Drag with a mouse to pan; Ctrl/Cmd+wheel zooms
+around the pointer in the inline viewer. Ordinary wheel scrolling still scrolls
+the document. Expand opens a larger viewer where wheel zoom and two-finger pinch
+are available. On touch, inline vertical swipes keep scrolling the document;
+use the expanded viewer for free two-dimensional panning.
+
+Focus the diagram to use arrows to pan (Shift for larger steps), +/- to zoom,
+0 to fit, and 1 for 100%. Escape closes the expanded viewer and returns focus to
+its Expand button. SVG download includes the full diagram, independent of pan
+and zoom. Each diagram has its own viewport. Manual zoom is retained during a
+resize; Fit mode recalculates its fit. Controls are omitted from PNG/PDF capture,
+which still captures the visible inline viewport; use Download SVG for the full
+unclipped diagram.
 
 ### HTML Preview
 
