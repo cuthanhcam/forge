@@ -7,6 +7,9 @@ development work and are not a claim that a tagged release has shipped.
 
 ### Added
 
+- Visual startup/tool loading, safe module/render recovery and a non-blocking offline notice.
+- Custom unknown-route states and viewport-bottom footers on short information pages.
+
 - Remembered navigation/category collapse and Markdown outline visibility.
 - Markdown heading outline with keyboard navigation and current-section tracking.
 - Interactive Mermaid viewing with pan, pinch, fit/reset, 10-point button zoom,

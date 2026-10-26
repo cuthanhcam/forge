@@ -19,3 +19,15 @@ Existing tabs may retain in-memory input until they are closed or reloaded.
 Use [Support](https://forge.cuthanhcam.workers.dev/support/ask) for questions and [Report an issue](https://forge.cuthanhcam.workers.dev/support/issue)
 for bugs. Redact credentials and use synthetic examples. Read
 [Tokens, secrets and safe debugging](https://forge.cuthanhcam.workers.dev/docs/safety) before working with sensitive input.
+
+## Loading and connection problems
+
+Forge shows a visual startup loader and tool skeletons rather than a blank page.
+If app files fail to load, use Reload page after checking your connection.
+Reloading does not clear saved drafts, but unsaved changes in this tab can be lost.
+The offline notice is informational: already-loaded tools remain editable; opening
+an unloaded tool or external preview resource may require a connection.
+
+If the initial website HTML cannot load at all, the browser may show its own
+network error. Forge does not install an offline cache or silently reload your
+workspace. Unknown page/document/support routes show a 404 with recovery links.
