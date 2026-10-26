@@ -1,9 +1,11 @@
+import { cn } from "@/shared/lib/cn";
 import { projectLinks } from "@/core/config/project-links";
 import { useThemeStore } from "@/core/theme/theme.store";
 import { themeOptions } from "@/core/theme/theme.options";
 import type { JSX } from "react";
 import {
   BookOpen,
+  Check,
   Database,
   ExternalLink,
   LifeBuoy,
@@ -100,9 +102,20 @@ export function SettingsPage(): JSX.Element {
                       checked={mode === option}
                       onChange={() => setMode(option)}
                     />
-                    <span className="inline-flex items-center gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm text-foreground transition-colors hover:bg-slate-100 peer-checked:border-accent-600 peer-checked:bg-accent-50 peer-checked:text-accent-700 peer-focus-visible:ring-2 peer-focus-visible:ring-accent-600 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background">
+                    <span
+                      className={cn(
+                        "inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors peer-focus-visible:ring-2 peer-focus-visible:ring-accent-600 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background",
+                        mode === option
+                          ? "border-accent-600 bg-accent-50 text-accent-700 hover:bg-accent-100"
+                          : "border-border bg-white text-foreground hover:bg-slate-100",
+                      )}
+                    >
                       <Icon aria-hidden="true" className="h-4 w-4" />
                       {label}
+                      <Check
+                        aria-hidden="true"
+                        className={cn("h-3.5 w-3.5", mode !== option && "invisible")}
+                      />
                     </span>
                   </label>
                 ))}
