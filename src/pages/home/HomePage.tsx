@@ -208,6 +208,8 @@ export function HomePage(): JSX.Element {
             ) : null}
           </div>
         </section>
+      </div>
+      <div className="mx-auto max-w-7xl">
         <SiteFooter />
       </div>
     </main>
