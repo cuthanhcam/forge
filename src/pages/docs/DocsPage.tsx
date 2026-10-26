@@ -1,3 +1,4 @@
+import { NotFoundPage } from "@/pages/not-found/NotFoundPage";
 import { SiteFooter } from "@/shared/components/SiteFooter";
 import { useLayoutEffect, useRef } from "react";
 import type { JSX } from "react";
@@ -24,6 +25,8 @@ export function DocsPage(): JSX.Element {
     if (scrollRef.current) scrollRef.current.scrollTop = 0;
   }, [page.id]);
 
+  if (docId && !docPages.some((doc) => doc.id === docId)) return <NotFoundPage />;
+
   function scrollToHeading(id: string): void {
     const target = scrollRef.current?.querySelector<HTMLElement>(`#${CSS.escape(id)}`);
     const owner = scrollRef.current;
@@ -46,8 +49,8 @@ export function DocsPage(): JSX.Element {
       ref={scrollRef}
       className="scrollbar-forge min-h-0 min-w-0 flex-1 overflow-auto px-4 pb-5 md:px-6 lg:px-8"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="grid min-h-[calc(100dvh-6rem)] min-w-0 gap-4 lg:grid-cols-[240px_minmax(0,1fr)] xl:grid-cols-[240px_minmax(0,1fr)_220px]">
+      <div className="mx-auto flex min-h-full w-full max-w-7xl flex-col">
+        <div className="grid min-w-0 flex-1 gap-4 lg:grid-cols-[240px_minmax(0,1fr)] xl:grid-cols-[240px_minmax(0,1fr)_220px]">
           <aside className="scrollbar-forge sticky top-5 hidden max-h-[calc(100dvh-6rem)] min-h-0 self-start overflow-y-auto border-r border-slate-200 pr-4 pt-5 lg:block">
             <div>
               <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
