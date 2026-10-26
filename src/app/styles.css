@@ -419,8 +419,8 @@ body {
   border: 1px solid rgb(226 232 240);
   border-radius: 0.5rem;
   background: rgb(248 250 252);
-  padding: 1rem;
-  text-align: center;
+  padding: 0;
+  text-align: initial;
 }
 
 .forge-markdown .hljs-keyword,

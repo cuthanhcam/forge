@@ -1,4 +1,7 @@
-import { persistedWorkspaceSchema } from "@/core/storage/storage.schema";
+import {
+  persistedWorkspaceSchema,
+  type PersistedWorkspace,
+} from "@/core/storage/storage.schema";
 import { storageKeys } from "@/core/storage/storage.keys";
 import { readStorageValue, writeStorageValue } from "@/core/storage/storage.service";
 import { create } from "zustand";
@@ -6,7 +9,7 @@ import type { WorkspaceActions, WorkspaceState } from "./workspace.types";
 
 const maxRecentTools = 8;
 
-function readPreferences() {
+function readPreferences(): PersistedWorkspace {
   try {
     const result = persistedWorkspaceSchema.safeParse(
       readStorageValue(storageKeys.workspace) ?? {},

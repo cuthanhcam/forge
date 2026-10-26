@@ -8,8 +8,10 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("renders the guide flowchart and sequence diagram", async ({ page }) => {
-  await expect(page.locator(".mermaid svg")).toHaveCount(2);
-  for (const diagram of await page.locator(".mermaid svg").all()) {
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(2);
+  for (const diagram of await page
+    .locator(".mermaid [data-diagram-artwork] > svg")
+    .all()) {
     const box = await diagram.boundingBox();
     expect(box?.width).toBeGreaterThan(20);
     expect(box?.height).toBeGreaterThan(20);
@@ -23,14 +25,14 @@ test("rapid edits show only the latest diagram and survive layout changes", asyn
   await editor.fill(flowchart);
   await editor.fill("```mermaid\nflowchart TD\n  Broken[\n```");
   await editor.fill(sequence);
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
   await expect(page.locator(".mermaid")).toContainText("Latest message");
   await page.getByRole("button", { name: "Select editor layout" }).click();
   await page.getByRole("menuitem", { name: "Preview", exact: true }).click();
   await expect(page.locator(".mermaid")).toContainText("Latest message");
   await page.getByRole("button", { name: "Select editor layout" }).click();
   await page.getByRole("menuitem", { name: "Split", exact: true }).click();
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
 });
 
 test("invalid diagram shows an actionable error and valid edits recover", async ({
@@ -41,7 +43,7 @@ test("invalid diagram shows an actionable error and valid edits recover", async 
   await expect(page.getByRole("alert")).toContainText("Check the diagram syntax");
   await expect(page.locator(".mermaid")).toContainText("this is not a diagram");
   await editor.fill(flowchart);
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
   await expect(page.locator(".mermaid")).toContainText("Finish");
   await expect(page.getByRole("alert")).toHaveCount(0);
 });
@@ -54,7 +56,7 @@ test("scroll and resize preserve rendered diagrams in both themes", async ({ pag
       "A long paragraph for scroll testing.\n\n".repeat(200) +
       "\n# Final section",
   );
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
   await editor.evaluate((element) => {
     element.scrollTop = element.scrollHeight;
   });
@@ -66,7 +68,7 @@ test("scroll and resize preserve rendered diagrams in both themes", async ({ pag
     page.getByRole("heading", { name: "Final section", exact: true }),
   ).toBeInViewport();
   await page.evaluate(() => document.documentElement.classList.add("dark"));
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
   await expect(page.locator(".mermaid")).toContainText("Finish");
   await expect(
     page.getByRole("heading", { name: "Final section", exact: true }),
@@ -75,7 +77,7 @@ test("scroll and resize preserve rendered diagrams in both themes", async ({ pag
   await preview.evaluate((element) => {
     element.scrollTop = 0;
   });
-  await expect(page.locator(".mermaid svg")).toBeInViewport();
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toBeInViewport();
   await page.screenshot({ path: test.info().outputPath("markdown-dark.png") });
 });
 
@@ -84,7 +86,7 @@ test("untrusted Markdown and diagram labels cannot execute scripts", async ({ pa
   await editor.fill(
     '<img src="data:image/png;base64,invalid" onerror="window.forgeInjected=true">\n\n```mermaid\nflowchart LR\n  A["&lt;script&gt;alert(1)&lt;/script&gt;"] --> B[Safe]\n```',
   );
-  await expect(page.locator(".mermaid svg")).toHaveCount(1);
+  await expect(page.locator(".mermaid [data-diagram-artwork] > svg")).toHaveCount(1);
   await expect(
     page.locator(".forge-markdown [onerror], .forge-markdown script"),
   ).toHaveCount(0);
