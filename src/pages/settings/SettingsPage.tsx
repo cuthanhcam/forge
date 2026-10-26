@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import { cn } from "@/shared/lib/cn";
 import { projectLinks } from "@/core/config/project-links";
 import { useThemeStore } from "@/core/theme/theme.store";
@@ -194,15 +195,13 @@ export function SettingsPage(): JSX.Element {
                   <BookOpen aria-hidden="true" className="h-4 w-4" />
                   Product docs
                 </a>
-                <a
+                <Link
                   className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
-                  href={projectLinks.reportIssue}
-                  rel="noreferrer"
-                  target="_blank"
+                  to={projectLinks.reportIssue}
                 >
                   <ExternalLink aria-hidden="true" className="h-4 w-4" />
                   Report an issue
-                </a>
+                </Link>
               </div>
             </div>
           </div>
