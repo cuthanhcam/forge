@@ -70,6 +70,11 @@ export function ThemeProvider({ children }: ThemeProviderProps): JSX.Element {
       root.classList.toggle("dark", resolvedMode === "dark");
       root.dataset.theme = mode;
       root.style.colorScheme = resolvedMode;
+      const background = resolvedMode === "dark" ? "#0d1117" : "#ffffff";
+      root.style.backgroundColor = background;
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", background);
     }
 
     applyTheme();

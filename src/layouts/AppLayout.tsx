@@ -1,6 +1,8 @@
+import { PageErrorBoundary } from "@/shared/components/PageErrorBoundary";
+import { OfflineNotice } from "@/shared/components/OfflineNotice";
 import type { JSX } from "react";
 import { useCallback, useState } from "react";
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import { useShortcuts } from "@/core/shortcuts/use-shortcuts";
 import { CommandPalette } from "@/widgets/command-palette/CommandPalette";
 import { Header } from "@/widgets/header/Header";
@@ -8,6 +10,7 @@ import { KeyboardShortcutsDialog } from "@/widgets/shortcuts/KeyboardShortcutsDi
 import { Sidebar } from "@/widgets/sidebar/Sidebar";
 
 export function AppLayout(): JSX.Element {
+  const location = useLocation();
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
@@ -30,7 +33,13 @@ export function AppLayout(): JSX.Element {
             onOpenCommandPalette={openCommandPalette}
             onOpenShortcuts={openShortcuts}
           />
-          <Outlet />
+          <OfflineNotice />
+          <PageErrorBoundary
+            key={location.pathname}
+            showFooter={!location.pathname.startsWith("/tools/")}
+          >
+            <Outlet />
+          </PageErrorBoundary>
         </div>
       </div>
       <CommandPalette onOpenChange={setCommandPaletteOpen} open={commandPaletteOpen} />
