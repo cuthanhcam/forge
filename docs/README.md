@@ -11,7 +11,8 @@ collection of unrelated websites.
 
 - [Product overview](product.md)
 - [Tool guide](tools.md)
-- [Privacy model](privacy.md)
+- [Privacy policy](privacy.md)
+- [Terms of use](terms.md)
 - [Tokens, secrets and safe debugging](security-and-tokens.md)
 - [Workspace settings](workspace.md)
 - [Keyboard shortcuts](shortcuts.md)
