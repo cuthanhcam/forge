@@ -18,9 +18,14 @@ transition is used. A non-passive local wheel listener prevents default only for
 Ctrl/Cmd+wheel inline or wheel inside the expanded viewer. Inline touch keeps
 vertical document scrolling; expanded touch supports unrestricted pan/pinch.
 
-The expanded viewer uses the existing Radix Dialog focus trap, Escape handling
-and return focus. Buttons have tooltips/names; the focusable canvas describes its
-keyboard shortcuts. Viewport state is transient, not saved in document drafts.
+Inline controls use one Expand icon in the top-right corner. The expanded viewer
+is a non-modal Radix Dialog titled Diagram, sized to 80% of the viewport. Its
+compact bottom-right toolbar uses a LocateFixed icon for Fit, distinct from
+Expand. Buttons and keyboard +/- change zoom by 10 percentage points; wheel
+changes are capped at 10 points per event. Outside document scrolling remains
+available. Escape closes and returns focus. Buttons have tooltips/names and the
+focusable canvas describes keyboard shortcuts without visible helper text.
+Viewport state is transient, not saved in document drafts.
 
 ## Rendering and export boundaries
 
@@ -62,3 +67,18 @@ Chromium desktop/phone emulation is covered. Physical mobile, Firefox/WebKit and
 screen-reader reviews remain follow-ups. Large graphs are still subject to
 Mermaid's existing rendering limits. Keep source/draft privacy and sanitization
 boundaries when extending exports or adding other diagram engines.
+
+## Document outline
+
+The collapsible Outline lives below documents and remembers its open state in
+the Markdown tool preferences. A toolbar shortcut can reopen a collapsed rail.
+Both rail width and outline expansion respect reduced-motion preferences.
+
+markdown-outline.service derives headings from sanitized rendered HTML, so fenced
+code is excluded and inline formatting becomes readable text. Heading IDs are
+namespaced and deduplicated; explicit author anchors are preserved. Local
+heading links resolve to these IDs. Outline navigation scrolls only the preview,
+opens Split when needed and keeps the selected heading anchored while diagrams
+or images finish rendering. User scroll/pointer/keyboard input releases that
+anchor. Scroll tracking is frame-scheduled and uses cached nodes; theme DOM
+replacement refreshes the cache. Arrow/Home/End keys navigate outline controls.
