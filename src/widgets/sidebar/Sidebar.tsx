@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import { projectLinks } from "@/core/config/project-links";
 import type { JSX } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -29,14 +30,9 @@ import { SidebarGroup } from "./SidebarGroup";
 interface SidebarProps {
   mobileOpen: boolean;
   onMobileOpenChange: (open: boolean) => void;
-  onOpenShortcuts: () => void;
 }
 
-export function Sidebar({
-  mobileOpen,
-  onMobileOpenChange,
-  onOpenShortcuts,
-}: SidebarProps): JSX.Element {
+export function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps): JSX.Element {
   const [helpOpen, setHelpOpen] = useState(false);
   const [desktop, setDesktop] = useState(
     () =>
@@ -293,7 +289,7 @@ export function Sidebar({
                   icon={AlertTriangle}
                   label="Report an issue"
                   onSelect={() => setHelpOpen(false)}
-                  href={projectLinks.reportIssue}
+                  to={projectLinks.reportIssue}
                 />
                 <HelpMenuItem
                   icon={HeartHandshake}
@@ -321,10 +317,8 @@ export function Sidebar({
                 <HelpMenuItem
                   icon={Keyboard}
                   label="Keyboard shortcuts"
-                  onSelect={() => {
-                    setHelpOpen(false);
-                    onOpenShortcuts();
-                  }}
+                  onSelect={() => setHelpOpen(false)}
+                  to="/docs/shortcuts"
                 />
               </div>
               <div className="border-t border-slate-100 p-2">
@@ -348,60 +342,72 @@ export function Sidebar({
           ) : null}
 
           <div className="sidebar-footer-actions" data-collapsed={effectiveCollapsed}>
-            <NavLink
-              aria-label="Settings"
-              className={({ isActive }) =>
-                cn("flex h-9 w-9 items-center justify-center transition", {
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                    effectiveCollapsed && !isActive,
-                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                    effectiveCollapsed && isActive,
-                  "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
-                    !effectiveCollapsed && isActive,
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
-                    !effectiveCollapsed && !isActive,
-                })
-              }
-              to="/settings"
+            <Tooltip content={"Settings"} side="right">
+              <NavLink
+                aria-label="Settings"
+                className={({ isActive }) =>
+                  cn(
+                    "flex h-9 w-9 items-center justify-center transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
+                    {
+                      "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
+                        effectiveCollapsed && !isActive,
+                      "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
+                        effectiveCollapsed && isActive,
+                      "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
+                        !effectiveCollapsed && isActive,
+                      "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
+                        !effectiveCollapsed && !isActive,
+                    },
+                  )
+                }
+                to="/settings"
+              >
+                <Settings aria-hidden="true" className="h-4 w-4 shrink-0" />
+              </NavLink>
+            </Tooltip>
+            <Tooltip content={"Help and documentation"} side="right">
+              <button
+                aria-expanded={helpOpen}
+                aria-label="Help"
+                className={cn(
+                  "flex h-9 w-9 shrink-0 items-center justify-center transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
+                  {
+                    "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
+                      effectiveCollapsed && !helpOpen,
+                    "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
+                      effectiveCollapsed && helpOpen,
+                    "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
+                      !effectiveCollapsed && helpOpen,
+                    "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
+                      !effectiveCollapsed && !helpOpen,
+                  },
+                )}
+                onClick={() => setHelpOpen((value) => !value)}
+                type="button"
+              >
+                <HelpCircle aria-hidden="true" className="h-4 w-4" />
+              </button>
+            </Tooltip>
+            <Tooltip
+              content={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              side="right"
             >
-              <Settings aria-hidden="true" className="h-4 w-4 shrink-0" />
-            </NavLink>
-            <button
-              aria-expanded={helpOpen}
-              aria-label="Help"
-              className={cn(
-                "flex h-9 w-9 shrink-0 items-center justify-center transition",
-                {
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                    effectiveCollapsed && !helpOpen,
-                  "rounded-md text-slate-700 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none":
-                    effectiveCollapsed && helpOpen,
-                  "rounded-md bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200":
-                    !effectiveCollapsed && helpOpen,
-                  "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950":
-                    !effectiveCollapsed && !helpOpen,
-                },
-              )}
-              onClick={() => setHelpOpen((value) => !value)}
-              type="button"
-            >
-              <HelpCircle aria-hidden="true" className="h-4 w-4" />
-            </button>
-            <button
-              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              aria-expanded={!sidebarCollapsed}
-              aria-controls="primary-tool-navigation"
-              className={cn(
-                "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none lg:flex",
-                effectiveCollapsed
-                  ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none"
-                  : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950",
-              )}
-              onClick={toggleSidebar}
-              type="button"
-            >
-              <ToggleIcon aria-hidden="true" className="h-4 w-4" />
-            </button>
+              <button
+                aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                aria-expanded={!sidebarCollapsed}
+                aria-controls="primary-tool-navigation"
+                className={cn(
+                  "hidden h-9 w-9 shrink-0 items-center justify-center transition-colors focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none lg:flex",
+                  effectiveCollapsed
+                    ? "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none"
+                    : "rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-950",
+                )}
+                onClick={toggleSidebar}
+                type="button"
+              >
+                <ToggleIcon aria-hidden="true" className="h-4 w-4" />
+              </button>
+            </Tooltip>
           </div>
         </div>
       </aside>

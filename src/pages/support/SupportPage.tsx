@@ -60,7 +60,7 @@ export function SupportPage(): JSX.Element {
 
   return (
     <main className="scrollbar-forge min-h-0 flex-1 overflow-auto px-4 py-6 md:px-6 lg:px-8">
-      <div className="mx-auto max-w-6xl">
+      <div className="mx-auto max-w-7xl">
         <section className="overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm shadow-slate-950/[0.03]">
           <HelperPageHeader
             eyebrow="Support"

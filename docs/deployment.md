@@ -37,8 +37,8 @@ placeholders. `VITE_APP_NAME` and `VITE_APP_URL` are not consumed by application
 code and do not configure runtime branding or routing.
 
 Public project destinations live in `src/core/config/project-links.ts`. Review
-those destinations for a fork, especially the canonical hosted issue-support
-link. Internal tool routes remain relative to the deployed origin.
+those destinations for a fork, for repository and sponsorship links. In-app support/help links and tool routes
+remain relative to the deployed origin.
 
 ## Cloudflare Pages
 

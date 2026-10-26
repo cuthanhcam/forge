@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import { themeOptions } from "@/core/theme/theme.options";
 import type { JSX } from "react";
 import { useEffect, useRef, useState } from "react";
@@ -45,17 +46,19 @@ export function ThemeMenu(): JSX.Element {
 
   return (
     <div className="relative" ref={containerRef}>
-      <button
-        aria-expanded={open}
-        aria-haspopup="menu"
-        aria-label="Change theme"
-        className="inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-950"
-        onClick={() => setOpen((current) => !current)}
-        type="button"
-      >
-        <ActiveIcon aria-hidden="true" className="h-4 w-4" />
-        <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
-      </button>
+      <Tooltip content="Change theme" side="bottom">
+        <button
+          aria-expanded={open}
+          aria-haspopup="menu"
+          aria-label="Change theme"
+          className="inline-flex h-9 items-center gap-1.5 rounded-md px-2.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-950"
+          onClick={() => setOpen((current) => !current)}
+          type="button"
+        >
+          <ActiveIcon aria-hidden="true" className="h-4 w-4" />
+          <ChevronDown aria-hidden="true" className="h-3.5 w-3.5" />
+        </button>
+      </Tooltip>
       {open ? (
         <div
           className="absolute right-0 top-11 z-40 w-40 overflow-hidden rounded-lg border border-slate-200 bg-white p-1.5 shadow-xl shadow-slate-950/12"

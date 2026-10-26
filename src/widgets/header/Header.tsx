@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import type { JSX } from "react";
 import { Menu } from "lucide-react";
 import { useLocation } from "react-router";
@@ -24,16 +25,18 @@ export function Header({
   return (
     <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center justify-between bg-white/90 px-4 backdrop-blur md:px-5">
       <div className="flex items-center gap-3">
-        <button
-          aria-label="Open navigation"
-          aria-expanded={navigationOpen}
-          aria-controls="forge-sidebar"
-          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600 lg:hidden"
-          onClick={onOpenNavigation}
-          type="button"
-        >
-          <Menu aria-hidden="true" className="h-5 w-5" />
-        </button>
+        <Tooltip content="Open navigation" side="bottom">
+          <button
+            aria-label="Open navigation"
+            aria-expanded={navigationOpen}
+            aria-controls="forge-sidebar"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600 lg:hidden"
+            onClick={onOpenNavigation}
+            type="button"
+          >
+            <Menu aria-hidden="true" className="h-5 w-5" />
+          </button>
+        </Tooltip>
         <div className="flex min-w-0 items-center gap-2">
           {HeaderIcon ? (
             <HeaderIcon aria-hidden="true" className="h-4 w-4 shrink-0 text-accent-600" />
