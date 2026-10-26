@@ -1,11 +1,13 @@
-# Support
+# Getting help
 
-Use GitHub issues for reproducible bugs, feature proposals, and new tool
-requests.
+- [Ask a question](https://forge.cuthanhcam.workers.dev/support/ask).
+- [Report a bug](https://forge.cuthanhcam.workers.dev/support/issue), then use the
+  appropriate [issue form](https://github.com/cuthanhcam/forge/issues/new/choose).
+- Read [Contributing](../CONTRIBUTING.md) before submitting a focused change.
+- See the [architecture](../docs/development/architecture.md) for implementation questions.
+- Report vulnerabilities privately using [SECURITY.md](../SECURITY.md).
 
-- Bugs: use the bug report issue form.
-- Features: use the feature request issue form.
-- Tool ideas: use the tool request issue form.
-- Contribution process: read `docs/contributing.md`.
-- Architecture questions: read `docs/development/architecture.md` first, then open a
-  discussion if GitHub Discussions are enabled.
+Use synthetic reproductions. Do not include live tokens, passwords, signing
+keys, personal data or unredacted screenshots in reports.
+
+Optional support: [Sponsoring](../SPONSORING.md).

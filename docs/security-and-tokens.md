@@ -39,7 +39,7 @@ Diff, JSON, JSON/YAML and Regex. Those drafts can contain sensitive data too.
 Browser storage is not an encrypted vault. Clear this site's data in browser
 settings to remove saved drafts/preferences; export wanted drafts first.
 Private browsing may reduce persistence but does not isolate unsafe previews,
-extensions or an untrusted device. See [the privacy model](/privacy).
+extensions or an untrusted device. See [the privacy model](https://forge.cuthanhcam.workers.dev/privacy).
 
 ## Preview boundaries and reporting
 

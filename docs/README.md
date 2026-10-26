@@ -12,6 +12,8 @@ collection of unrelated websites.
 - [Product overview](product.md)
 - [Tool guide](tools.md)
 - [Privacy model](privacy.md)
+- [Tokens, secrets and safe debugging](security-and-tokens.md)
+- [Workspace settings](workspace.md)
 - [Keyboard shortcuts](shortcuts.md)
 - [Deployment notes](deployment.md)
 - [Support](support.md)
@@ -36,3 +38,10 @@ how to use it safely.
 
 Development and implementation notes can live elsewhere when needed; this
 folder should stay focused on Forge as a product.
+
+## Open source
+
+- [Start here](../START-HERE.md)
+- [Changelog](../CHANGELOG.md)
+- [Sponsoring](../SPONSORING.md)
+- [Maintainer guide](development/maintaining.md)

@@ -122,7 +122,10 @@ Convert between JSON and YAML for config and API workflows.
 ### JWT Decoder
 
 Decode JWT headers and payloads, inspect claim details, generate examples, and
-verify HMAC signatures locally when supported.
+verify HS256/HS384/HS512 HMAC signatures locally. Decoding is not authentication;
+a matching signature does not validate issuer, audience, time, revocation or
+application authorization. Asymmetric verification and JWE decryption are not
+supported. Read [token safety](security-and-tokens.md).
 
 ## Encoding
 

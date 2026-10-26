@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ask a question
+    url: https://forge.cuthanhcam.workers.dev/support/ask
+    about: Get help using Forge. Use synthetic examples, without credentials.
+  - name: Report a security vulnerability privately
+    url: https://github.com/cuthanhcam/forge/security/policy
+    about: Follow the email instructions in SECURITY.md. Do not open a public issue.

@@ -1,6 +1,6 @@
 # Workspace settings
 
-Open [Settings](/settings) to choose Light, Dark or System appearance. The same
+Open [Settings](https://forge.cuthanhcam.workers.dev/settings) to choose Light, Dark or System appearance. The same
 preference is available in the header and follows device changes in System mode.
 Theme, navigator collapse, category collapse, favorites and recent tools are
 remembered in this browser. Markdown tabs/outline and Diff options have separate
@@ -16,6 +16,6 @@ origin. This removes drafts and preferences together. Clearing a visible input
 is not a complete browser-data deletion. Export anything you want to keep first.
 Existing tabs may retain in-memory input until they are closed or reloaded.
 
-Use [Support](/support/ask) for questions and [Report an issue](/support/issue)
+Use [Support](https://forge.cuthanhcam.workers.dev/support/ask) for questions and [Report an issue](https://forge.cuthanhcam.workers.dev/support/issue)
 for bugs. Redact credentials and use synthetic examples. Read
-[Tokens, secrets and safe debugging](/docs/safety) before working with sensitive input.
+[Tokens, secrets and safe debugging](https://forge.cuthanhcam.workers.dev/docs/safety) before working with sensitive input.

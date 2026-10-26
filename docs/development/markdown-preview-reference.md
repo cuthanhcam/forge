@@ -49,3 +49,11 @@ before integration into develop. Broader Firefox/WebKit coverage remains needed.
 Do not bring remote renderers or collaboration into these branches. If reference
 code is reused later, review Apache-2.0 attribution/NOTICE requirements first;
 Forge's current MIT license alone does not cover copied third-party code.
+
+## Delivery update
+
+Outline and diagram controls are delivered. Forge derives the outline from
+sanitized rendered headings (including raw HTML headings), rather than a regex
+or source-token-only filter. IDs and local heading links share one collision-safe
+allocation. PNG/SVG diagram downloads are complete-diagram exports. Full-document
+export readiness and find/replace remain pending.
