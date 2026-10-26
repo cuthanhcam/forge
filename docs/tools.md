@@ -2,6 +2,11 @@
 
 Forge groups tools by workflow, not by implementation detail.
 
+The main navigation's collapsed state and expanded/collapsed category groups are
+remembered in this browser. Markdown tab and Diff option rails keep their own
+preferences. A mobile navigation drawer still starts closed after reload. If
+browser storage is blocked or cleared, preferences are session-only or reset.
+
 ## Editors
 
 ### Markdown Preview
@@ -24,6 +29,13 @@ scrolling; it recalculates wrapped line heights when the editor resizes.
 Markdown and HTML source editors share the same monospace font; rendered
 Markdown prose uses the UI reading font.
 
+Open Outline from the toolbar to browse document headings below the tabs.
+Indentation follows heading levels, and the current section is highlighted.
+Click a heading to jump within the preview; Editor-only layout opens Split.
+Outline can collapse independently and remembers its state after reload.
+Code blocks are excluded. Use Arrow keys, Home and End to move between entries.
+
+The tab rail animates smoothly and respects reduced-motion settings.
 The tab collapse/expand control sits at the bottom of the desktop tab rail.
 Right-click a document, long-press it on touch devices, or focus it and press
 Shift+F10 to rename, duplicate or delete it even when the rail is collapsed.
@@ -43,6 +55,22 @@ pause in editing. Invalid diagrams show an error and their source; correct the
 syntax to retry. Diagrams follow the Forge theme and render with strict security
 and SVG text labels. Executable HTML labels and diagram click callbacks are not
 enabled.
+
+Each Mermaid diagram has a compact Expand icon in its top-right corner. The
+expanded Diagram viewer occupies about 85% of the viewport and places zoom,
+Fit, Reset to 100% and Download PNG/SVG controls in the bottom-right corner. Zoom
+buttons change scale by 10 percentage points. Drag to pan; wheel and two-finger
+pinch zoom in the expanded viewer. You can still scroll the document outside it.
+Inline Ctrl/Cmd+wheel zooms around the pointer; ordinary wheel and vertical touch
+swipes keep scrolling the document.
+
+Focus the diagram to use arrows to pan (Shift for larger steps), +/- to zoom,
+0 to fit, and 1 for 100%. Escape closes the expanded viewer and returns focus to
+its Expand button. SVG download includes the full diagram, independent of pan
+and zoom. Each diagram has its own viewport. Manual zoom is retained during a
+resize; Fit mode recalculates its fit. Controls are omitted from PNG/PDF capture,
+which still captures the visible inline viewport; use Download SVG for the full
+unclipped diagram.
 
 ### HTML Preview
 
@@ -94,7 +122,10 @@ Convert between JSON and YAML for config and API workflows.
 ### JWT Decoder
 
 Decode JWT headers and payloads, inspect claim details, generate examples, and
-verify HMAC signatures locally when supported.
+verify HS256/HS384/HS512 HMAC signatures locally. Decoding is not authentication;
+a matching signature does not validate issuer, audience, time, revocation or
+application authorization. Asymmetric verification and JWE decryption are not
+supported. Read [token safety](security-and-tokens.md).
 
 ## Encoding
 
@@ -142,3 +173,8 @@ Create URL-friendly slugs from human text.
 ### Regex Tester
 
 Test regular expressions against sample input with match feedback.
+
+PNG diagram export renders the complete sanitized SVG locally against the current
+theme background, independent of zoom. Output is bounded to 8192 pixels per side
+and 16 million pixels total; very large diagrams are downscaled. SVG retains
+vector detail. Export failures show a message with the SVG alternative.

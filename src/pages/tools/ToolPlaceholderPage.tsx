@@ -104,7 +104,11 @@ export function ToolPlaceholderPage(): JSX.Element {
   if (ToolPage) {
     return (
       <ToolLayout showHeader={false} tool={tool}>
-        <Suspense fallback={<LoadingState />}>
+        <Suspense
+          fallback={
+            <LoadingState layout={tool.loadingLayout} label={`Loading ${tool.name}`} />
+          }
+        >
           <ToolPage />
         </Suspense>
       </ToolLayout>

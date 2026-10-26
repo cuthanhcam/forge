@@ -7,7 +7,8 @@
 - `src/shared`: reusable primitives and tool surfaces, without feature imports.
 - `src/widgets`: navigation, editor integration and product-level controls.
 - `src/pages`: home, docs, settings, legal and fallback routes.
-- `scripts`: tool scaffolding and registry validation.
+- `scripts`: tool-creation guidance and registry validation. The create:tool command
+  currently prints instructions; it does not generate feature files.
 - `tests`: app integration tests and shared setup; keep feature tests colocated.
 - `docs`: user docs; `docs/development` contains contributor decisions and backlog.
 

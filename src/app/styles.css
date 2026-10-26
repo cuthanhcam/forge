@@ -419,8 +419,8 @@ body {
   border: 1px solid rgb(226 232 240);
   border-radius: 0.5rem;
   background: rgb(248 250 252);
-  padding: 1rem;
-  text-align: center;
+  padding: 0;
+  text-align: initial;
 }
 
 .forge-markdown .hljs-keyword,
@@ -976,5 +976,45 @@ body {
   }
   .forge-range:hover::-moz-range-thumb {
     background: var(--accent-solid-hover);
+  }
+}
+
+/* A static drafting grid adds texture without competing with the tool directory. */
+.forge-home-signature {
+  position: relative;
+  isolation: isolate;
+}
+
+.forge-home-signature::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.forge-home-signature::before {
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(100 116 139 / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(100 116 139 / 0.1) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse at 84% 44%, #000 5%, transparent 70%);
+}
+
+.dark .forge-home-signature::before {
+  opacity: 0.65;
+}
+
+@media (forced-colors: active) {
+  .forge-home-signature::before {
+    display: none;
+  }
+}
+
+/* Match ResizablePanes' container threshold, including a collapsed/expanded tab rail. */
+@container (min-width: 640px) {
+  .forge-loading-preview {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
   }
 }

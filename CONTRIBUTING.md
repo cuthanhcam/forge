@@ -30,8 +30,10 @@ to inspect the report.
 
 Read [architecture](docs/development/architecture.md), then the
 [roadmap](docs/development/roadmap.md). Start with a bounded bug and include
-steps to reproduce. Use `pnpm create:tool` for a new tool, then
-`pnpm check:tools`; follow a neighboring feature's schema/service/page pattern.
+steps to reproduce. Follow [adding a tool](docs/adding-a-new-tool.md) and a neighboring feature's
+schema/service/page pattern. `pnpm create:tool <tool-id>` currently prints
+guidance rather than generating files. Register the loading layout and run
+`pnpm check:tools`.
 
 ## Branch and review workflow
 

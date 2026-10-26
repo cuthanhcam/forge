@@ -71,8 +71,12 @@ test("UI font is self-hosted and home stays readable at narrow widths and large 
     document.documentElement.classList.add("dark");
   });
   await expect.poll(noOverflow).toBe(true);
-  await main.getByRole("link", { name: "Terms", exact: true }).scrollIntoViewIfNeeded();
-  await expect(main.getByRole("link", { name: "Terms", exact: true })).toBeInViewport();
+  await main
+    .getByRole("link", { name: "Instagram", exact: true })
+    .scrollIntoViewIfNeeded();
+  await expect(
+    main.getByRole("link", { name: "Instagram", exact: true }),
+  ).toBeInViewport();
   await page.screenshot({ path: test.info().outputPath("home-dark-large-text.png") });
 });
 

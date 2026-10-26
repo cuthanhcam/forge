@@ -15,6 +15,7 @@ import {
   FileDown,
   FileText,
   ImageDown,
+  ListTree,
   Link2,
   Link2Off,
   PanelLeft,
@@ -45,6 +46,8 @@ import {
   renderMarkdownToHtml,
 } from "./markdown-preview.service";
 
+import { buildMarkdownOutline } from "./markdown-outline.service";
+import { useMarkdownOutline } from "./use-markdown-outline";
 import { MarkdownTabs } from "./MarkdownTabs";
 import { MarkdownPreviewContent } from "./MarkdownPreviewContent";
 import { useMarkdownScroll } from "./use-markdown-scroll";
@@ -99,8 +102,8 @@ export function MarkdownPreviewPage(): JSX.Element {
   const activeTab =
     state.tabs.find((tab) => tab.id === state.activeTabId) ?? state.tabs[0];
   const previewSource = useDeferredValue(activeTab.content);
-  const renderedHtml = useMemo(
-    () => renderMarkdownToHtml(previewSource),
+  const { html: renderedHtml, headings } = useMemo(
+    () => buildMarkdownOutline(renderMarkdownToHtml(previewSource)),
     [previewSource],
   );
   const readTime = useMemo(
@@ -124,6 +127,21 @@ export function MarkdownPreviewPage(): JSX.Element {
       layout: state.viewMode,
       html: renderedHtml,
     });
+
+  const outline = useMarkdownOutline({
+    preview: previewScrollRef,
+    content: previewContentRef,
+    editor: editorRef,
+    headings,
+    documentId: activeTab.id,
+    layout: state.viewMode,
+    visible: showPreview,
+    markPreviewIntent: onPreviewIntent,
+  });
+  function navigateHeading(id: string): void {
+    if (!showPreview) updateState({ ...state, viewMode: "split" });
+    outline.navigate(id);
+  }
 
   function updateState(nextState: MarkdownPreviewState): void {
     setState(nextState);
@@ -431,6 +449,35 @@ ${renderedHtml}
 
           <div className="flex min-w-0 flex-wrap items-center gap-1">
             <Tooltip
+              content={
+                state.outlineOpen && !state.tabsCollapsed
+                  ? "Hide outline"
+                  : "Show outline"
+              }
+              side="bottom"
+            >
+              <Button
+                aria-label={
+                  state.outlineOpen && !state.tabsCollapsed
+                    ? "Hide outline"
+                    : "Show outline"
+                }
+                aria-expanded={state.outlineOpen && !state.tabsCollapsed}
+                aria-controls="markdown-outline-items"
+                size="icon"
+                variant="ghost"
+                onClick={() =>
+                  updateState({
+                    ...state,
+                    tabsCollapsed: false,
+                    outlineOpen: state.tabsCollapsed || !state.outlineOpen,
+                  })
+                }
+              >
+                <ListTree aria-hidden="true" className="h-4 w-4" />
+              </Button>
+            </Tooltip>
+            <Tooltip
               content={state.syncScroll ? "Disable sync" : "Enable sync"}
               side="bottom"
             >
@@ -569,13 +616,20 @@ ${renderedHtml}
         ) : null}
         <div
           className={cn(
-            "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1",
+            "grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden transition-[grid-template-columns] duration-200 ease-out motion-reduce:transition-none md:grid-rows-1",
             state.tabsCollapsed
               ? "md:grid-cols-[3rem_minmax(0,1fr)]"
               : "md:grid-cols-[11.5rem_minmax(0,1fr)] lg:grid-cols-[12rem_minmax(0,1fr)]",
           )}
         >
           <MarkdownTabs
+            outline={{
+              headings,
+              open: state.outlineOpen,
+              activeId: outline.activeId,
+              onToggle: () => updateState({ ...state, outlineOpen: !state.outlineOpen }),
+              onNavigate: navigateHeading,
+            }}
             tabs={state.tabs}
             activeId={activeTab.id}
             collapsed={state.tabsCollapsed}
@@ -596,6 +650,20 @@ ${renderedHtml}
               showPreview ? (
                 <div
                   className="scrollbar-forge h-full min-h-0 min-w-0 overflow-auto overscroll-contain bg-background outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600"
+                  onClick={(event) => {
+                    if (!(event.target instanceof Element)) return;
+                    const link = event.target.closest('a[href^="#"]');
+                    if (!link) return;
+                    try {
+                      const id = decodeURIComponent(link.getAttribute("href")!.slice(1));
+                      if (headings.some((heading) => heading.id === id)) {
+                        event.preventDefault();
+                        outline.navigate(id);
+                      }
+                    } catch {
+                      /* Preserve malformed author links. */
+                    }
+                  }}
                   onScroll={onPreviewScroll}
                   onKeyDown={onPreviewIntent}
                   onWheel={onPreviewIntent}

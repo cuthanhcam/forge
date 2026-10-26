@@ -31,17 +31,14 @@ This is required for routes such as:
 
 ## Environment Variables
 
-Client-exposed values should use the `VITE_` prefix.
+Client-exposed values use the `VITE_` prefix and are included in the client bundle;
+never place a credential there. The current `.env.example` contains documentation
+placeholders. `VITE_APP_NAME` and `VITE_APP_URL` are not consumed by application
+code and do not configure runtime branding or routing.
 
-Example:
-
-```env
-VITE_APP_NAME=Forge
-VITE_APP_URL=https://your-forge-domain.example
-```
-
-The app should avoid hardcoding temporary deployment domains. Put deployment
-URLs in environment files or host configuration instead.
+Public project destinations live in `src/core/config/project-links.ts`. Review
+repository and sponsorship destinations for a fork. In-app support/help links and tool routes
+remain relative to the deployed origin.
 
 ## Cloudflare Pages
 

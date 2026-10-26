@@ -1,3 +1,6 @@
+import safetyMarkdown from "../../../docs/security-and-tokens.md?raw";
+import workspaceMarkdown from "../../../docs/workspace.md?raw";
+import supportMarkdown from "../../../docs/support.md?raw";
 export interface DocPageContent {
   description: string;
   id: string;
@@ -7,7 +10,8 @@ export interface DocPageContent {
 
 export const docPages: DocPageContent[] = [
   {
-    description: "The story, product model, workflows, and trust boundaries behind Forge.",
+    description:
+      "The story, product model, workflows, and trust boundaries behind Forge.",
     id: "overview",
     title: "Product docs",
     markdown: `# Product docs
@@ -155,7 +159,7 @@ Open JWT Decoder and paste the token into the encoded token pane. Forge separate
 
 Use Claims Breakdown when you need to understand standard fields such as issuer, audience, issued-at time, not-before time, expiration, scopes, or roles. If the token uses an HMAC algorithm, enter the secret to verify the signature locally.
 
-Avoid sharing production JWTs in public support channels. If you need help, redact the signature and any sensitive claims.
+Decoding does not authenticate a token. A matching HMAC signature does not validate issuer, audience, authorization or revocation. Use your trusted authentication stack for production decisions. Never share real tokens or signing secrets; use synthetic examples. Read [Tokens and safety](/docs/safety).
 
 ## Format JSON safely
 
@@ -251,6 +255,24 @@ Copy buttons should be visible beside generated or transformed output. Header co
 
 Dialogs, menus, and flyouts should close with \`Esc\` and when clicking outside where the interaction pattern supports it. A keyboard shortcut should not trap the user in a modal state.
 `,
+  },
+  {
+    id: "safety",
+    title: "Tokens and safety",
+    description: "JWT trust boundaries, secrets and responsible reporting.",
+    markdown: safetyMarkdown,
+  },
+  {
+    id: "workspace",
+    title: "Workspace settings",
+    description: "Appearance, remembered navigation and local drafts.",
+    markdown: workspaceMarkdown,
+  },
+  {
+    id: "support",
+    title: "Support and contributing",
+    description: "Questions, issue reports and optional project support.",
+    markdown: supportMarkdown,
   },
 ];
 

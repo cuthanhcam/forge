@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import type { JSX } from "react";
 import { NavLink } from "react-router";
 import type { ToolDefinition } from "@/core/registry/tool.definition";
@@ -15,29 +16,24 @@ export function SidebarToolItem({
   const Icon = tool.icon;
 
   return (
-    <NavLink
-      aria-label={tool.name}
-      className={({ isActive }) =>
-        cn(
-          "group relative flex h-8 items-center overflow-hidden rounded-md px-2 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none",
-          isActive
-            ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-200"
-            : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
-        )
-      }
-      title={collapsed ? tool.name : undefined}
-      to={tool.route}
-    >
-      <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
-      <span
-        aria-hidden={collapsed}
-        className={cn(
-          "absolute left-8 right-2 truncate transition-opacity duration-150 motion-reduce:transition-none",
-          collapsed ? "opacity-0" : "opacity-100",
-        )}
+    <Tooltip content={tool.name} side="right">
+      <NavLink
+        aria-label={tool.name}
+        // A string className remains compatible with Radix's asChild prop merging.
+        className="group relative flex h-8 items-center overflow-hidden rounded-md px-2 text-[13px] font-medium text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 motion-reduce:transition-none [&.active]:bg-accent-50 [&.active]:text-accent-700 [&.active]:ring-1 [&.active]:ring-inset [&.active]:ring-accent-200"
+        to={tool.route}
       >
-        {tool.name}
-      </span>
-    </NavLink>
+        <Icon aria-hidden="true" className="h-4 w-4 shrink-0" />
+        <span
+          aria-hidden={collapsed}
+          className={cn(
+            "absolute left-8 right-2 truncate transition-opacity duration-150 motion-reduce:transition-none",
+            collapsed ? "opacity-0" : "opacity-100",
+          )}
+        >
+          {tool.name}
+        </span>
+      </NavLink>
+    </Tooltip>
   );
 }

@@ -3,6 +3,7 @@ export interface WorkspaceState {
   favoriteToolIds: string[];
   recentToolIds: string[];
   sidebarCollapsed: boolean;
+  collapsedCategoryIds: string[];
 }
 
 export interface WorkspaceActions {
@@ -11,5 +12,6 @@ export interface WorkspaceActions {
   setActiveTool: (toolId: string | null) => void;
   toggleFavorite: (toolId: string) => void;
   toggleSidebar: () => void;
+  toggleCategory: (categoryId: string) => void;
   trackRecentTool: (toolId: string) => void;
 }

@@ -1,5 +1,7 @@
+import { SiteFooter } from "@/shared/components/SiteFooter";
+import { Tooltip } from "@/shared/ui/tooltip";
 import { useMemo, useRef, useState, type JSX } from "react";
-import { ArrowDown, ArrowUpRight, Search, ShieldCheck, X } from "lucide-react";
+import { ArrowDown, ArrowUpRight, Search, X } from "lucide-react";
 import { Link } from "react-router";
 import { toolCategoryDefinitions } from "@/core/registry/tool.categories";
 import { toolRegistry } from "@/core/registry/tool.registry";
@@ -52,7 +54,7 @@ export function HomePage(): JSX.Element {
       <div className="mx-auto max-w-5xl">
         <section
           aria-labelledby="forge-signature"
-          className="flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center py-8 sm:py-12"
+          className="forge-home-signature flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center py-8 sm:py-12"
         >
           <div className="mb-8 flex items-center gap-3 sm:mb-10">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-foreground">
@@ -123,14 +125,16 @@ export function HomePage(): JSX.Element {
                 value={query}
               />
               {query ? (
-                <button
-                  aria-label="Clear filter"
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-                  onClick={clearFilter}
-                  type="button"
-                >
-                  <X aria-hidden="true" className="h-4 w-4" />
-                </button>
+                <Tooltip content="Clear filter" side="bottom">
+                  <button
+                    aria-label="Clear filter"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
+                    onClick={clearFilter}
+                    type="button"
+                  >
+                    <X aria-hidden="true" className="h-4 w-4" />
+                  </button>
+                </Tooltip>
               ) : null}
             </div>
             <p className="text-xs text-muted-foreground" role="status">
@@ -204,32 +208,9 @@ export function HomePage(): JSX.Element {
             ) : null}
           </div>
         </section>
-        <footer className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-border pt-5 text-xs leading-5 text-muted-foreground">
-          <p className="flex items-center gap-2">
-            <ShieldCheck aria-hidden="true" className="h-4 w-4 shrink-0" />
-            Core tools run in your browser.
-          </p>
-          <nav aria-label="Forge information" className="flex flex-wrap gap-4">
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/docs"
-            >
-              Documentation
-            </Link>
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/privacy"
-            >
-              Privacy
-            </Link>
-            <Link
-              className="rounded underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-              to="/terms"
-            >
-              Terms
-            </Link>
-          </nav>
-        </footer>
+      </div>
+      <div className="mx-auto max-w-7xl">
+        <SiteFooter />
       </div>
     </main>
   );
