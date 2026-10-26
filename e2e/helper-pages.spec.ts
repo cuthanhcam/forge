@@ -21,7 +21,7 @@ test("appearance shares the header preference and remembers system mode", async 
   await expect(page.locator("html")).not.toHaveClass(/dark/);
   await expect(
     page.getByRole("link", { name: "Report an issue", exact: true }),
-  ).toHaveAttribute("href", "https://forge.cuthanhcam.workers.dev/support/issue");
+  ).toHaveAttribute("href", "/support/issue");
 });
 
 test("support provides safe reporting paths without submitting a draft", async ({
@@ -81,4 +81,50 @@ test("practical documentation is reachable on desktop and phone", async ({
   expect(
     await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
   ).toBe(true);
+});
+
+test("help menu uses local routes while header shortcuts keep the dialog", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/settings");
+  if (isMobile)
+    await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  else {
+    await page
+      .locator("#forge-sidebar")
+      .getByRole("button", { name: "Collapse sidebar", exact: true })
+      .click();
+    await page.getByRole("link", { name: "Settings", exact: true }).hover();
+    await expect(
+      page.getByRole("tooltip", { name: "Settings", exact: true }),
+    ).toBeVisible();
+  }
+  await page.getByRole("button", { name: "Help", exact: true }).click();
+  const issue = page
+    .getByRole("link", { name: "Report an issue", exact: true })
+    .filter({ has: page.locator("span") });
+  await expect(issue).toHaveAttribute("href", "/support/issue");
+  await expect(issue).not.toHaveAttribute("target", "_blank");
+  await issue.click();
+  await expect(page).toHaveURL(/\/support\/issue$/);
+  if (isMobile)
+    await page.getByRole("button", { name: "Open navigation", exact: true }).click();
+  await page.getByRole("button", { name: "Help", exact: true }).click();
+  await page.getByRole("link", { name: "Keyboard shortcuts", exact: true }).click();
+  await expect(page).toHaveURL(/\/docs\/shortcuts$/);
+  if (!isMobile) {
+    const headerButton = page.getByRole("button", {
+      name: "View keyboard shortcuts",
+      exact: true,
+    });
+    await headerButton.hover();
+    await expect(
+      page.getByRole("tooltip", { name: "View keyboard shortcuts", exact: true }),
+    ).toBeVisible();
+    await headerButton.click();
+    await expect(page.getByRole("dialog")).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(headerButton).toBeFocused();
+  }
 });

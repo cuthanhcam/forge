@@ -38,7 +38,7 @@ export function DocsPage(): JSX.Element {
   }
 
   return (
-    <main className="min-h-0 min-w-0 flex-1 overflow-hidden px-4 pb-5 md:px-6">
+    <main className="min-h-0 min-w-0 flex-1 overflow-hidden px-4 pb-5 md:px-6 lg:px-8">
       <div className="mx-auto grid h-full min-w-0 max-w-full gap-4 lg:grid-cols-[240px_minmax(0,1fr)] xl:max-w-7xl xl:grid-cols-[240px_minmax(0,1fr)_220px]">
         <aside className="scrollbar-forge hidden min-h-0 overflow-y-auto border-r border-slate-200 pr-4 pt-5 lg:block">
           <div className="sticky top-5">

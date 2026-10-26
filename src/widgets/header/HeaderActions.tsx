@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import type { JSX } from "react";
 import { Github, Keyboard, Search } from "lucide-react";
 import { projectLinks } from "@/core/config/project-links";
@@ -16,14 +17,16 @@ export function HeaderActions({
 }: HeaderActionsProps): JSX.Element {
   return (
     <div className="flex items-center gap-2">
-      <button
-        aria-label="Search tools"
-        className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 md:hidden"
-        onClick={onOpenCommandPalette}
-        type="button"
-      >
-        <Search aria-hidden="true" className="h-4 w-4" />
-      </button>
+      <Tooltip content="Search tools" side="bottom">
+        <button
+          aria-label="Search tools"
+          className="inline-flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 md:hidden"
+          onClick={onOpenCommandPalette}
+          type="button"
+        >
+          <Search aria-hidden="true" className="h-4 w-4" />
+        </button>
+      </Tooltip>
       <Button
         className="hidden min-w-52 justify-start text-slate-500 md:inline-flex"
         onClick={onOpenCommandPalette}
@@ -35,24 +38,28 @@ export function HeaderActions({
           {shortcuts.commandPalette.label}
         </kbd>
       </Button>
-      <button
-        aria-label="View keyboard shortcuts"
-        className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 md:inline-flex"
-        onClick={onOpenShortcuts}
-        type="button"
-      >
-        <Keyboard aria-hidden="true" className="h-4 w-4" />
-      </button>
+      <Tooltip content="View keyboard shortcuts" side="bottom">
+        <button
+          aria-label="View keyboard shortcuts"
+          className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 md:inline-flex"
+          onClick={onOpenShortcuts}
+          type="button"
+        >
+          <Keyboard aria-hidden="true" className="h-4 w-4" />
+        </button>
+      </Tooltip>
       <ThemeMenu />
-      <a
-        aria-label="Open Forge on GitHub"
-        className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:inline-flex"
-        href={projectLinks.repository}
-        rel="noreferrer"
-        target="_blank"
-      >
-        <Github aria-hidden="true" className="h-4 w-4" />
-      </a>
+      <Tooltip content="Open Forge on GitHub" side="bottom">
+        <a
+          aria-label="Open Forge on GitHub"
+          className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:inline-flex"
+          href={projectLinks.repository}
+          rel="noreferrer"
+          target="_blank"
+        >
+          <Github aria-hidden="true" className="h-4 w-4" />
+        </a>
+      </Tooltip>
     </div>
   );
 }
