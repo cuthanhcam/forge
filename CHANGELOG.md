@@ -7,6 +7,7 @@ development work and are not a claim that a tagged release has shipped.
 
 ### Added
 
+- Nine registry-selected skeleton layouts for all sixteen tools.
 - Visual startup/tool loading, safe module/render recovery and a non-blocking offline notice.
 - Custom unknown-route states and viewport-bottom footers on short information pages.
 

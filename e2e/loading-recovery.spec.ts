@@ -1,3 +1,4 @@
+import { toolRegistry } from "../src/core/registry/tool.registry";
 import { expect, test } from "@playwright/test";
 
 const entry = "**/src/app/main.tsx*";
@@ -64,7 +65,10 @@ test("lazy tools show skeletons that respect reduced motion and finish loading",
     await route.continue();
   });
   await page.goto("/tools/uuid", { waitUntil: "commit" });
-  const skeleton = page.getByRole("status", { name: "Loading workspace", exact: true });
+  const skeleton = page.getByRole("status", {
+    name: "Loading UUID Generator",
+    exact: true,
+  });
   await expect(skeleton).toBeVisible();
   await page.emulateMedia({ reducedMotion: "reduce" });
   await expect(page.locator("[data-loading-skeleton]")).toHaveCSS(
@@ -200,4 +204,81 @@ test("an application render failure has standalone recovery without exposing exc
     page.getByRole("button", { name: "Reload page", exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("contentinfo", { name: "Forge footer" })).toBeAttached();
+});
+
+test("every registered tool has an appropriate, responsive loading surface", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  const screenshots = new Set<string>();
+  const features = /\/src\/features\//;
+  for (const tool of toolRegistry.filter((item) => item.status === "available")) {
+    let release!: () => void;
+    const gate = new Promise<void>((resolve) => {
+      release = resolve;
+    });
+    await page.route(features, async (route) => {
+      await gate;
+      await route.continue();
+    });
+    try {
+      await page.goto(tool.route, { waitUntil: "commit" });
+      const skeleton = page.getByRole("status", {
+        name: `Loading ${tool.name}`,
+        exact: true,
+      });
+      await expect(skeleton).toBeVisible();
+      await expect(skeleton).toHaveAttribute("data-loading-layout", tool.loadingLayout);
+      expect(
+        await page
+          .getByRole("main")
+          .evaluate((node) => node.scrollWidth <= node.clientWidth),
+      ).toBe(true);
+      if (!screenshots.has(tool.loadingLayout)) {
+        await page.screenshot({
+          path: test.info().outputPath(`skeleton-${tool.loadingLayout}.png`),
+        });
+        screenshots.add(tool.loadingLayout);
+      }
+      release();
+      await expect(skeleton).toHaveCount(0);
+      await expect(
+        page.getByRole("heading", { name: "This page could not load", exact: true }),
+      ).toHaveCount(0);
+    } finally {
+      release();
+      await page.unroute(features);
+    }
+  }
+});
+
+test("startup handlers never reactivate against IDs inside preview content", async ({
+  page,
+}) => {
+  await page.clock.install();
+  await page.goto("/tools/markdown-preview");
+  await page
+    .getByRole("textbox", { name: "Markdown input" })
+    .fill(
+      '<div id="root"><div id="forge-startup" class="forge-boot"><p id="forge-startup-slow" hidden>Hidden preview content</p><h2 id="forge-startup-error">Preview heading</h2></div></div>',
+    );
+  const preview = page.getByRole("document", { name: "Rendered Markdown" });
+  const node = preview.locator("#forge-startup");
+  const hidden = node.locator("#forge-startup-slow");
+  await expect(node).toBeAttached();
+  await expect(hidden).toHaveAttribute("hidden", "");
+  await page.evaluate(() =>
+    window.dispatchEvent(
+      new ErrorEvent("error", {
+        error: new Error("synthetic startup-scope check"),
+        cancelable: true,
+      }),
+    ),
+  );
+  await expect(node).not.toHaveAttribute("data-failed", "true");
+  await page.clock.runFor(12_100);
+  await expect(hidden).toHaveAttribute("hidden", "");
+  await expect(
+    preview.getByRole("heading", { name: "Preview heading", exact: true }),
+  ).toBeAttached();
 });

@@ -12,14 +12,25 @@ reduced-motion preferences disable animation.
 
 The bootstrap markup is replaced when React mounts. Error messages and stacks
 are not displayed, persisted or sent to a reporting service. The startup handler
-ignores later errors once its markup is gone; React boundaries own app recovery.
+only accepts the original root-level startup node and its timer retains that node
+reference. Preview content with duplicate IDs cannot reactivate the startup
+controls. React boundaries own app recovery once the initial markup is gone.
 If the HTML request itself cannot reach the browser, Forge cannot replace the
 browser's own network error screen. No service worker or offline data cache has
 been introduced.
 
 ## Tool loading and render failures
 
-Suspense shows a layout-shaped skeleton while lazy tool modules load. Its status
+Suspense uses nine layouts for the sixteen tools: Markdown (with tab rail), HTML
+preview, Diff/options, structured data, JWT, generators, transformations, time
+conversion and Regex. Every tool selects a required loadingLayout in the registry;
+new tools must choose one. Shared bars, panels, controls and cards avoid duplicating
+a loader per feature. Preview skeletons use the same 640px container threshold as
+ResizablePanes; utility layouts follow their existing viewport breakpoints.
+
+These placeholders approximate the default layout; they do not read document
+content, generate fake results or reproduce every saved pane/tab preference.
+Suspense displays them only while lazy tool modules load. The status
 is named for assistive technology, decorative lines are hidden from it, and
 pulse animation respects reduced motion.
 

@@ -22,6 +22,7 @@ collection of unrelated websites.
 ## Development
 
 - [Contributing](../CONTRIBUTING.md)
+- [Adding a tool](adding-a-new-tool.md)
 - [Architecture](development/architecture.md)
 - [Theme and interaction colors](development/theme.md)
 - [Diff workbench](development/diff-workbench.md)
