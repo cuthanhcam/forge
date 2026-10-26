@@ -57,8 +57,8 @@ and SVG text labels. Executable HTML labels and diagram click callbacks are not
 enabled.
 
 Each Mermaid diagram has a compact Expand icon in its top-right corner. The
-expanded Diagram viewer occupies about 80% of the viewport and places zoom,
-Fit, Reset to 100% and Download SVG controls in the bottom-right corner. Zoom
+expanded Diagram viewer occupies about 85% of the viewport and places zoom,
+Fit, Reset to 100% and Download PNG/SVG controls in the bottom-right corner. Zoom
 buttons change scale by 10 percentage points. Drag to pan; wheel and two-finger
 pinch zoom in the expanded viewer. You can still scroll the document outside it.
 Inline Ctrl/Cmd+wheel zooms around the pointer; ordinary wheel and vertical touch
@@ -170,3 +170,8 @@ Create URL-friendly slugs from human text.
 ### Regex Tester
 
 Test regular expressions against sample input with match feedback.
+
+PNG diagram export renders the complete sanitized SVG locally against the current
+theme background, independent of zoom. Output is bounded to 8192 pixels per side
+and 16 million pixels total; very large diagrams are downscaled. SVG retains
+vector detail. Export failures show a message with the SVG alternative.

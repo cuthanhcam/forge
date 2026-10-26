@@ -9,8 +9,18 @@ import {
   type JSX,
 } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Download, Maximize, X, Minus, Plus, RotateCcw, LocateFixed } from "lucide-react";
+import {
+  Download,
+  ImageDown,
+  Maximize,
+  X,
+  Minus,
+  Plus,
+  RotateCcw,
+  LocateFixed,
+} from "lucide-react";
 import { Button } from "@/shared/ui/button";
+import { diagramToPng } from "./diagram-png.service";
 import { Tooltip } from "@/shared/ui/tooltip";
 import {
   clampDiagramScale,
@@ -36,7 +46,7 @@ export function MermaidDiagram({ svg, number }: MermaidDiagramProps): JSX.Elemen
             className="pointer-events-none fixed inset-0 z-40 bg-slate-950/40"
           />
         )}
-        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex h-[80dvh] w-[80vw] min-h-0 min-w-0 -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border border-border bg-white text-foreground shadow-xl">
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex h-[85dvh] w-[85vw] min-h-0 min-w-0 -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border border-border bg-white text-foreground shadow-xl">
           <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-2">
             <Dialog.Title className="text-sm font-semibold">Diagram</Dialog.Title>
             <Tooltip content="Close diagram" side="bottom">
@@ -75,6 +85,8 @@ function DiagramCanvas({
   const viewRef = useRef(view);
   const fitMode = useRef(true);
   const [dragging, setDragging] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<{
     view: DiagramView;
@@ -180,15 +192,32 @@ function DiagramCanvas({
     if (canvasRef.current?.hasPointerCapture(pointerId))
       canvasRef.current.releasePointerCapture(pointerId);
   };
-  const download = (): void => {
-    const url = URL.createObjectURL(
-      new Blob([artwork.svg], { type: "image/svg+xml;charset=utf-8" }),
-    );
+  const save = (blob: Blob, extension: string): void => {
+    const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = `forge-diagram-${number}.svg`;
+    anchor.download = `forge-diagram-${number}.${extension}`;
     anchor.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  };
+  const download = (): void =>
+    save(new Blob([artwork.svg], { type: "image/svg+xml;charset=utf-8" }), "svg");
+  const downloadPng = async (): Promise<void> => {
+    setExporting(true);
+    setExportError(null);
+    try {
+      const background = canvasRef.current
+        ? getComputedStyle(canvasRef.current).backgroundColor
+        : "#ffffff";
+      save(
+        await diagramToPng(artwork.svg, artwork.width, artwork.height, background),
+        "png",
+      );
+    } catch {
+      setExportError("PNG export failed. Try Download SVG instead.");
+    } finally {
+      setExporting(false);
+    }
   };
   const control = (
     label: string,
@@ -249,6 +278,14 @@ function DiagramCanvas({
             "Reset to 100%",
             <RotateCcw aria-hidden="true" className="h-4 w-4" />,
             () => center(1),
+          )}
+          {control(
+            exporting ? "Exporting PNG" : "Download PNG",
+            <ImageDown aria-hidden="true" className="h-4 w-4" />,
+            () => {
+              void downloadPng();
+            },
+            exporting,
           )}
           {control(
             "Download SVG",
@@ -391,6 +428,14 @@ function DiagramCanvas({
           dangerouslySetInnerHTML={{ __html: artwork.svg }}
         />
       </div>
+      {exportError && (
+        <p
+          role="alert"
+          className="absolute bottom-16 right-3 z-10 max-w-xs rounded-md border border-border bg-white p-3 text-xs text-foreground"
+        >
+          {exportError}
+        </p>
+      )}
       <span id={`diagram-help-${id}`} className="sr-only">
         Focus the diagram: arrows pan, plus/minus zoom by 10 percentage points, 0 fits, 1
         resets to 100%. Expand for full touch panning. Escape closes the expanded view.

@@ -68,8 +68,8 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
   const dialog = page.getByRole("dialog", { name: "Diagram", exact: true });
   await expect(dialog).toBeVisible();
   const dialogBox = (await dialog.boundingBox())!;
-  expect(dialogBox.width).toBeCloseTo(page.viewportSize()!.width * 0.8, 0);
-  expect(dialogBox.height).toBeCloseTo(page.viewportSize()!.height * 0.8, 0);
+  expect(dialogBox.width).toBeCloseTo(page.viewportSize()!.width * 0.85, 0);
+  expect(dialogBox.height).toBeCloseTo(page.viewportSize()!.height * 0.85, 0);
   const previewBox = (await preview.boundingBox())!;
   const oldScroll = await preview.evaluate((node) => node.scrollTop);
   await page.mouse.move(
@@ -112,6 +112,14 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
   expect(percent(await dialog.getByLabel("Diagram zoom").textContent())).toBeLessThan(
     125,
   );
+  const pngPromise = page.waitForEvent("download");
+  await dialog.getByRole("button", { name: "Download PNG", exact: true }).click();
+  const png = await pngPromise;
+  expect(png.suggestedFilename()).toBe("forge-diagram-1.png");
+  const pngBytes = await readFile(await png.path());
+  expect([...pngBytes.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
+  expect(pngBytes.readUInt32BE(16)).toBeGreaterThan(0);
+  expect(pngBytes.readUInt32BE(20)).toBeGreaterThan(0);
   const downloadPromise = page.waitForEvent("download");
   await dialog.getByRole("button", { name: "Download SVG", exact: true }).click();
   const download = await downloadPromise;

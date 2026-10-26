@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { ChevronDown, ListTree } from "lucide-react";
+import { Tooltip } from "@/shared/ui/tooltip";
 import { cn } from "@/shared/lib/cn";
 import type { MarkdownHeading } from "./markdown-outline.service";
 
@@ -76,21 +77,22 @@ export function MarkdownOutline({
               <ul className="m-0 list-none space-y-0.5 p-1">
                 {headings.map((heading) => (
                   <li key={heading.id}>
-                    <button
-                      type="button"
-                      title={heading.title}
-                      aria-current={activeId === heading.id ? "location" : undefined}
-                      onClick={() => onNavigate(heading.id)}
-                      className={cn(
-                        "flex min-h-8 w-full items-center rounded-md py-1 pr-2 text-left text-xs leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
-                        activeId === heading.id
-                          ? "bg-accent-50 font-medium text-accent-700"
-                          : "text-slate-500 hover:bg-slate-100 hover:text-foreground",
-                      )}
-                      style={{ paddingLeft: 8 + (heading.level - base) * 8 }}
-                    >
-                      <span className="min-w-0 truncate">{heading.title}</span>
-                    </button>
+                    <Tooltip content={heading.title}>
+                      <button
+                        type="button"
+                        aria-current={activeId === heading.id ? "location" : undefined}
+                        onClick={() => onNavigate(heading.id)}
+                        className={cn(
+                          "flex min-h-8 w-full items-center rounded-md transition-colors duration-150 motion-reduce:transition-none py-1 pr-2 text-left text-xs leading-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
+                          activeId === heading.id
+                            ? "bg-accent-50 font-medium text-accent-700 hover:bg-accent-100"
+                            : "text-slate-500 hover:bg-slate-100 hover:text-foreground",
+                        )}
+                        style={{ paddingLeft: 8 + (heading.level - base) * 8 }}
+                      >
+                        <span className="min-w-0 truncate">{heading.title}</span>
+                      </button>
+                    </Tooltip>
                   </li>
                 ))}
               </ul>

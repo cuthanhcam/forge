@@ -19,7 +19,7 @@ Ctrl/Cmd+wheel inline or wheel inside the expanded viewer. Inline touch keeps
 vertical document scrolling; expanded touch supports unrestricted pan/pinch.
 
 Inline controls use one Expand icon in the top-right corner. The expanded viewer
-is a non-modal Radix Dialog titled Diagram, sized to 80% of the viewport. Its
+is a non-modal Radix Dialog titled Diagram, sized to 85% of the viewport. Its
 compact bottom-right toolbar uses a LocateFixed icon for Fit, distinct from
 Expand. Buttons and keyboard +/- change zoom by 10 percentage points; wheel
 changes are capped at 10 points per event. Outside document scrolling remains
@@ -82,3 +82,8 @@ opens Split when needed and keeps the selected heading anchored while diagrams
 or images finish rendering. User scroll/pointer/keyboard input releases that
 anchor. Scroll tracking is frame-scheduled and uses cached nodes; theme DOM
 replacement refreshes the cache. Arrow/Home/End keys navigate outline controls.
+
+PNG diagram export renders the complete sanitized SVG locally against the current
+theme background, independent of zoom. Output is bounded to 8192 pixels per side
+and 16 million pixels total; very large diagrams are downscaled. SVG retains
+vector detail. Export failures show a message with the SVG alternative.
