@@ -138,3 +138,110 @@ test("help menu uses local routes while header shortcuts keep the dialog", async
     await expect(headerButton).toBeFocused();
   }
 });
+
+test("informational footers stay in their scroll owner and out of tool workspaces", async ({
+  page,
+}) => {
+  for (const route of [
+    "/",
+    "/settings",
+    "/docs",
+    "/support/ask",
+    "/privacy",
+    "/terms",
+    "/missing-page",
+  ]) {
+    await page.goto(route);
+    const footer = page.getByRole("contentinfo", { name: "Forge footer" });
+    await expect(footer).toHaveCount(1);
+    await footer.evaluate((node) => {
+      let owner = node.parentElement;
+      while (owner && !/auto|scroll/.test(getComputedStyle(owner).overflowY))
+        owner = owner.parentElement;
+      if (owner) owner.scrollTop = owner.scrollHeight;
+    });
+    await expect(footer).toBeInViewport();
+    const contacts = footer.getByRole("navigation", { name: "Maintainer contacts" });
+    await expect(contacts.getByRole("link")).toHaveCount(5);
+    await expect(
+      contacts.getByRole("link", { name: "GitHub profile", exact: true }),
+    ).toHaveAttribute("href", "https://github.com/cuthanhcam");
+    await expect(
+      contacts.getByRole("link", { name: "LinkedIn", exact: true }),
+    ).toHaveAttribute("href", "https://www.linkedin.com/in/cuthanhcam");
+    await expect(
+      contacts.getByRole("link", { name: "Email maintainer", exact: true }),
+    ).toHaveAttribute("href", "mailto:cuthanhcam04@gmail.com");
+    await expect(
+      contacts.getByRole("link", { name: "Facebook", exact: true }),
+    ).toHaveAttribute("href", "https://www.facebook.com/cuthanhcam");
+    await expect(
+      contacts.getByRole("link", { name: "Instagram", exact: true }),
+    ).toHaveAttribute("href", "https://instagram.com/cuthanhcam");
+    expect(
+      await page
+        .locator("header")
+        .first()
+        .evaluate((node) => node.getBoundingClientRect().top),
+    ).toBe(0);
+    expect(
+      await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth),
+    ).toBe(true);
+  }
+  for (const route of [
+    "markdown-preview",
+    "html-preview",
+    "diff-checker",
+    "jwt-decoder",
+  ]) {
+    await page.goto(`/tools/${route}`);
+    await expect(page.getByRole("contentinfo", { name: "Forge footer" })).toHaveCount(0);
+  }
+});
+
+test("policy pages explain actual data boundaries and docs selection stays inside its scroll area", async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto("/privacy");
+  const content = page.getByRole("article");
+  await expect(
+    content.getByRole("heading", { name: "Storage and retention", exact: true }),
+  ).toBeVisible();
+  await expect(
+    content.getByText(/JWT tokens, verification secrets and generated passwords/),
+  ).toBeAttached();
+  await expect(
+    content.getByRole("heading", {
+      name: "Preview documents and network requests",
+      exact: true,
+    }),
+  ).toBeAttached();
+  await page.goto("/terms");
+  await expect(
+    content.getByRole("heading", {
+      name: "Tokens and cryptographic checks",
+      exact: true,
+    }),
+  ).toBeAttached();
+  await expect(
+    content.getByText(/JWT decoding does not authenticate a token/),
+  ).toBeAttached();
+  await expect(
+    content.getByRole("link", { name: "MIT license", exact: true }),
+  ).toHaveAttribute("href", "https://github.com/cuthanhcam/forge/blob/main/LICENSE");
+  if (!isMobile) {
+    await page.goto("/docs");
+    const navigation = page.getByRole("navigation", { name: "Documentation navigation" });
+    for (const name of [/Product docs/, /Guides/]) {
+      const link = navigation.getByRole("link", { name });
+      await link.click();
+      await expect(link).toHaveAttribute("aria-current", "page");
+      const linkBox = (await link.boundingBox())!;
+      const navBox = (await navigation.boundingBox())!;
+      expect(linkBox.x).toBeGreaterThan(navBox.x);
+      expect(linkBox.x + linkBox.width).toBeLessThan(navBox.x + navBox.width);
+    }
+    await page.screenshot({ path: test.info().outputPath("docs-navigation.png") });
+  }
+});

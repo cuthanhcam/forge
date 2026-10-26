@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import { HelperPageHeader } from "@/shared/components/HelperPageHeader";
 import type { JSX, ReactNode } from "react";
 
@@ -21,6 +22,7 @@ export function MainLayout({
           <HelperPageHeader eyebrow={eyebrow} title={title} subtitle={subtitle} />
         </div>
         {children}
+        <SiteFooter />
       </div>
     </main>
   );

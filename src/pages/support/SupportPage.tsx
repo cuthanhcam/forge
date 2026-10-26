@@ -1,3 +1,4 @@
+import { SiteFooter } from "@/shared/components/SiteFooter";
 import { projectLinks } from "@/core/config/project-links";
 import { HelperPageHeader } from "@/shared/components/HelperPageHeader";
 import type { JSX } from "react";
@@ -238,6 +239,7 @@ export function SupportPage(): JSX.Element {
             </section>
           </div>
         </section>
+        <SiteFooter />
       </div>
     </main>
   );
