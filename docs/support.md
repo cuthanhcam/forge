@@ -12,7 +12,7 @@ to `cuthanhcam04@gmail.com`.
 Use GitHub Issues for bugs, broken UI states, incorrect output, and feature
 requests:
 
-[https://github.com/orcace/forge/issues](https://github.com/orcace/forge/issues)
+[https://github.com/cuthanhcam/forge/issues](https://github.com/cuthanhcam/forge/issues)
 
 When reporting a bug, include:
 

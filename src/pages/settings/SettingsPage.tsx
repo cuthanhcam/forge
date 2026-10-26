@@ -1,3 +1,6 @@
+import { projectLinks } from "@/core/config/project-links";
+import { useThemeStore } from "@/core/theme/theme.store";
+import { themeOptions } from "@/core/theme/theme.options";
 import type { JSX } from "react";
 import {
   BookOpen,
@@ -19,6 +22,8 @@ import { Button } from "@/shared/ui/button";
 const persistedTools = toolRegistry.filter((tool) => tool.persist);
 
 export function SettingsPage(): JSX.Element {
+  const mode = useThemeStore((state) => state.mode);
+  const setMode = useThemeStore((state) => state.setMode);
   const activeToolId = useWorkspaceStore((state) => state.activeToolId);
   const favoriteToolIds = useWorkspaceStore((state) => state.favoriteToolIds);
   const recentToolIds = useWorkspaceStore((state) => state.recentToolIds);
@@ -29,7 +34,7 @@ export function SettingsPage(): JSX.Element {
   return (
     <MainLayout
       eyebrow="Workspace"
-      subtitle="Keep Forge's application-level preferences small, visible, and useful. Theme lives in the header so appearance stays one click away from every page."
+      subtitle="Make the workspace yours. Choose an appearance, adjust navigation, and understand what stays in this browser."
       title="Settings"
     >
       <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
@@ -71,12 +76,37 @@ export function SettingsPage(): JSX.Element {
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-base font-semibold text-slate-950">Appearance</h2>
-                <Badge>Header menu</Badge>
+                <Badge>
+                  {mode === "system"
+                    ? "Follow device"
+                    : mode === "dark"
+                      ? "Dark"
+                      : "Light"}
+                </Badge>
               </div>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Light, Dark, and System are controlled from the header. That keeps
-                appearance available across tools without burying it inside Settings.
+                Choose Light, Dark, or follow your device. This preference is shared with
+                the header and remembered in this browser.
               </p>
+              <fieldset className="mt-4 flex flex-wrap gap-2">
+                <legend className="sr-only">Appearance theme</legend>
+                {themeOptions.map(({ mode: option, label, icon: Icon }) => (
+                  <label key={option} className="relative cursor-pointer">
+                    <input
+                      className="peer absolute inset-0 h-full w-full cursor-pointer opacity-0"
+                      type="radio"
+                      name="appearance"
+                      value={option}
+                      checked={mode === option}
+                      onChange={() => setMode(option)}
+                    />
+                    <span className="inline-flex items-center gap-2 rounded-md border border-border bg-white px-3 py-2 text-sm text-foreground transition-colors hover:bg-slate-100 peer-checked:border-accent-600 peer-checked:bg-accent-50 peer-checked:text-accent-700 peer-focus-visible:ring-2 peer-focus-visible:ring-accent-600 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-background">
+                      <Icon aria-hidden="true" className="h-4 w-4" />
+                      {label}
+                    </span>
+                  </label>
+                ))}
+              </fieldset>
             </div>
           </div>
         </section>
@@ -89,8 +119,10 @@ export function SettingsPage(): JSX.Element {
             <div className="min-w-0 flex-1">
               <h2 className="text-base font-semibold text-slate-950">Local workspace</h2>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                Forge keeps tool drafts and UI preferences in this browser. It does not
-                require an account or send workspace state to a server.
+                Markdown, HTML, Diff, JSON and Regex drafts can be saved in this browser.
+                JWT tokens, verification secrets and generated passwords are not saved by
+                Forge. Browser storage is readable by people or extensions with access to
+                your profile; it is not a secure vault.
               </p>
               <div className="mt-4 grid gap-3 sm:grid-cols-3">
                 <StatCard
@@ -109,6 +141,18 @@ export function SettingsPage(): JSX.Element {
                   value={persistedTools.length.toString()}
                 />
               </div>
+              <p className="mt-3 text-xs leading-5 text-muted-foreground">
+                To remove drafts and preferences, clear this site&apos;s data in your
+                browser settings. Export important drafts first. Clearing a tool input may
+                not remove previously saved browser data.{" "}
+                <a
+                  className="text-accent-700 underline underline-offset-4"
+                  href="/privacy"
+                >
+                  Read the privacy model
+                </a>
+                .
+              </p>
               <p className="mt-3 text-xs font-medium text-slate-500">
                 Recent tools tracked: {recentToolIds.length}
               </p>
@@ -139,12 +183,12 @@ export function SettingsPage(): JSX.Element {
                 </a>
                 <a
                   className="inline-flex h-8 items-center justify-center gap-2 rounded-md border border-border bg-white px-3 text-xs font-medium text-foreground shadow-sm transition hover:border-accent-200 hover:bg-accent-50"
-                  href="https://github.com/orcace/forge/issues"
+                  href={projectLinks.reportIssue}
                   rel="noreferrer"
                   target="_blank"
                 >
                   <ExternalLink aria-hidden="true" className="h-4 w-4" />
-                  GitHub issues
+                  Report an issue
                 </a>
               </div>
             </div>

@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import { Github, Keyboard, Search } from "lucide-react";
+import { projectLinks } from "@/core/config/project-links";
 import { shortcuts } from "@/core/shortcuts/shortcuts";
 import { Button } from "@/shared/ui/button";
 import { ThemeMenu } from "./ThemeMenu";
@@ -44,9 +45,9 @@ export function HeaderActions({
       </button>
       <ThemeMenu />
       <a
-        aria-label="Open GitHub profile"
+        aria-label="Open Forge on GitHub"
         className="hidden h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-950 sm:inline-flex"
-        href="https://github.com/cuthanhcam"
+        href={projectLinks.repository}
         rel="noreferrer"
         target="_blank"
       >

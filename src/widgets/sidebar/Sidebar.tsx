@@ -1,3 +1,4 @@
+import { projectLinks } from "@/core/config/project-links";
 import type { JSX } from "react";
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router";
@@ -292,7 +293,7 @@ export function Sidebar({
                   icon={AlertTriangle}
                   label="Report an issue"
                   onSelect={() => setHelpOpen(false)}
-                  href="https://github.com/orcace/forge/issues"
+                  href={projectLinks.reportIssue}
                 />
                 <HelpMenuItem
                   icon={HeartHandshake}
