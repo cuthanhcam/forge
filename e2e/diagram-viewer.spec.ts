@@ -34,13 +34,11 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
     node.scrollTop = 0;
   });
   const output = diagram.getByLabel("Diagram zoom");
-  const initial = percent(await output.textContent());
-  await diagram.getByRole("button", { name: "Zoom in", exact: true }).click();
-  await expect
-    .poll(async () => percent(await output.textContent()))
-    .toBeGreaterThan(initial);
-  await diagram.getByRole("button", { name: "Reset to 100%", exact: true }).click();
+  await canvas.focus();
+  await canvas.press("1");
   await expect(output).toHaveText("100%");
+  await canvas.press("+");
+  await expect(output).toHaveText("110%");
   const art = diagram.locator("[data-diagram-artwork]");
   const before = await art.getAttribute("style");
   const box = (await canvas.boundingBox())!;
@@ -67,7 +65,21 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
   await expect.poll(() => art.getAttribute("style")).not.toBe(before);
   const expand = diagram.getByRole("button", { name: "Expand diagram", exact: true });
   await expand.click();
-  const dialog = page.getByRole("dialog", { name: "Mermaid diagram 1", exact: true });
+  const dialog = page.getByRole("dialog", { name: "Diagram", exact: true });
+  await expect(dialog).toBeVisible();
+  const dialogBox = (await dialog.boundingBox())!;
+  expect(dialogBox.width).toBeCloseTo(page.viewportSize()!.width * 0.8, 0);
+  expect(dialogBox.height).toBeCloseTo(page.viewportSize()!.height * 0.8, 0);
+  const previewBox = (await preview.boundingBox())!;
+  const oldScroll = await preview.evaluate((node) => node.scrollTop);
+  await page.mouse.move(
+    previewBox.x + previewBox.width - 3,
+    previewBox.y + previewBox.height / 2,
+  );
+  await page.mouse.wheel(0, 200);
+  await expect
+    .poll(() => preview.evaluate((node) => node.scrollTop))
+    .toBeGreaterThan(oldScroll);
   await expect(dialog).toBeVisible();
   const ids = await page
     .locator("[data-diagram-artwork] [id]")
@@ -75,9 +87,11 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
   expect(new Set(ids).size).toBe(ids.length);
   await dialog.getByRole("button", { name: "Reset to 100%", exact: true }).click();
   const stage = dialog.getByRole("region", { name: "Interactive Mermaid diagram" });
+  await dialog.getByRole("button", { name: "Zoom in", exact: true }).click();
+  await expect(dialog.getByLabel("Diagram zoom")).toHaveText("110%");
   await stage.focus();
   await stage.press("+");
-  await expect(dialog.getByLabel("Diagram zoom")).toHaveText("125%");
+  await expect(dialog.getByLabel("Diagram zoom")).toHaveText("120%");
   const transformed = await dialog
     .locator("[data-diagram-artwork]")
     .getAttribute("style");
@@ -93,7 +107,7 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
         requestAnimationFrame(() => requestAnimationFrame(resolve)),
       ),
   );
-  await expect(dialog.getByLabel("Diagram zoom")).toHaveText("125%");
+  await expect(dialog.getByLabel("Diagram zoom")).toHaveText("120%");
   await stage.press("0");
   expect(percent(await dialog.getByLabel("Diagram zoom").textContent())).toBeLessThan(
     125,
@@ -116,7 +130,7 @@ test("diagram controls zoom/pan without trapping document wheel, then expand wit
   await stage.press("Escape");
   await expect(dialog).toHaveCount(0);
   await expect(expand).toBeFocused();
-  await expect(output).toHaveText("100%");
+  await expect(output).toHaveText("110%");
   await page
     .getByRole("textbox", { name: "Markdown input" })
     .fill("```mermaid\ninvalid diagram\n```");

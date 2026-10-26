@@ -9,7 +9,7 @@ import {
   type JSX,
 } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { Download, Maximize, Minimize, Minus, Plus, RotateCcw, Scan } from "lucide-react";
+import { Download, Maximize, X, Minus, Plus, RotateCcw, LocateFixed } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Tooltip } from "@/shared/ui/tooltip";
 import {
@@ -25,18 +25,36 @@ interface MermaidDiagramProps {
 }
 
 export function MermaidDiagram({ svg, number }: MermaidDiagramProps): JSX.Element {
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog.Root>
+    <Dialog.Root modal={false} open={open} onOpenChange={setOpen}>
       <DiagramCanvas svg={svg} expanded={false} number={number} />
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 z-40 bg-slate-950/50 backdrop-blur-sm" />
-        <Dialog.Content className="fixed inset-2 z-50 flex min-h-0 min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-white text-foreground shadow-xl sm:inset-4">
-          <Dialog.Title className="shrink-0 px-4 pt-3 text-sm font-semibold">
-            Mermaid diagram {number}
-          </Dialog.Title>
+        {open && (
+          <div
+            aria-hidden="true"
+            className="pointer-events-none fixed inset-0 z-40 bg-slate-950/40"
+          />
+        )}
+        <Dialog.Content className="fixed left-1/2 top-1/2 z-50 flex h-[80dvh] w-[80vw] min-h-0 min-w-0 -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border border-border bg-white text-foreground shadow-xl">
+          <div className="flex shrink-0 items-center justify-between border-b border-border px-4 py-2">
+            <Dialog.Title className="text-sm font-semibold">Diagram</Dialog.Title>
+            <Tooltip content="Close diagram" side="bottom">
+              <Dialog.Close asChild>
+                <Button
+                  aria-label="Collapse diagram"
+                  className="h-8 w-8"
+                  size="icon"
+                  variant="ghost"
+                >
+                  <X aria-hidden="true" className="h-4 w-4" />
+                </Button>
+              </Dialog.Close>
+            </Tooltip>
+          </div>
           <Dialog.Description className="sr-only">
-            Zoom, drag to pan, or use arrow keys in the diagram. Escape closes the
-            expanded view.
+            Zoom and pan the diagram. Escape closes this view. You can scroll the document
+            outside this window.
           </Dialog.Description>
           <DiagramCanvas svg={svg} expanded number={number} />
         </Dialog.Content>
@@ -89,21 +107,25 @@ function DiagramCanvas({
       clampDiagramScale(
         Math.min(
           1,
-          (canvas.clientWidth - 32) / artwork.width,
-          (canvas.clientHeight - 32) / artwork.height,
+          (canvas.clientWidth - 64) / artwork.width,
+          (canvas.clientHeight - 112) / artwork.height,
         ),
       ),
     );
     fitMode.current = true;
   }, [artwork.width, artwork.height, center]);
-  const zoom = (factor: number): void => {
+  const zoom = (delta: number): void => {
     const canvas = canvasRef.current;
     if (canvas)
       apply(
-        zoomDiagram(viewRef.current, viewRef.current.scale * factor, {
-          x: canvas.clientWidth / 2,
-          y: canvas.clientHeight / 2,
-        }),
+        zoomDiagram(
+          viewRef.current,
+          Math.round((viewRef.current.scale + delta) * 100) / 100,
+          {
+            x: canvas.clientWidth / 2,
+            y: canvas.clientHeight / 2,
+          },
+        ),
       );
   };
   useLayoutEffect(() => {
@@ -143,7 +165,7 @@ function DiagramCanvas({
       apply(
         zoomDiagram(
           viewRef.current,
-          viewRef.current.scale * Math.exp(-Math.max(-200, Math.min(200, delta)) * 0.003),
+          viewRef.current.scale - Math.max(-100, Math.min(100, delta)) / 1000,
           { x: event.clientX - rect.left, y: event.clientY - rect.top },
         ),
       );
@@ -189,71 +211,70 @@ function DiagramCanvas({
   );
   return (
     <div
-      className={expanded ? "flex min-h-0 flex-1 flex-col" : "min-w-0"}
+      className={expanded ? "relative flex min-h-0 flex-1 flex-col" : "relative min-w-0"}
       role="group"
-      aria-label={`Mermaid diagram ${number}`}
+      aria-label={`Diagram ${number}`}
     >
-      <div
-        data-html2canvas-ignore="true"
-        className="flex shrink-0 flex-wrap items-center justify-center gap-1 border-b border-border bg-white p-1.5"
-        role="toolbar"
-        aria-label={expanded ? "Expanded diagram controls" : "Diagram controls"}
-      >
-        {control(
-          "Zoom out",
-          <Minus aria-hidden="true" className="h-4 w-4" />,
-          () => zoom(1 / 1.25),
-          view.scale <= 0.01,
-        )}
-        <output
-          className="min-w-12 text-center font-mono text-xs tabular-nums text-muted-foreground"
-          aria-label="Diagram zoom"
+      {expanded ? (
+        <div
+          data-html2canvas-ignore="true"
+          className="absolute bottom-3 right-3 z-10 flex max-w-[calc(100%-1.5rem)] flex-wrap items-center justify-center gap-1 rounded-lg border border-border bg-white/90 p-1.5 shadow-sm backdrop-blur"
+          role="toolbar"
+          aria-label="Diagram controls"
         >
-          {Math.round(view.scale * 100)}%
-        </output>
-        {control(
-          "Zoom in",
-          <Plus aria-hidden="true" className="h-4 w-4" />,
-          () => zoom(1.25),
-          view.scale >= 8,
-        )}
-        {control("Fit diagram", <Scan aria-hidden="true" className="h-4 w-4" />, fit)}
-        {control(
-          "Reset to 100%",
-          <RotateCcw aria-hidden="true" className="h-4 w-4" />,
-          () => center(1),
-        )}
-        {control(
-          "Download SVG",
-          <Download aria-hidden="true" className="h-4 w-4" />,
-          download,
-        )}
-        <Tooltip content={expanded ? "Collapse diagram" : "Expand diagram"} side="bottom">
-          {expanded ? (
-            <Dialog.Close asChild>
-              <Button
-                aria-label="Collapse diagram"
-                className="h-8 w-8"
-                size="icon"
-                variant="ghost"
-              >
-                <Minimize aria-hidden="true" className="h-4 w-4" />
-              </Button>
-            </Dialog.Close>
-          ) : (
+          {control(
+            "Zoom out",
+            <Minus aria-hidden="true" className="h-4 w-4" />,
+            () => zoom(-0.1),
+            view.scale <= 0.01,
+          )}
+          <output
+            className="min-w-12 text-center font-mono text-xs tabular-nums text-muted-foreground"
+            aria-label="Diagram zoom"
+          >
+            {Math.round(view.scale * 100)}%
+          </output>
+          {control(
+            "Zoom in",
+            <Plus aria-hidden="true" className="h-4 w-4" />,
+            () => zoom(0.1),
+            view.scale >= 8,
+          )}
+          {control(
+            "Fit diagram",
+            <LocateFixed aria-hidden="true" className="h-4 w-4" />,
+            fit,
+          )}
+          {control(
+            "Reset to 100%",
+            <RotateCcw aria-hidden="true" className="h-4 w-4" />,
+            () => center(1),
+          )}
+          {control(
+            "Download SVG",
+            <Download aria-hidden="true" className="h-4 w-4" />,
+            download,
+          )}
+        </div>
+      ) : (
+        <div data-html2canvas-ignore="true" className="absolute right-2 top-2 z-10">
+          <Tooltip content="Expand diagram" side="bottom">
             <Dialog.Trigger asChild>
               <Button
                 aria-label="Expand diagram"
-                className="h-8 w-8"
+                className="h-8 w-8 bg-white/90"
                 size="icon"
                 variant="ghost"
               >
                 <Maximize aria-hidden="true" className="h-4 w-4" />
               </Button>
             </Dialog.Trigger>
-          )}
-        </Tooltip>
-      </div>
+          </Tooltip>
+          <output className="sr-only" aria-label="Diagram zoom">
+            {Math.round(view.scale * 100)}%
+          </output>
+        </div>
+      )}
       <div
         ref={canvasRef}
         className={`relative min-h-0 min-w-0 overflow-hidden bg-background outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600 ${expanded ? "flex-1" : "h-[clamp(220px,40dvh,400px)]"}`}
@@ -291,7 +312,7 @@ function DiagramCanvas({
             event.preventDefault();
             if (event.key === "0") fit();
             else if (event.key === "1") center(1);
-            else zoom(event.key === "-" ? 1 / 1.25 : 1.25);
+            else zoom(event.key === "-" ? -0.1 : 0.1);
           }
         }}
         onPointerDown={(event) => {
@@ -370,18 +391,10 @@ function DiagramCanvas({
           dangerouslySetInnerHTML={{ __html: artwork.svg }}
         />
       </div>
-      <div
-        id={`diagram-help-${id}`}
-        data-html2canvas-ignore="true"
-        className="shrink-0 px-3 py-1.5 text-center text-[11px] leading-4 text-muted-foreground"
-      >
-        {expanded
-          ? "Scroll to zoom. Drag to pan."
-          : "Ctrl/Cmd + wheel to zoom. Drag to pan."}{" "}
-        <span className="sr-only">
-          Focus the diagram: arrows pan, plus/minus zoom, 0 fits, 1 resets to 100%.
-        </span>
-      </div>
+      <span id={`diagram-help-${id}`} className="sr-only">
+        Focus the diagram: arrows pan, plus/minus zoom by 10 percentage points, 0 fits, 1
+        resets to 100%. Expand for full touch panning. Escape closes the expanded view.
+      </span>
     </div>
   );
 }
