@@ -45,7 +45,7 @@ export function DocsPage(): JSX.Element {
             <p className="mb-2 px-2 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
               Documentation
             </p>
-            <nav className="space-y-1" aria-label="Documentation navigation">
+            <nav className="space-y-1 p-1" aria-label="Documentation navigation">
               {docPages.map((doc) => {
                 const Icon = docIcons[doc.id] ?? BookOpen;
 
@@ -53,9 +53,9 @@ export function DocsPage(): JSX.Element {
                   <NavLink
                     className={({ isActive }) =>
                       cn(
-                        "flex items-start gap-2 rounded-md px-2 py-2 text-[13px] font-semibold transition",
+                        "flex items-start gap-2 rounded-md px-2 py-2 text-[13px] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-600",
                         isActive || (!docId && doc.id === "overview")
-                          ? "bg-accent-50 text-accent-700 ring-1 ring-accent-100"
+                          ? "bg-accent-50 text-accent-700 ring-1 ring-inset ring-accent-100"
                           : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
                       )
                     }
@@ -128,7 +128,7 @@ export function DocsPage(): JSX.Element {
           </div>
         </section>
 
-        <aside className="hidden min-h-0 border-l border-slate-200 pl-4 pt-5 xl:block">
+        <aside className="scrollbar-forge hidden min-h-0 overflow-y-auto border-l border-slate-200 pl-4 pt-5 xl:block">
           <div className="sticky top-5">
             <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.08em] text-slate-400">
               On this page

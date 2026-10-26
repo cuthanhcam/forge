@@ -979,15 +979,13 @@ body {
   }
 }
 
-/* A static drafting grid and the Forge mark give the hero identity without
-   adding moving decoration or competing with the tool directory below. */
+/* A static drafting grid adds texture without competing with the tool directory. */
 .forge-home-signature {
   position: relative;
   isolation: isolate;
 }
 
-.forge-home-signature::before,
-.forge-home-signature::after {
+.forge-home-signature::before {
   content: "";
   position: absolute;
   z-index: -1;
@@ -1003,29 +1001,12 @@ body {
   mask-image: radial-gradient(ellipse at 84% 44%, #000 5%, transparent 70%);
 }
 
-.forge-home-signature::after {
-  width: clamp(160px, 34vw, 460px);
-  aspect-ratio: 1;
-  right: 0;
-  top: 19%;
-  background: var(--accent-solid);
-  opacity: 0.035;
-  mask: url("/forge-black.svg") center / contain no-repeat;
-  transform: rotate(-8deg);
-}
-
 .dark .forge-home-signature::before {
   opacity: 0.65;
 }
 
-.dark .forge-home-signature::after {
-  background: var(--accent-400);
-  opacity: 0.04;
-}
-
 @media (forced-colors: active) {
-  .forge-home-signature::before,
-  .forge-home-signature::after {
+  .forge-home-signature::before {
     display: none;
   }
 }
