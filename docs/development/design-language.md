@@ -114,17 +114,17 @@ main. Keep [the tool audit](tool-ux-audit.md) and this plan updated as tasks lan
 See [range control behavior](range-controls.md) for the implemented scales,
 keyboard rules and native-input constraints.
 
-## Informational footer proposal
+## Informational footer
 
-Use one shared footer on Home, Docs, Support, Settings, Privacy, Terms and the
-not-found page. It lives at the end of each page's own scroll owner, never fixed
-above tool editors. Docs keeps it in the reader column so the document outline
-and navigation remain independently reachable.
+Use one minimal footer on Home, Docs, Support, Settings, Privacy, Terms and the
+not-found page. Its content width matches the shared max-w-7xl page container,
+including Docs and Home. It scrolls with the page rather than staying fixed.
+Docs uses one page scroll owner with sticky, independently scrollable sidebars;
+the footer spans the full content grid and changing document resets reading to top.
 
-The project-first treatment uses a quiet top divider, copyright/maintainer name,
-short OSS description, five accessible contact icons and local information links.
-GitHub, LinkedIn and email appear first; Facebook and Instagram follow. Keep
-icons monochrome, with theme-aware hover/focus and tooltips. External links use
-noopener/noreferrer and no embedded social feeds. Narrow layouts wrap naturally.
-This is the initial reviewable proposal; avoid a large marketing footer in the
-workbench and do not add it to registered tool routes.
+The left side shows only copyright/name and Vietnam / Software Engineer. The
+right side has GitHub, LinkedIn, email, Facebook and Instagram icons, with
+accessible names, theme-aware hover/focus, tooltips and safe external links.
+On narrow screens the contact row wraps and remains right-aligned. Do not add
+extra footer navigation, marketing copy or social embeds. Registered tool
+workspaces retain their full editor area without a site footer.

@@ -1,6 +1,5 @@
 import type { JSX } from "react";
 import { Facebook, Github, Instagram, Linkedin, Mail } from "lucide-react";
-import { Link } from "react-router";
 import { projectLinks } from "@/core/config/project-links";
 import { Tooltip } from "@/shared/ui/tooltip";
 
@@ -18,19 +17,16 @@ export function SiteFooter(): JSX.Element {
     <footer
       role="contentinfo"
       aria-label="Forge footer"
-      className="mt-10 border-t border-border pb-2 pt-6 text-xs leading-5 text-muted-foreground"
+      className="mt-10 border-t border-border pb-2 pt-6 text-sm leading-6 text-muted-foreground"
     >
-      <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-x-8 gap-y-4">
         <div className="space-y-1">
-          <p>
-            &copy; {new Date().getFullYear()} cuthanhcam <span aria-hidden="true">·</span>{" "}
-            Forge
-          </p>
-          <p>Independent, open-source developer tools.</p>
+          <p>&copy; {new Date().getFullYear()} cuthanhcam</p>
+          <p>Vietnam &middot; Software Engineer</p>
         </div>
         <nav
           aria-label="Maintainer contacts"
-          className="flex flex-wrap items-center gap-1"
+          className="ml-auto flex flex-wrap items-center gap-1"
         >
           {contacts.map(({ label, href, icon: Icon }) => (
             <Tooltip key={label} content={label} side="top">
@@ -47,22 +43,6 @@ export function SiteFooter(): JSX.Element {
           ))}
         </nav>
       </div>
-      <nav aria-label="Forge information" className="mt-4 flex flex-wrap gap-x-4 gap-y-2">
-        {[
-          { to: "/docs", label: "Documentation" },
-          { to: "/support/ask", label: "Support" },
-          { to: "/privacy", label: "Privacy" },
-          { to: "/terms", label: "Terms" },
-        ].map(({ to, label }) => (
-          <Link
-            key={to}
-            to={to}
-            className="rounded underline-offset-4 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-          >
-            {label}
-          </Link>
-        ))}
-      </nav>
     </footer>
   );
 }

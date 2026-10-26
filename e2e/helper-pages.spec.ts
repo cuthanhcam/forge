@@ -154,6 +154,28 @@ test("informational footers stay in their scroll owner and out of tool workspace
     await page.goto(route);
     const footer = page.getByRole("contentinfo", { name: "Forge footer" });
     await expect(footer).toHaveCount(1);
+    await expect(
+      footer.getByText(`© ${new Date().getFullYear()} cuthanhcam`, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      footer.getByText("Vietnam · Software Engineer", { exact: true }),
+    ).toBeVisible();
+    await expect(footer.getByRole("link")).toHaveCount(5);
+    const footerWidth = await footer.evaluate((node) =>
+      Math.round(node.getBoundingClientRect().width),
+    );
+    const mainWidth = await page.getByRole("main").evaluate((node) => {
+      const style = getComputedStyle(node);
+      return Math.round(
+        Math.min(
+          1280,
+          node.clientWidth -
+            parseFloat(style.paddingLeft) -
+            parseFloat(style.paddingRight),
+        ),
+      );
+    });
+    expect(footerWidth).toBe(mainWidth);
     await footer.evaluate((node) => {
       let owner = node.parentElement;
       while (owner && !/auto|scroll/.test(getComputedStyle(owner).overflowY))
