@@ -18,6 +18,8 @@ development work and are not a claim that a tagged release has shipped.
 
 - Compact diagram controls, themed outline tooltips and smooth tab-rail collapse.
 - Consistent helper-page brand treatment and redacted support-report guidance.
+- Subtle Forge mark and drafting-grid background on the Home signature.
+- Local support/help routing and shared icon tooltips across navigation/header.
 - Repository links updated to `cuthanhcam/forge`.
 
 ### Known limits

@@ -978,3 +978,54 @@ body {
     background: var(--accent-solid-hover);
   }
 }
+
+/* A static drafting grid and the Forge mark give the hero identity without
+   adding moving decoration or competing with the tool directory below. */
+.forge-home-signature {
+  position: relative;
+  isolation: isolate;
+}
+
+.forge-home-signature::before,
+.forge-home-signature::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.forge-home-signature::before {
+  inset: 0;
+  background-image:
+    linear-gradient(rgb(100 116 139 / 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(100 116 139 / 0.1) 1px, transparent 1px);
+  background-size: 36px 36px;
+  mask-image: radial-gradient(ellipse at 84% 44%, #000 5%, transparent 70%);
+}
+
+.forge-home-signature::after {
+  width: clamp(160px, 34vw, 460px);
+  aspect-ratio: 1;
+  right: 0;
+  top: 19%;
+  background: var(--accent-solid);
+  opacity: 0.035;
+  mask: url("/forge-black.svg") center / contain no-repeat;
+  transform: rotate(-8deg);
+}
+
+.dark .forge-home-signature::before {
+  opacity: 0.65;
+}
+
+.dark .forge-home-signature::after {
+  background: var(--accent-400);
+  opacity: 0.04;
+}
+
+@media (forced-colors: active) {
+  .forge-home-signature::before,
+  .forge-home-signature::after {
+    display: none;
+  }
+}

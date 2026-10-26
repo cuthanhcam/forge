@@ -1,3 +1,4 @@
+import { Tooltip } from "@/shared/ui/tooltip";
 import { useMemo, useRef, useState, type JSX } from "react";
 import { ArrowDown, ArrowUpRight, Search, ShieldCheck, X } from "lucide-react";
 import { Link } from "react-router";
@@ -52,7 +53,7 @@ export function HomePage(): JSX.Element {
       <div className="mx-auto max-w-5xl">
         <section
           aria-labelledby="forge-signature"
-          className="flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center py-8 sm:py-12"
+          className="forge-home-signature flex min-h-[calc(100dvh-7.5rem)] flex-col justify-center py-8 sm:py-12"
         >
           <div className="mb-8 flex items-center gap-3 sm:mb-10">
             <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-card text-foreground">
@@ -123,14 +124,16 @@ export function HomePage(): JSX.Element {
                 value={query}
               />
               {query ? (
-                <button
-                  aria-label="Clear filter"
-                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
-                  onClick={clearFilter}
-                  type="button"
-                >
-                  <X aria-hidden="true" className="h-4 w-4" />
-                </button>
+                <Tooltip content="Clear filter" side="bottom">
+                  <button
+                    aria-label="Clear filter"
+                    className="flex h-7 w-7 shrink-0 items-center justify-center rounded text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-600"
+                    onClick={clearFilter}
+                    type="button"
+                  >
+                    <X aria-hidden="true" className="h-4 w-4" />
+                  </button>
+                </Tooltip>
               ) : null}
             </div>
             <p className="text-xs text-muted-foreground" role="status">
